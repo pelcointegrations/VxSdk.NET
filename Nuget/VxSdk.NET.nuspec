@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>VxSdk.NET</id>
+    <title>VideoXpert SDK .NET Wrapper</title>
+    <version>3.0.0000</version>
+    <authors>Pelco by Schneider Electric</authors>
+    <owners>Pelco by Schneider Electric</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://raw.githubusercontent.com/pelcointegrations/VideoXpertSdk/master/Nuget/pelco-integrations-64x64.png</iconUrl>
+    <projectUrl>https://github.com/pelcointegrations/VxSdk.NET</projectUrl>
+    <repository type="git" url="https://github.com/pelcointegrations/VxSdk.NET" />
+    <description>Provides a .NET wrapper for the Pelco VideoXpert SDK, which allows third party applications to integrate with the VideoXpert platform.</description>
+    <summary>A .NET wrapper for the Pelco VideoXpert SDK.</summary>
+    <copyright>Copyright ©2019 Pelco</copyright>
+    <tags>videoxpert, vxsdk, sdk, pelco, schneider-electric, .net, wrapper</tags>
+  </metadata>
+    <files>
+      <file src="VxSdk.NET.props" target="build\VxSdk.NET.props" />
+      <file src="VxSdk.NET.targets" target="build\VxSdk.NET.targets" />
+
+      <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\Win32\bin\VxSdk.dll" target="build\x86" />
+      <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\Win32\bin\cpprest140_2_9.dll" target="build\x86" />	
+      <file src="..\VxSdkNet\bin\x86\Release\VxSdk.NET.dll" target="lib\x86\VxSdk.NET.dll" />
+      <file src="..\VxSdkNet\bin\x86\Release\VxSdk.NET.xml" target="lib\x86\VxSdk.NET.xml" />
+
+      <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\x64\bin\VxSdk.dll" target="build\x64" />
+      <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\x64\bin\cpprest140_2_9.dll" target="build\x64" />	
+      <file src="..\VxSdkNet\bin\x64\Release\VxSdk.NET.dll" target="lib\x64\VxSdk.NET.dll" />
+      <file src="..\VxSdkNet\bin\x64\Release\VxSdk.NET.xml" target="lib\x64\VxSdk.NET.xml" />
+    </files>
+</package>

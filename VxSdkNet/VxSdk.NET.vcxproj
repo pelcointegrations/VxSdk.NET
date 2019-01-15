@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7B8BD603-EB13-4E0D-A7E9-7A36813E52E1}</ProjectGuid>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <Keyword>ManagedCProj</Keyword>
+    <RootNamespace>VxSdkNet</RootNamespace>
+    <ProjectName>VxSdk.NET</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>Bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0501;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0501;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0501;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0501;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\AlarmInput.h" />
+    <ClInclude Include="Include\Bookmark.h" />
+    <ClInclude Include="Include\BookmarkLock.h" />
+    <ClInclude Include="Include\Configuration.h" />
+    <ClInclude Include="Include\DataObject.h" />
+    <ClInclude Include="Include\DataStorage.h" />
+    <ClInclude Include="Include\DeviceAssignment.h" />
+    <ClInclude Include="Include\Drawing.h" />
+    <ClInclude Include="Include\Driver.h" />
+    <ClInclude Include="Include\Gap.h" />
+    <ClInclude Include="Include\License.h" />
+    <ClInclude Include="Include\LicenseFeature.h" />
+    <ClInclude Include="Include\ManualRecording.h" />
+    <ClInclude Include="Include\Marker.h" />
+    <ClInclude Include="Include\Monitor.h" />
+    <ClInclude Include="Include\MonitorCell.h" />
+    <ClInclude Include="Include\MonitorPosition.h" />
+    <ClInclude Include="Include\MonitorWall.h" />
+    <ClInclude Include="Include\NewBookmark.h" />
+    <ClInclude Include="Include\NewClip.h" />
+    <ClInclude Include="Include\NewDataObject.h" />
+    <ClInclude Include="Include\NewDevice.h" />
+    <ClInclude Include="Include\NewDeviceAssignment.h" />
+    <ClInclude Include="Include\NewEvent.h" />
+    <ClInclude Include="Include\NewManualRecording.h" />
+    <ClInclude Include="Include\NewMonitor.h" />
+    <ClInclude Include="Include\NewMarker.h" />
+    <ClInclude Include="Include\NewNotification.h" />
+    <ClInclude Include="Include\NewPixelSearch.h" />
+    <ClInclude Include="Include\NewPrivilege.h" />
+    <ClInclude Include="Include\NewRule.h" />
+    <ClInclude Include="Include\NewSchedule.h" />
+    <ClInclude Include="Include\NewScheduleTrigger.h" />
+    <ClInclude Include="Include\NewSituation.h" />
+    <ClInclude Include="Include\NewTag.h" />
+    <ClInclude Include="Include\NewTimeTable.h" />
+    <ClInclude Include="Include\NewUser.h" />
+    <ClInclude Include="Include\Notification.h" />
+    <ClInclude Include="Include\PixelSearch.h" />
+    <ClInclude Include="Include\Privilege.h" />
+    <ClInclude Include="Include\PtzLimits.h" />
+    <ClInclude Include="Include\PtzLock.h" />
+    <ClInclude Include="Include\Log.h" />
+    <ClInclude Include="Include\Rect.h" />
+    <ClInclude Include="Include\RelayOutput.h" />
+    <ClInclude Include="Include\ResourceLock.h" />
+    <ClInclude Include="Include\ResourceRef.h" />
+    <ClInclude Include="Include\ResourceRel.h" />
+    <ClInclude Include="Include\Role.h" />
+    <ClInclude Include="Include\Rule.h" />
+    <ClInclude Include="Include\RuleTrigger.h" />
+    <ClInclude Include="Include\Schedule.h" />
+    <ClInclude Include="Include\ScheduleTrigger.h" />
+    <ClInclude Include="Include\SnapshotFilter.h" />
+    <ClInclude Include="Include\Tag.h" />
+    <ClInclude Include="Include\TimeRange.h" />
+    <ClInclude Include="Include\TimeTable.h" />
+    <ClInclude Include="Include\User.h" />
+    <ClInclude Include="Include\UserInfo.h" />
+    <ClInclude Include="Include\Utils.h" />
+    <ClInclude Include="Include\Clip.h" />
+    <ClInclude Include="Include\DataInterface.h" />
+    <ClInclude Include="Include\DataSession.h" />
+    <ClInclude Include="Include\DataSource.h" />
+    <ClInclude Include="Include\Device.h" />
+    <ClInclude Include="Include\Event.h" />
+    <ClInclude Include="Include\Export.h" />
+    <ClInclude Include="Include\ExportClip.h" />
+    <ClInclude Include="Include\NewExport.h" />
+    <ClInclude Include="Include\NewExportClip.h" />
+    <ClInclude Include="Include\Pattern.h" />
+    <ClInclude Include="Include\Preset.h" />
+    <ClInclude Include="Include\PtzController.h" />
+    <ClInclude Include="Include\Situation.h" />
+    <ClInclude Include="Include\InternalEvent.h" />
+    <ClInclude Include="Include\VXSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\AssemblyInfo.cpp" />
+    <ClCompile Include="Source\AlarmInput.cpp" />
+    <ClCompile Include="Source\Bookmark.cpp" />
+    <ClCompile Include="Source\BookmarkLock.cpp" />
+    <ClCompile Include="Source\Configuration.cpp" />
+    <ClCompile Include="Source\DataObject.cpp" />
+    <ClCompile Include="Source\DataStorage.cpp" />
+    <ClCompile Include="Source\DeviceAssignment.cpp" />
+    <ClCompile Include="Source\Drawing.cpp" />
+    <ClCompile Include="Source\Driver.cpp" />
+    <ClCompile Include="Source\Gap.cpp" />
+    <ClCompile Include="Source\License.cpp" />
+    <ClCompile Include="Source\LicenseFeature.cpp" />
+    <ClCompile Include="Source\ManualRecording.cpp" />
+    <ClCompile Include="Source\Marker.cpp" />
+    <ClCompile Include="Source\Clip.cpp" />
+    <ClCompile Include="Source\DataInterface.cpp" />
+    <ClCompile Include="Source\DataSource.cpp" />
+    <ClCompile Include="Source\Device.cpp" />
+    <ClCompile Include="Source\Export.cpp" />
+    <ClCompile Include="Source\ExportClip.cpp" />
+    <ClCompile Include="Source\Monitor.cpp" />
+    <ClCompile Include="Source\MonitorCell.cpp" />
+    <ClCompile Include="Source\MonitorWall.cpp" />
+    <ClCompile Include="Source\Notification.cpp" />
+    <ClCompile Include="Source\Pattern.cpp" />
+    <ClCompile Include="Source\PixelSearch.cpp" />
+    <ClCompile Include="Source\Preset.cpp" />
+    <ClCompile Include="Source\Privilege.cpp" />
+    <ClCompile Include="Source\PtzController.cpp" />
+    <ClCompile Include="Source\PtzLock.cpp" />
+    <ClCompile Include="Source\Log.cpp" />
+    <ClCompile Include="Source\RelayOutput.cpp" />
+    <ClCompile Include="Source\ResourceRel.cpp" />
+    <ClCompile Include="Source\Role.cpp" />
+    <ClCompile Include="Source\Rule.cpp" />
+    <ClCompile Include="Source\Schedule.cpp" />
+    <ClCompile Include="Source\ScheduleTrigger.cpp" />
+    <ClCompile Include="Source\Situation.cpp" />
+    <ClCompile Include="Source\Tag.cpp" />
+    <ClCompile Include="Source\TimeTable.cpp" />
+    <ClCompile Include="Source\User.cpp" />
+    <ClCompile Include="Source\VXSystem.cpp" />
+    <ClCompile Include="Source\Event.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\VideoXpertSdk.3.0.1\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.1\build\native\VideoXpertSdk.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.1\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.1\build\native\VideoXpertSdk.targets'))" />
+  </Target>
+</Project>
