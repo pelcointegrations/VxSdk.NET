@@ -15,7 +15,8 @@ file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${ARCH})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${ARCH})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${ARCH})
 
-file(GLOB LIB_SOURCES ../VxSdkNet/Source/*.* Source/MediaControl.cpp)
+file(GLOB LIB_SOURCES ../VxSdkNet/Source/*.* Source/MediaControl.cpp Source/VxSdkNetMedia.rc)
+list(FILTER LIB_SOURCES EXCLUDE REGEX ".*VxSdkNet.rc$")
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/packages/VideoXpertSdk-Media/build/native/${CPP_ARCH}/lib/

@@ -16,7 +16,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${ARCH})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${ARCH})
 
 file(GLOB LIB_SOURCES Source/*.*)
-list(FILTER LIB_SOURCES EXCLUDE REGEX ".*AssemblyInfo.cpp$")
 
 link_directories(
     ${CMAKE_SOURCE_DIR}/packages/VideoXpertSdk/build/native/${CPP_ARCH}/lib/

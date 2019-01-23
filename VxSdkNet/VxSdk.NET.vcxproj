@@ -286,6 +286,9 @@
     <ClCompile Include="Source\VXSystem.cpp" />
     <ClCompile Include="Source\Event.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\VxSdkNet.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\VideoXpertSdk.3.0.1\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.1\build\native\VideoXpertSdk.targets')" />

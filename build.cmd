@@ -12,6 +12,10 @@ if NOT DEFINED BUILD_NUMBER (
   set BUILD_NUMBER=0000
 )
 
+if NOT DEFINED BUILD_NUMBER_MEDIA (
+  set BUILD_NUMBER_MEDIA=0000
+)
+
 if NOT DEFINED OUTPUT_PATH (
   set OUTPUT_PATH=%CD%
 )
@@ -19,6 +23,10 @@ if NOT DEFINED OUTPUT_PATH (
 if NOT DEFINED CMAKE_EXE (
   set CMAKE_EXE="C:\Program Files\CMake\bin\cmake.exe"
 )
+
+REM Update assembly version numbers
+powershell -Command "(gc VxSdkNet\Source\VxSdkNet.rc) -replace '12345', '%BUILD_NUMBER%' | Out-File VxSdkNet\Source\VxSdkNet.rc"
+powershell -Command "(gc VxSdkNetMedia\Source\VxSdkNetMedia.rc) -replace '12345', '%BUILD_NUMBER_MEDIA%' | Out-File VxSdkNetMedia\Source\VxSdkNetMedia.rc"
 
 REM Setup VxSdkNet build
 pushd VxSdkNet
@@ -66,4 +74,4 @@ REM Build VxSdkNet-Media
 
 REM Create Nuget Packages
 call Nuget\nuget.exe pack Nuget\VxSdk.NET.nuspec -Version %MAJOR_VER%.%MINOR_VER%.%BUILD_NUMBER% -OutputDirectory %OUTPUT_PATH%
-call Nuget\nuget.exe pack Nuget\VxSdk.NET-Media.nuspec -Version %MAJOR_VER%.%MINOR_VER%.%BUILD_NUMBER% -OutputDirectory %OUTPUT_PATH%
+call Nuget\nuget.exe pack Nuget\VxSdk.NET-Media.nuspec -Version %MAJOR_VER%.%MINOR_VER%.%BUILD_NUMBER_MEDIA% -OutputDirectory %OUTPUT_PATH%

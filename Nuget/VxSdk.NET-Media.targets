@@ -5,10 +5,7 @@
     <Error  Text="$(MSBuildThisFileName) does not work correctly on '$(Platform)' platform. You need to specify platform (x86 or x64)." />
   </Target>
   <Target Name="InjectReference" BeforeTargets="ResolveAssemblyReferences">
-    <ItemGroup Condition="('$(Platform)' == 'x86' or '$(Platform)' == 'x64') and '$(TargetFrameworkVersion)'=='v4.6.1'">
-      <Reference Include="VxSdk.NET-Media">
-        <HintPath>$(MSBuildThisFileDirectory)..\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
-      </Reference>
+    <ItemGroup Condition="('$(Platform)' == 'x86' or '$(Platform)' == 'x64')">
       <NativeLibs Include="$(MSBuildThisFileDirectory)\$(Platform)\**" />
       <Content Include="@(NativeLibs)">
         <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>

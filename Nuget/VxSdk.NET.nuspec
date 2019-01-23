@@ -16,7 +16,6 @@
     <tags>videoxpert, vxsdk, sdk, pelco, schneider-electric, .net, wrapper</tags>
   </metadata>
     <files>
-      <file src="VxSdk.NET.props" target="build\VxSdk.NET.props" />
       <file src="VxSdk.NET.targets" target="build\VxSdk.NET.targets" />
 
       <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\Win32\bin\VxSdk.dll" target="build\x86" />

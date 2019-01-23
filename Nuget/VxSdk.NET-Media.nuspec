@@ -16,7 +16,6 @@
     <tags>videoxpert, vxsdk, sdk, pelco, schneider-electric, .net, wrapper, gstreamer</tags>
   </metadata>
     <files>
-      <file src="VxSdk.NET-Media.props" target="build\VxSdk.NET-Media.props" />
       <file src="VxSdk.NET-Media.targets" target="build\VxSdk.NET-Media.targets" />
 
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\VxSdk.dll" target="build\x86" />
