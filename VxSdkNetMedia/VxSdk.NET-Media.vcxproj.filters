@@ -289,9 +289,6 @@
     <ClCompile Include="Source\VXSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Resources\AssemblyInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Bookmark.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -394,5 +391,10 @@
     <ClCompile Include="Source\RuleTrigger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\VxSdkNetMedia.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
