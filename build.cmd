@@ -1,10 +1,10 @@
 @echo off
 
-if NOT DEFINED BUILD_NUMBER (
+if NOT DEFINED MAJOR_VER (
   set MAJOR_VER=3
 )
 
-if NOT DEFINED BUILD_NUMBER (
+if NOT DEFINED MINOR_VER (
   set MINOR_VER=0
 )
 
@@ -17,7 +17,7 @@ if NOT DEFINED BUILD_NUMBER_MEDIA (
 )
 
 if NOT DEFINED OUTPUT_PATH (
-  set OUTPUT_PATH=%CD%
+  set OUTPUT_PATH="%CD%\output"
 )
 
 if NOT DEFINED CMAKE_EXE (
@@ -27,6 +27,9 @@ if NOT DEFINED CMAKE_EXE (
 REM Update assembly version numbers
 powershell -Command "(gc VxSdkNet\Source\VxSdkNet.rc) -replace '12345', '%BUILD_NUMBER%' | Out-File VxSdkNet\Source\VxSdkNet.rc"
 powershell -Command "(gc VxSdkNetMedia\Source\VxSdkNetMedia.rc) -replace '12345', '%BUILD_NUMBER_MEDIA%' | Out-File VxSdkNetMedia\Source\VxSdkNetMedia.rc"
+
+REM Create the output path for the NuGet packages if it doesn't exist
+if not exist %OUTPUT_PATH% mkdir %OUTPUT_PATH%
 
 REM Setup VxSdkNet build
 pushd VxSdkNet

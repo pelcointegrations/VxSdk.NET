@@ -22,3 +22,6 @@ build
 *.asm
 *.cache
 *.pdb
+*.nupkg
+*.p7s
+*.rc
