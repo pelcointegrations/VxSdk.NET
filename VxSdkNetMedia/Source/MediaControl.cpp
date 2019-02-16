@@ -56,6 +56,14 @@ bool VxSdkNet::MediaControl::Play(float speed) {
     return _control->Play(speed);
 }
 
+bool VxSdkNet::MediaControl::StartLocalRecording(System::String^ filePath, System::String^ fileName) {
+    return _control->StartLocalRecording(Utils::ConvertSysStringNonConst(filePath), Utils::ConvertSysStringNonConst(fileName));
+}
+
+void VxSdkNet::MediaControl::StopLocalRecording() {
+    _control->StopLocalRecording();
+}
+
 bool VxSdkNet::MediaControl::Seek(System::DateTime time, float speed) {
     // Convert the seek time from a DateTime format to unix time format
     System::TimeSpan ts = (time - System::DateTime(1970, 1, 1, 0, 0, 0));

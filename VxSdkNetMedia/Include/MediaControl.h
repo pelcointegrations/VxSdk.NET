@@ -96,6 +96,19 @@ namespace VxSdkNet {
         bool Play(float speed);
 
         /// <summary>
+        /// Starts recording the current video stream to a local file.
+        /// </summary>
+        /// <param name="filePath">The full path to save the recorded video to.</param>
+        /// <param name="fileName">The file name to use for the recorded video file.</param>
+        /// <returns><c>true</c> if the recording was started successfully, otherwise <c>false</c>.</returns>
+        bool StartLocalRecording(System::String^ filePath, System::String^ fileName);
+
+        /// <summary>
+        /// Stops the current local recording in progress, if any.
+        /// </summary>
+        void StopLocalRecording();
+
+        /// <summary>
         /// Call Play on the stream with the supplied start time, resulting in a playback stream.
         /// </summary>
         /// <param name="time">The start time for playback.</param>
