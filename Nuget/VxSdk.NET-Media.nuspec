@@ -41,6 +41,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgraphene-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstaudio-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstbadaudio-1.0-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstbadvideo-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstbase-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstcodecparsers-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstcontroller-1.0-0.dll" target="build\x86\bin" />
@@ -98,6 +99,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgraphene-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstaudio-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstbadaudio-1.0-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstbadvideo-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstbase-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstcodecparsers-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstcontroller-1.0-0.dll" target="build\x64\bin" />

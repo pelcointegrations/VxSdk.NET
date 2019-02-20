@@ -298,12 +298,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk-Media.3.0.6\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.6\build\native\VideoXpertSdk-Media.targets')" />
+    <Import Project="packages\VideoXpertSdk-Media.3.0.8\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.8\build\native\VideoXpertSdk-Media.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.6\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.6\build\native\VideoXpertSdk-Media.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.8\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.8\build\native\VideoXpertSdk-Media.targets'))" />
   </Target>
 </Project>
