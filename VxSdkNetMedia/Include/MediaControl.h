@@ -4,6 +4,7 @@
 
 #include "MediaEvent.h"
 #include "StreamEvent.h"
+#include "PelcoDataEvent.h"
 #include "Utils.h"
 #include "DataSource.h"
 
@@ -57,6 +58,20 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="streamEvent">The stream event sent from the stream as a managed type.</param>
         delegate void StreamEventDelegate(StreamingEvent^ streamEvent);
+
+        /// <summary>
+        /// The native event callback delegate.
+        /// </summary>
+        /// <param name="pelcoDataEvent">The Pelco data event sent from the stream.</param>
+        [System::Runtime::InteropServices::UnmanagedFunctionPointer(
+            System::Runtime::InteropServices::CallingConvention::Cdecl)]
+        delegate void PelcoDataCallbackDelegate(MediaController::PelcoDataEvent* pelcoDataEvent);
+
+        /// <summary>
+        /// The managed event delegate.
+        /// </summary>
+        /// <param name="pelcoDataManagedEvent">The Pelco data event sent from the stream as a managed type.</param>
+        delegate void PelcoDataEventDelegate(PelcoDataManagedEvent^ pelcoDataManagedEvent);
 
         /// <summary>
         /// Constructor.
@@ -175,6 +190,14 @@ namespace VxSdkNet {
             void remove(StreamEventDelegate ^eventDelegate);
         }
 
+        /// <summary>
+        /// PelcoDataEvent is raised whenever a new event is received from the stream.
+        /// </summary>
+        event PelcoDataEventDelegate ^ PelcoDataEvent {
+            void add(PelcoDataEventDelegate ^eventDelegate);
+            void remove(PelcoDataEventDelegate ^eventDelegate);
+        }
+
     internal:
         MediaController::IController* _control;
         void _FireTimestampEvent(MediaController::TimestampEvent* timeEvent);
@@ -183,6 +206,9 @@ namespace VxSdkNet {
         void _FireStreamEvent(MediaController::StreamEvent* streamEvent);
         StreamCallbackDelegate ^ _streamCallback;
         StreamEventDelegate ^ _streamEvent;
+        PelcoDataCallbackDelegate ^_pelcoDataCallback;
+        PelcoDataEventDelegate ^_pelcoDataEvent;
+        void _FirePelcoDataEvent(MediaController::PelcoDataEvent* event);
         DataSource^ _currentdataSource;
     };
 }

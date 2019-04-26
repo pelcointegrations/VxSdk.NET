@@ -248,6 +248,9 @@
     <ClInclude Include="..\VxSdkNet\Include\VXSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\PelcoDataEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MediaControl.cpp">
