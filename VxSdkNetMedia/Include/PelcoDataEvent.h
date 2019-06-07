@@ -1,4 +1,3 @@
-// Declares the PelcoDataManagedEvent class.
 #ifndef PelcoDataManagedEvent_h__
 #define PelcoDataManagedEvent_h__
 
@@ -44,9 +43,11 @@ namespace VxSdkNet {
         /// Gets the Pelco data string.
         /// </summary>
         /// <value>The Pelco data string.</value>
-        property System::String^ PelcoData {
+        property unsigned char * PelcoBytes {
         public:
-            System::String^ get() { return gcnew System::String(reinterpret_cast<char*>(_pelcoDataEvent->pelcoData)); }
+            unsigned char * get() {
+                return (_pelcoDataEvent->pelcoData);
+            }
         }
         
     internal:

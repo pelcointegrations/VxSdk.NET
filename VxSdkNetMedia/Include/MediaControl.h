@@ -124,6 +124,15 @@ namespace VxSdkNet {
         void StopLocalRecording();
 
         /// <summary>
+        /// Takes a snapshot from the current video stream and stores it to the filename
+        ///    provided
+        /// </summary>
+        /// <param name="filePath">The full path to save the snapshot to.</param>
+        /// <param name="fileName">The file name to use for the snapshot file.</param>
+        /// <returns><c>true</c> if the file stored correctly, else <c>false</c>.</returns>
+        bool SnapShot(System::String^ filePath, System::String^ fileName);
+
+        /// <summary>
         /// Call Play on the stream with the supplied start time, resulting in a playback stream.
         /// </summary>
         /// <param name="time">The start time for playback.</param>
