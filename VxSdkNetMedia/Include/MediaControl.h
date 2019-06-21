@@ -32,6 +32,17 @@ namespace VxSdkNet {
         };
 
         /// <summary>
+        /// Values that represent the different transport modes for an RTSP stream (ignored for MJPEG Pull).
+        /// </summary>
+        enum class RTSPNetworkTransports {
+            /// <summary>Stream will be sent with UDP (default). Will be used with multicast transmissions.</summary>
+            UDP,
+
+            /// <summary>Stream will be sent with TCP network protocol if possible.</summary>
+            RTPOverRTSP
+        };
+
+        /// <summary>
         /// The native event callback delegate.
         /// </summary>
         /// <param name="timeEvent">The time event sent from the stream.</param>
@@ -111,6 +122,13 @@ namespace VxSdkNet {
         bool Play(float speed);
 
         /// <summary>
+        /// Call Play on the stream.
+        /// </summary>
+        /// <param name="speed">The playback speed.  Negative values can be used for reverse playback.</param>
+        /// <param name="networkTransport">Network transport to use for video stream. </param>
+        bool Play(float speed, RTSPNetworkTransports networkTransport);
+
+        /// <summary>
         /// Starts recording the current video stream to a local file.
         /// </summary>
         /// <param name="filePath">The full path to save the recorded video to.</param>
@@ -138,6 +156,14 @@ namespace VxSdkNet {
         /// <param name="time">The start time for playback.</param>
         /// <param name="speed">The playback speed.  Negative values can be used for reverse playback.</param>
         bool Seek(System::DateTime time, float speed);
+
+        /// <summary>
+        /// Call Play on the stream with the supplied start time, resulting in a playback stream.
+        /// </summary>
+        /// <param name="time">The start time for playback.</param>
+        /// <param name="speed">The playback speed.  Negative values can be used for reverse playback.</param>
+        /// <param name="networkTransport">Network transport to use for video stream. </param>
+        bool Seek(System::DateTime time, float speed, RTSPNetworkTransports networkTransport);
 
         /// <summary>
         /// Set the stream to a new data source.

@@ -56,7 +56,11 @@ void VxSdkNet::MediaControl::Pause() {
 }
 
 bool VxSdkNet::MediaControl::Play(float speed) {
-    return _control->Play(speed);
+    return _control->Play(speed, 0, MediaController::IStream::kUDP);
+}
+
+bool VxSdkNet::MediaControl::Play(float speed, VxSdkNet::MediaControl::RTSPNetworkTransports networkTransport) {
+    return _control->Play(speed, 0, (MediaController::IStream::RTSPNetworkTransport) networkTransport);
 }
 
 bool VxSdkNet::MediaControl::StartLocalRecording(System::String^ filePath, System::String^ fileName) {
@@ -72,11 +76,15 @@ bool VxSdkNet::MediaControl::SnapShot(System::String^ filePath, System::String^ 
 }
 
 bool VxSdkNet::MediaControl::Seek(System::DateTime time, float speed) {
+    return VxSdkNet::MediaControl::Seek(time, speed, RTSPNetworkTransports::UDP);
+}
+
+bool VxSdkNet::MediaControl::Seek(System::DateTime time, float speed, VxSdkNet::MediaControl::RTSPNetworkTransports networkTransport) {
     // Convert the seek time from a DateTime format to unix time format
     System::TimeSpan ts = (time - System::DateTime(1970, 1, 1, 0, 0, 0));
     unsigned int seekTime = safe_cast<unsigned int>(ts.TotalSeconds);
 
-    return _control->Play(speed, seekTime);
+    return _control->Play(speed, seekTime, (MediaController::IStream::RTSPNetworkTransport) networkTransport);
 }
 
 void VxSdkNet::MediaControl::SetDataSource(DataSource^ videoSource, DataInterface^ videoInterface, DataSource^ audioSource, DataInterface^ audioInterface) {

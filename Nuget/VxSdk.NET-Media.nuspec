@@ -50,7 +50,9 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstpbutils-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstreamer-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstriff-1.0-0.dll" target="build\x86\bin" />
-      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstrtp-1.0-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstrtp-1.0-0.dll" target="build\x86\bin" />	  
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstrtsp-1.0-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstsdp-1.0-0.dll" target="build\x86\bin" />  
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgsttag-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstvideo-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgthread-2.0-0.dll" target="build\x86\bin" />
@@ -81,6 +83,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstplayback.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstrtp.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstrtpmanager.dll" target="build\x86\lib\gstreamer-1.0" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstrtsp.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstsoup.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstudp.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstvideoconvert.dll" target="build\x86\lib\gstreamer-1.0" />
@@ -109,6 +112,8 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstreamer-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstriff-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstrtp-1.0-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstrtsp-1.0-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstsdp-1.0-0.dll" target="build\x64\bin" /> 
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgsttag-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgstvideo-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgthread-2.0-0.dll" target="build\x64\bin" />
@@ -139,6 +144,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstplayback.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstrtp.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstrtpmanager.dll" target="build\x64\lib\gstreamer-1.0" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstrtsp.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstsoup.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstudp.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstvideoconvert.dll" target="build\x64\lib\gstreamer-1.0" />
