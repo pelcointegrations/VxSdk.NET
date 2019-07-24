@@ -168,6 +168,6 @@ void VxSdkNet::MediaControl::_FirePelcoDataEvent(MediaController::PelcoDataEvent
 }
 
 bool VxSdkNet::MediaControl::AddVideoOverlayData(System::String^ overlayData, VideoOverlayDataPositions position, bool includeDateTime) {
-    std::string toPassIn(Utils::ConvertSysStringNonConst(overlayData));
+    std::string toPassIn(Utils::ConvertCSharpString(overlayData));
     return _control->AddVideoOverlayData(toPassIn, (MediaController::IController::VideoOverlayDataPosition) position, includeDateTime);
 }
