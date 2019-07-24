@@ -131,7 +131,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_monitor->id); }
+            System::String^ get() { return Utils::ConvertCppString(_monitor->id); }
         }
 
         /// <summary>
@@ -159,9 +159,9 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_monitor->name); }
+            System::String^ get() { return Utils::ConvertCppString(_monitor->name); }
             void set(System::String^ value) {
-				VxSdk::Utilities::StrCopySafe(_monitor->name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(_monitor->name, Utils::ConvertCSharpString(value).c_str());
             }
         }
 

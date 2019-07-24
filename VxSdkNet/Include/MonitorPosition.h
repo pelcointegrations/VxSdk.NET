@@ -27,7 +27,7 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="vxMonitorPosition">The vx monitor position.</param>
         MonitorPosition(VxSdk::VxMonitorPosition* vxMonitorPosition){
-            MonitorId = gcnew System::String(vxMonitorPosition->monitorId);
+            MonitorId = Utils::ConvertCppString(vxMonitorPosition->monitorId);
             Position = gcnew Rect(&vxMonitorPosition->position);
         }
 

@@ -44,7 +44,7 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_driver->name); }
+            System::String^ get() { return Utils::ConvertCppString(_driver->name); }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace VxSdkNet {
         /// <value>The driver type identifier.</value>
         property System::String^ Type {
         public:
-            System::String^ get() { return gcnew System::String(_driver->type); }
+            System::String^ get() { return Utils::ConvertCppString(_driver->type); }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace VxSdkNet {
         /// <value>The name of the vendor.</value>
         property System::String^ Vendor {
         public:
-            System::String^ get() { return gcnew System::String(_driver->vendor); }
+            System::String^ get() { return Utils::ConvertCppString(_driver->vendor); }
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace VxSdkNet {
         /// <value>The version number.</value>
         property System::String^ Version {
         public:
-            System::String^ get() { return gcnew System::String(_driver->version); }
+            System::String^ get() { return Utils::ConvertCppString(_driver->version); }
         }
 
     internal:

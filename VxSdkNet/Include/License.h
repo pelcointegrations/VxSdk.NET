@@ -55,7 +55,7 @@ namespace VxSdkNet {
         /// <value>The friendly name of the owning company/organization.</value>
         property System::String^ CompanyName {
         public:
-            System::String^ get() { return gcnew System::String(_license->companyName); }
+            System::String^ get() { return Utils::ConvertCppString(_license->companyName); }
         }
 
         /// <summary>

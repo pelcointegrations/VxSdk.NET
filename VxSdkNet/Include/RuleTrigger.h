@@ -31,7 +31,7 @@ namespace VxSdkNet {
             for (int i = 0; i < vxRuleTrigger->sourceRefSize; i++)
                 ResourceRefs->Add(gcnew ResourceRef(&vxRuleTrigger->sourceRef[i]));
 
-            SituationType = gcnew System::String(vxRuleTrigger->situationType);
+            SituationType = Utils::ConvertCppString(vxRuleTrigger->situationType);
         }
 
         /// <summary>

@@ -54,8 +54,8 @@ namespace VxSdkNet {
         /// <param name="vxTimeRange">The time range.</param>
         TimeRange(VxSdk::VxTimeRange* vxTimeRange) {
             Day = DayOfWeek(vxTimeRange->day);
-            EndTime = Utils::ConvertTimeCharToDateTime(vxTimeRange->endTime);
-            StartTime = Utils::ConvertTimeCharToDateTime(vxTimeRange->startTime);
+            EndTime = Utils::ConvertCppTime(vxTimeRange->endTime);
+            StartTime = Utils::ConvertCppTime(vxTimeRange->startTime);
         }
 
         /// <summary>

@@ -50,7 +50,7 @@ namespace VxSdkNet {
         /// <value>The activation identifier.</value>
         property System::String^ ActivationId {
         public:
-            System::String^ get() { return gcnew System::String(_licenseFeature->activationId); }
+            System::String^ get() { return Utils::ConvertCppString(_licenseFeature->activationId); }
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace VxSdkNet {
         /// <value>The date and time at which the feature will expire.</value>
         property System::DateTime Expiration {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_licenseFeature->expiration); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_licenseFeature->expiration); }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the feature.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_licenseFeature->id); }
+            System::String^ get() { return Utils::ConvertCppString(_licenseFeature->id); }
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace VxSdkNet {
         /// <value>The date and time at which the feature was installed on the host.</value>
         property System::DateTime Installation {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_licenseFeature->installation); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_licenseFeature->installation); }
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace VxSdkNet {
         /// <value>The name of the feature.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_licenseFeature->name); }
+            System::String^ get() { return Utils::ConvertCppString(_licenseFeature->name); }
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace VxSdkNet {
         /// <value>The feature version.</value>
         property System::String^ Version {
         public:
-            System::String^ get() { return gcnew System::String(_licenseFeature->version); }
+            System::String^ get() { return Utils::ConvertCppString(_licenseFeature->version); }
         }
 
     internal:

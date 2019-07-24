@@ -44,7 +44,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_resourceLock->id); }
+            System::String^ get() { return Utils::ConvertCppString(_resourceLock->id); }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace VxSdkNet {
         /// <value>The owner.</value>
         property System::String^ Owner {
         public:
-            System::String^ get() { return gcnew System::String(_resourceLock->owner); }
+            System::String^ get() { return Utils::ConvertCppString(_resourceLock->owner); }
         }
 
     internal:

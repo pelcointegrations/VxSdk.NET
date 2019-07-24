@@ -82,7 +82,7 @@ namespace VxSdkNet {
         /// <value>The client identifier.</value>
         property System::String^ AckClientId {
         public:
-            System::String^ get() { return gcnew System::String(_event->ackClientId); }
+            System::String^ get() { return Utils::ConvertCppString(_event->ackClientId); }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace VxSdkNet {
         /// <value>The friendly name of the client.</value>
         property System::String^ AckClientName {
         public:
-            System::String^ get() { return gcnew System::String(_event->ackClientName); }
+            System::String^ get() { return Utils::ConvertCppString(_event->ackClientName); }
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace VxSdkNet {
         /// <value>The event acknowledgement time.</value>
         property System::DateTime AckTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_event->ackTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_event->ackTime); }
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace VxSdkNet {
         /// <value>The user name.</value>
         property System::String^ AckUserName {
         public:
-            System::String^ get() { return gcnew System::String(_event->ackUser); }
+            System::String^ get() { return Utils::ConvertCppString(_event->ackUser); }
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace VxSdkNet {
         /// <value>The identifier of the generator device.</value>
         property System::String^ GeneratorDeviceId {
         public:
-            System::String^ get() { return gcnew System::String(_event->generatorDeviceId); }
+            System::String^ get() { return Utils::ConvertCppString(_event->generatorDeviceId); }
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace VxSdkNet {
         /// <value>The friendly name of the generator device.</value>
         property System::String^ GeneratorDeviceName {
         public:
-            System::String^ get() { return gcnew System::String(_event->generatorDeviceName); }
+            System::String^ get() { return Utils::ConvertCppString(_event->generatorDeviceName); }
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace VxSdkNet {
         /// <value>The events unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_event->id); }
+            System::String^ get() { return Utils::ConvertCppString(_event->id); }
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace VxSdkNet {
         /// <value>The name of the situation.</value>
         property System::String^ SituationName {
         public:
-            System::String^ get() { return gcnew System::String(_event->situationName); }
+            System::String^ get() { return Utils::ConvertCppString(_event->situationName); }
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace VxSdkNet {
         /// <value>The type of the situation.</value>
         property System::String^ SituationType {
         public:
-            System::String^ get() { return gcnew System::String(_event->situationType); }
+            System::String^ get() { return Utils::ConvertCppString(_event->situationType); }
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace VxSdkNet {
         /// <value>The client identifier.</value>
         property System::String^ SourceClientId {
         public:
-            System::String^ get() { return gcnew System::String(_event->sourceClientId); }
+            System::String^ get() { return Utils::ConvertCppString(_event->sourceClientId); }
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the source device.</value>
         property System::String^ SourceDeviceId {
         public:
-            System::String^ get() { return gcnew System::String(_event->sourceDeviceId); }
+            System::String^ get() { return Utils::ConvertCppString(_event->sourceDeviceId); }
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace VxSdkNet {
         /// <value>The friendly name of the source device.</value>
         property System::String^ SourceDeviceName {
         public:
-            System::String^ get() { return gcnew System::String(_event->sourceDeviceName); }
+            System::String^ get() { return Utils::ConvertCppString(_event->sourceDeviceName); }
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace VxSdkNet {
         /// <value>The user name.</value>
         property System::String^ SourceUserName {
         public:
-            System::String^ get() { return gcnew System::String(_event->sourceUserName); }
+            System::String^ get() { return Utils::ConvertCppString(_event->sourceUserName); }
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace VxSdkNet {
         /// <value>The event time.</value>
         property System::DateTime Time {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_event->time); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_event->time); }
         }
 
         /// <summary>

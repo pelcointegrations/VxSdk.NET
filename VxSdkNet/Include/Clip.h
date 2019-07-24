@@ -93,7 +93,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ DataSourceId {
         public:
-            System::String^ get() { return gcnew System::String(_clip->dataSourceId); }
+            System::String^ get() { return Utils::ConvertCppString(_clip->dataSourceId); }
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace VxSdkNet {
         /// <value>The friendly name of the data source.</value>
         property System::String^ DataSourceName {
         public:
-            System::String^ get() { return gcnew System::String(_clip->dataSourceName); }
+            System::String^ get() { return Utils::ConvertCppString(_clip->dataSourceName); }
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ DataStorageId {
         public:
-            System::String^ get() { return gcnew System::String(_clip->dataStorageId); }
+            System::String^ get() { return Utils::ConvertCppString(_clip->dataStorageId); }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace VxSdkNet {
         /// <value>The end time.</value>
         property System::DateTime EndTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_clip->endTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_clip->endTime); }
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace VxSdkNet {
         /// <value>The media type.</value>
         property System::String^ MediaType {
         public:
-            System::String^ get() { return gcnew System::String(_clip->type); }
+            System::String^ get() { return Utils::ConvertCppString(_clip->type); }
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ SourceDataStorageId {
         public:
-            System::String^ get() { return gcnew System::String(_clip->sourceDataStorageId); }
+            System::String^ get() { return Utils::ConvertCppString(_clip->sourceDataStorageId); }
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace VxSdkNet {
         /// <value>The start time.</value>
         property System::DateTime StartTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_clip->startTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_clip->startTime); }
         }
 
     internal:

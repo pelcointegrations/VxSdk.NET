@@ -45,7 +45,7 @@ namespace VxSdkNet {
         property System::String^ EventSituationType {
         public:
              System::String^ get() { return gcnew  System::String(_scheduleTrigger->eventSituationType); }
-            void set( System::String^ value) { VxSdk::Utilities::StrCopySafe(_scheduleTrigger->eventSituationType, Utils::ConvertSysString(value)); }
+            void set( System::String^ value) { VxSdk::Utilities::StrCopySafe(_scheduleTrigger->eventSituationType, Utils::ConvertCSharpString(value).c_str()); }
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace VxSdkNet {
 
                 for (int i = 0; i < _scheduleTrigger->eventPropertySize; i++)
                 {
-                    System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(gcnew System::String(_scheduleTrigger->eventProperties[i]->key),
-                        gcnew System::String(_scheduleTrigger->eventProperties[i]->value));
+                    System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(Utils::ConvertCppString(_scheduleTrigger->eventProperties[i]->key),
+                        Utils::ConvertCppString(_scheduleTrigger->eventProperties[i]->value));
 
                     mList->Add(kvPair);
                 }
@@ -72,8 +72,8 @@ namespace VxSdkNet {
                 int size = value->Count;
                 VxSdk::VxKvObject *kvObj = new VxSdk::VxKvObject[size];
                 for (int i = 0; i < size; i++) {
-                    VxSdk::Utilities::StrCopySafe(kvObj[i].key, Utils::ConvertSysString(value[i].Key));
-                    VxSdk::Utilities::StrCopySafe(kvObj[i].value, Utils::ConvertSysString(value[i].Value));
+                    VxSdk::Utilities::StrCopySafe(kvObj[i].key, Utils::ConvertCSharpString(value[i].Key).c_str());
+                    VxSdk::Utilities::StrCopySafe(kvObj[i].value, Utils::ConvertCSharpString(value[i].Value).c_str());
                 }
 
                 _scheduleTrigger->SetEventProperties(kvObj, size);
@@ -98,7 +98,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_scheduleTrigger->id); }
+            System::String^ get() { return Utils::ConvertCppString(_scheduleTrigger->id); }
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace VxSdkNet {
         /// <value>The unique time table identifier, if any.</value>
         property System::String^ TimeTableId {
         public:
-            System::String^ get() { return gcnew System::String(_scheduleTrigger->timeTableId); }
-            void set(System::String^ value) { VxSdk::Utilities::StrCopySafe(_scheduleTrigger->timeTableId, Utils::ConvertSysString(value)); }
+            System::String^ get() { return Utils::ConvertCppString(_scheduleTrigger->timeTableId); }
+            void set(System::String^ value) { VxSdk::Utilities::StrCopySafe(_scheduleTrigger->timeTableId, Utils::ConvertCSharpString(value).c_str()); }
         }
 
     internal:

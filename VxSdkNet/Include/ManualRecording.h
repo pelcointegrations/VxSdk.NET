@@ -62,7 +62,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the data source.</value>
         property System::String^ DataSourceId {
         public:
-            System::String^ get() { return gcnew System::String(_manualRecording->dataSourceId); }
+            System::String^ get() { return Utils::ConvertCppString(_manualRecording->dataSourceId); }
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_manualRecording->id); }
+            System::String^ get() { return Utils::ConvertCppString(_manualRecording->id); }
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace VxSdkNet {
         /// <value>The owner name.</value>
         property System::String^ OwnerName {
         public:
-            System::String^ get() { return gcnew System::String(_manualRecording->owner); }
+            System::String^ get() { return Utils::ConvertCppString(_manualRecording->owner); }
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> at which this manual recording was created.</value>
         property System::DateTime Time {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_manualRecording->time); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_manualRecording->time); }
         }
 
     internal:

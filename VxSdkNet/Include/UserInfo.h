@@ -43,7 +43,7 @@ namespace VxSdkNet {
         /// <value>The employee identifier.</value>
         property System::String^ EmployeeId {
         public:
-            System::String^ get() { return gcnew System::String(_userInfo->employeeId); }
+            System::String^ get() { return Utils::ConvertCppString(_userInfo->employeeId); }
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace VxSdkNet {
         /// <value>The first name of user.</value>
         property System::String^ FirstName {
         public:
-            System::String^ get() { return gcnew System::String(_userInfo->firstName); }
+            System::String^ get() { return Utils::ConvertCppString(_userInfo->firstName); }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace VxSdkNet {
         /// <value>The last name of user.</value>
         property System::String^ LastName {
         public:
-            System::String^ get() { return gcnew System::String(_userInfo->lastName); }
+            System::String^ get() { return Utils::ConvertCppString(_userInfo->lastName); }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_userInfo->name); }
+            System::String^ get() { return Utils::ConvertCppString(_userInfo->name); }
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace VxSdkNet {
         /// <value>Information about the user.</value>
         property System::String^ Note {
         public:
-            System::String^ get() { return gcnew System::String(_userInfo->note); }
+            System::String^ get() { return Utils::ConvertCppString(_userInfo->note); }
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace VxSdkNet {
                 for (int i = 0; i < _userInfo->phoneNumberSize; i++)
                 {
                     System::Collections::Generic::KeyValuePair<User::PhoneType, System::String^> kvPair((User::PhoneType)_userInfo->phoneNumbers[i]->type,
-                        gcnew System::String(_userInfo->phoneNumbers[i]->number));
+                        Utils::ConvertCppString(_userInfo->phoneNumbers[i]->number));
 
                     mList->Add(kvPair);
                 }

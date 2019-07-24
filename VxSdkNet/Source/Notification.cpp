@@ -34,7 +34,7 @@ System::Collections::Generic::List<VxSdkNet::Role^>^ VxSdkNet::Notification::Get
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -77,7 +77,7 @@ System::Collections::Generic::List<System::String^>^ VxSdkNet::Notification::_Ge
     List<System::String^>^ mlist = gcnew List<System::String^>();
     // Add each role id to the string list
     for (int i = 0; i < _notification->roleIdSize; i++)
-        mlist->Add(gcnew System::String(_notification->roleIds[i]));
+        mlist->Add(Utils::ConvertCppString(_notification->roleIds[i]));
 
     return mlist;
 }

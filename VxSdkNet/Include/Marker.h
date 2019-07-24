@@ -119,7 +119,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_marker->id); }
+            System::String^ get() { return Utils::ConvertCppString(_marker->id); }
         }
 
         /// <summary>
@@ -128,10 +128,10 @@ namespace VxSdkNet {
         /// <value>The layer name of the marker.</value>
         property System::String^ LayerName {
         public:
-            System::String^ get() { return gcnew System::String(_marker->layerName); }
+            System::String^ get() { return Utils::ConvertCppString(_marker->layerName); }
             void set(System::String^ value) {
                 char layerName[64];
-                VxSdk::Utilities::StrCopySafe(layerName, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(layerName, Utils::ConvertCSharpString(value).c_str());
                 _marker->SetLayerName(layerName);
             }
         }
@@ -142,10 +142,10 @@ namespace VxSdkNet {
         /// <value>The friendly name of the marker.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_marker->name); }
+            System::String^ get() { return Utils::ConvertCppString(_marker->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _marker->SetName(name);
             }
         }

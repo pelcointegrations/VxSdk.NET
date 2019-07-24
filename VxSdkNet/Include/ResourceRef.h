@@ -45,7 +45,7 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="vxResourceRef">The resource ref.</param>
         ResourceRef(VxSdk::VxResourceRef* vxResourceRef) {
-            Id = gcnew System::String(vxResourceRef->id);
+            Id = Utils::ConvertCppString(vxResourceRef->id);
             Type = ResourceType(vxResourceRef->type);
         }
 

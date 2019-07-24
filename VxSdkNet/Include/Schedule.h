@@ -108,7 +108,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_schedule->id); }
+            System::String^ get() { return Utils::ConvertCppString(_schedule->id); }
         }
 
         /// <summary>
@@ -126,10 +126,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_schedule->name); }
+            System::String^ get() { return Utils::ConvertCppString(_schedule->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _schedule->SetName(name);
             }
         }

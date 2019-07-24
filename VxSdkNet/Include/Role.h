@@ -66,7 +66,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_role->id); }
+            System::String^ get() { return Utils::ConvertCppString(_role->id); }
         }
 
         /// <summary>
@@ -84,10 +84,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_role->name); }
+            System::String^ get() { return Utils::ConvertCppString(_role->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _role->SetName(name);
             }
         }

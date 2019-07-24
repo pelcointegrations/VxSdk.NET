@@ -230,7 +230,7 @@ namespace VxSdkNet {
         /// <value>The driver device identifier.</value>
         property System::String^ DriverDeviceId {
         public:
-            System::String^ get() { return gcnew System::String(_device->driverDeviceId); }
+            System::String^ get() { return Utils::ConvertCppString(_device->driverDeviceId); }
         }
 
         /// <summary>
@@ -239,10 +239,10 @@ namespace VxSdkNet {
         /// <value>The driver type identifier.</value>
         property System::String^ DriverTypeId {
         public:
-            System::String^ get() { return gcnew System::String(_device->driverTypeId); }
+            System::String^ get() { return Utils::ConvertCppString(_device->driverTypeId); }
             void set(System::String^ value) {
                 char driverTypeId[64];
-                VxSdk::Utilities::StrCopySafe(driverTypeId, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(driverTypeId, Utils::ConvertCSharpString(value).c_str());
                 _device->SetDriverTypeId(driverTypeId);
             }
         }
@@ -253,7 +253,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_device->id); }
+            System::String^ get() { return Utils::ConvertCppString(_device->id); }
         }
 
         /// <summary>
@@ -262,10 +262,10 @@ namespace VxSdkNet {
         /// <value>The IP.</value>
         property System::String^ Ip {
         public:
-            System::String^ get() { return gcnew System::String(_device->ip); }
+            System::String^ get() { return Utils::ConvertCppString(_device->ip); }
             void set(System::String^ value) {
                 char ip[64];
-                VxSdk::Utilities::StrCopySafe(ip, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(ip, Utils::ConvertCSharpString(value).c_str());
                 _device->SetIp(ip);
             }
         }
@@ -303,7 +303,7 @@ namespace VxSdkNet {
         /// <value>The model name.</value>
         property System::String^ Model {
         public:
-            System::String^ get() { return gcnew System::String(_device->model); }
+            System::String^ get() { return Utils::ConvertCppString(_device->model); }
         }
 
         /// <summary>
@@ -321,10 +321,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_device->name); }
+            System::String^ get() { return Utils::ConvertCppString(_device->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _device->SetName(name);
             }
         }
@@ -337,7 +337,7 @@ namespace VxSdkNet {
         public:
             void set(System::String^ value) {
                 char password[64];
-                VxSdk::Utilities::StrCopySafe(password, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(password, Utils::ConvertCSharpString(value).c_str());
                 _device->SetPassword(password);
             }
         }
@@ -367,7 +367,7 @@ namespace VxSdkNet {
         /// <value>The serial number.</value>
         property System::String^ Serial {
         public:
-            System::String^ get() { return gcnew System::String(_device->serial); }
+            System::String^ get() { return Utils::ConvertCppString(_device->serial); }
         }
 
         /// <summary>
@@ -409,10 +409,10 @@ namespace VxSdkNet {
         /// <value>The username.</value>
         property System::String^ Username {
         public:
-            System::String^ get() { return gcnew System::String(_device->username); }
+            System::String^ get() { return Utils::ConvertCppString(_device->username); }
             void set(System::String^ value) {
                 char username[64];
-                VxSdk::Utilities::StrCopySafe(username, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(username, Utils::ConvertCSharpString(value).c_str());
                 _device->SetUsername(username);
             }
         }
@@ -423,7 +423,7 @@ namespace VxSdkNet {
         /// <value>The name of the devices vendor.</value>
         property System::String^ Vendor {
         public:
-            System::String^ get() { return gcnew System::String(_device->vendor); }
+            System::String^ get() { return Utils::ConvertCppString(_device->vendor); }
         }
 
         /// <summary>
@@ -432,10 +432,10 @@ namespace VxSdkNet {
         /// <value>The software version.</value>
         property System::String^ Version {
         public:
-            System::String^ get() { return gcnew System::String(_device->version); }
+            System::String^ get() { return Utils::ConvertCppString(_device->version); }
             void set(System::String^ value) {
                 char version[64];
-                VxSdk::Utilities::StrCopySafe(version, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(version, Utils::ConvertCSharpString(value).c_str());
                 _device->SetVersion(version);
             }
         }
@@ -446,7 +446,7 @@ namespace VxSdkNet {
         /// <value>The virtual IP.</value>
         property System::String^ VirtualIp {
         public:
-            System::String^ get() { return gcnew System::String(_device->virtualIp); }
+            System::String^ get() { return Utils::ConvertCppString(_device->virtualIp); }
         }
 
     internal:

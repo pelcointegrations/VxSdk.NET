@@ -44,11 +44,12 @@ namespace VxSdkNet {
         /// <value>The end date.</value>
         property System::DateTime EndDate {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_timeTable->endDate); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_timeTable->endDate); }
             void set(System::DateTime value) {
+                std::string val = Utils::ConvertCSharpDateTime(value);
                 char* endValue = nullptr;
                 if (value != System::DateTime::MinValue)
-                    endValue = Utils::ConvertDateTimeToCharNonConst(value);
+                    endValue = (char*)val.c_str();
 
                 _timeTable->SetEndDate(endValue);
             }
@@ -60,7 +61,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_timeTable->id); }
+            System::String^ get() { return Utils::ConvertCppString(_timeTable->id); }
         }
 
         /// <summary>
@@ -69,10 +70,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_timeTable->name); }
+            System::String^ get() { return Utils::ConvertCppString(_timeTable->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _timeTable->SetName(name);
             }
         }
@@ -83,11 +84,12 @@ namespace VxSdkNet {
         /// <value>The start date.</value>
         property System::DateTime StartDate {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_timeTable->startDate); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_timeTable->startDate); }
             void set(System::DateTime value) {
+                std::string val = Utils::ConvertCSharpDateTime(value);
                 char* startValue = nullptr;
                 if (value != System::DateTime::MinValue)
-                    startValue = Utils::ConvertDateTimeToCharNonConst(value);
+                    startValue = (char*)val.c_str();
 
                 _timeTable->SetStartDate(startValue);
             }

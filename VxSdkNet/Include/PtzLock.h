@@ -66,7 +66,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_ptzLock->id); }
+            System::String^ get() { return Utils::ConvertCppString(_ptzLock->id); }
         }
 
         /// <summary>

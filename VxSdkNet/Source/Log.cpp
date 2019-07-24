@@ -29,7 +29,7 @@ System::String^ VxSdkNet::Log::_GetLogEndpoint() {
         // The result should now be kOK since we have allocated enough space
         _log->GetLogEndpoint(logEndpoint, size);
     }
-    return gcnew System::String(logEndpoint);
+    return Utils::ConvertCppString(logEndpoint);
 }
 
 

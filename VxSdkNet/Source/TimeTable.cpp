@@ -37,8 +37,8 @@ VxSdkNet::Results::Value VxSdkNet::TimeTable::_SetWeeklyTimeRanges(System::Colle
         for (int i = 0; i < timeRangeListSize; i++) {
             timeRanges[i] = new VxSdk::VxTimeRange();
             timeRanges[i]->day = (VxSdk::VxDayOfWeek::Value)timeRangeList[i]->Day;
-            VxSdk::Utilities::StrCopySafe(timeRanges[i]->startTime, Utils::ConvertDateTimeToTimeChar(timeRangeList[i]->StartTime));
-            VxSdk::Utilities::StrCopySafe(timeRanges[i]->endTime, Utils::ConvertDateTimeToTimeChar(timeRangeList[i]->EndTime));
+            VxSdk::Utilities::StrCopySafe(timeRanges[i]->startTime, Utils::ConvertCSharpTime(timeRangeList[i]->StartTime).c_str());
+            VxSdk::Utilities::StrCopySafe(timeRanges[i]->endTime, Utils::ConvertCSharpTime(timeRangeList[i]->EndTime).c_str());
         }
     }
     // Attempt to set the weekly time ranges and return the result

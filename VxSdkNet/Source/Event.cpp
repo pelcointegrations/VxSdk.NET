@@ -34,8 +34,8 @@ System::Collections::Generic::List<System::Collections::Generic::KeyValuePair<Sy
 
     // Populate the list with the event properties
     for (int i = 0; i < _event->propertySize; i++) {
-        System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(gcnew System::String(_event->properties[i]->key),
-            gcnew System::String(_event->properties[i]->value));
+        System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(Utils::ConvertCppString(_event->properties[i]->key),
+            Utils::ConvertCppString(_event->properties[i]->value));
 
         mList->Add(kvPair);
     }

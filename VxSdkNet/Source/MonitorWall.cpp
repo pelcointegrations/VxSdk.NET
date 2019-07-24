@@ -28,7 +28,7 @@ List<VxSdkNet::Monitor^>^ VxSdkNet::MonitorWall::GetMonitors(System::Collections
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 

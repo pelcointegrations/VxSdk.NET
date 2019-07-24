@@ -56,5 +56,5 @@ System::String^ VxSdkNet::PtzLock::_GetOwner() {
         // The result should now be kOK since we have allocated enough space
         _ptzLock->GetOwner(owner, size);
     }
-    return gcnew System::String(owner);
+    return Utils::ConvertCppString(owner);
 }

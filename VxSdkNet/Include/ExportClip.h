@@ -26,7 +26,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the data source.</value>
         property System::String^ DataSourceId {
         public:
-            System::String^ get() { return gcnew System::String(_exportClip->dataSourceId); }
+            System::String^ get() { return Utils::ConvertCppString(_exportClip->dataSourceId); }
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace VxSdkNet {
         /// <value>The end time.</value>
         property System::DateTime EndTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_exportClip->endTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_exportClip->endTime); }
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_exportClip->id); }
+            System::String^ get() { return Utils::ConvertCppString(_exportClip->id); }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace VxSdkNet {
         /// <value>The start time.</value>
         property System::DateTime StartTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_exportClip->startTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_exportClip->startTime); }
         }
 
     internal:

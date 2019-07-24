@@ -45,7 +45,7 @@ List<VxSdkNet::AlarmInput^>^ VxSdkNet::Device::GetAlarmInputs(System::Collection
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -84,7 +84,7 @@ List<VxSdkNet::DataSource^>^ VxSdkNet::Device::GetDataSources(System::Collection
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -123,7 +123,7 @@ List<VxSdkNet::DeviceAssignment^>^ VxSdkNet::Device::GetDeviceAssignments(System
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -162,7 +162,7 @@ List<VxSdkNet::Log^>^ VxSdkNet::Device::GetLogs(System::Collections::Generic::Di
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -201,7 +201,7 @@ System::Collections::Generic::List<VxSdkNet::Monitor^>^ VxSdkNet::Device::GetMon
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -240,7 +240,7 @@ List<VxSdkNet::RelayOutput^>^ VxSdkNet::Device::GetRelayOutputs(System::Collecti
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 

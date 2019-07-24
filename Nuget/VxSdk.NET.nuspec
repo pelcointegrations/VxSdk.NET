@@ -4,8 +4,8 @@
     <id>VxSdk.NET</id>
     <title>VideoXpert SDK .NET Wrapper</title>
     <version>3.0.0000</version>
-    <authors>Pelco by Schneider Electric</authors>
-    <owners>Pelco by Schneider Electric</owners>
+    <authors>Pelco</authors>
+    <owners>Pelco</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.githubusercontent.com/pelcointegrations/VideoXpertSdk/master/Nuget/pelco-integrations-64x64.png</iconUrl>
     <projectUrl>https://github.com/pelcointegrations/VxSdk.NET</projectUrl>
@@ -13,7 +13,7 @@
     <description>Provides a .NET wrapper for the Pelco VideoXpert SDK, which allows third party applications to integrate with the VideoXpert platform.</description>
     <summary>A .NET wrapper for the Pelco VideoXpert SDK.</summary>
     <copyright>Copyright ©2019 Pelco</copyright>
-    <tags>videoxpert, vxsdk, sdk, pelco, schneider-electric, .net, wrapper</tags>
+    <tags>videoxpert, vxsdk, sdk, pelco, .net, wrapper</tags>
   </metadata>
     <files>
       <file src="VxSdk.NET.targets" target="build\VxSdk.NET.targets" />

@@ -57,7 +57,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_dataSession->id); }
+            System::String^ get() { return Utils::ConvertCppString(_dataSession->id); }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace VxSdkNet {
         /// <value>The JPEG URI.</value>
         property System::String^ JpegUri {
         public:
-            System::String^ get() { return gcnew System::String(_dataSession->jpegUri); }
+            System::String^ get() { return Utils::ConvertCppString(_dataSession->jpegUri); }
         }
 
         /// <summary>

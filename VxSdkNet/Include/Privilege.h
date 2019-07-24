@@ -358,7 +358,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_privilege->id); }
+            System::String^ get() { return Utils::ConvertCppString(_privilege->id); }
         }
 
         /// <summary>

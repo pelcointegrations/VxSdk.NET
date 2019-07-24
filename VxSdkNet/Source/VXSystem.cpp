@@ -33,14 +33,14 @@ using namespace System::Runtime::InteropServices;
 
 VxSdkNet::VXSystem::VXSystem(String^ ip, String^ licenseKey) : _loginInfo(new VxSdk::VxLoginInfo()) {
     // Enter the VideoXpert IP information
-    VxSdk::Utilities::StrCopySafe(_loginInfo->ipAddress, Utils::ConvertSysString(ip));
-    VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertSysString(licenseKey));
+    VxSdk::Utilities::StrCopySafe(_loginInfo->ipAddress, Utils::ConvertCSharpString(ip).c_str());
+    VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertCSharpString(licenseKey).c_str());
 }
 
 VxSdkNet::VXSystem::VXSystem(String^ ip, int port, bool useSSL, String^ licenseKey) : _loginInfo(new VxSdk::VxLoginInfo()) {
     // Enter the VideoXpert IP information
-    VxSdk::Utilities::StrCopySafe(_loginInfo->ipAddress, Utils::ConvertSysString(ip));
-    VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertSysString(licenseKey));
+    VxSdk::Utilities::StrCopySafe(_loginInfo->ipAddress, Utils::ConvertCSharpString(ip).c_str());
+    VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertCSharpString(licenseKey).c_str());
     _loginInfo->port = port;
     _loginInfo->useSsl = useSSL;
 }
@@ -65,13 +65,13 @@ VxSdkNet::VXSystem::!VXSystem() {
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddBookmark(VxSdkNet::NewBookmark^ newBookmark) {
     // Create a bookmark object and populate its fields using newBookmark
     VxSdk::VxNewBookmark vxBookmark;
-    VxSdk::Utilities::StrCopySafe(vxBookmark.dataSourceId, Utils::ConvertSysString(newBookmark->DataSourceId));
-    VxSdk::Utilities::StrCopySafe(vxBookmark.description, Utils::ConvertSysString(newBookmark->Description));
-    VxSdk::Utilities::StrCopySafe(vxBookmark.groupId, Utils::ConvertSysString(newBookmark->GroupId));
-    VxSdk::Utilities::StrCopySafe(vxBookmark.lockEndTime, Utils::ConvertDateTimeToChar(newBookmark->LockEndTime));
-    VxSdk::Utilities::StrCopySafe(vxBookmark.lockStartTime, Utils::ConvertDateTimeToChar(newBookmark->LockStartTime));
-    VxSdk::Utilities::StrCopySafe(vxBookmark.name, Utils::ConvertSysString(newBookmark->Name));
-    VxSdk::Utilities::StrCopySafe(vxBookmark.time, Utils::ConvertDateTimeToChar(newBookmark->Time));
+    VxSdk::Utilities::StrCopySafe(vxBookmark.dataSourceId, Utils::ConvertCSharpString(newBookmark->DataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxBookmark.description, Utils::ConvertCSharpString(newBookmark->Description).c_str());
+    VxSdk::Utilities::StrCopySafe(vxBookmark.groupId, Utils::ConvertCSharpString(newBookmark->GroupId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxBookmark.lockEndTime, Utils::ConvertCSharpDateTime(newBookmark->LockEndTime).c_str());
+    VxSdk::Utilities::StrCopySafe(vxBookmark.lockStartTime, Utils::ConvertCSharpDateTime(newBookmark->LockStartTime).c_str());
+    VxSdk::Utilities::StrCopySafe(vxBookmark.name, Utils::ConvertCSharpString(newBookmark->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxBookmark.time, Utils::ConvertCSharpDateTime(newBookmark->Time).c_str());
     vxBookmark.isLocked = newBookmark->IsLocked;
 
     // Make the call to add the bookmark into VideoXpert
@@ -83,8 +83,9 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddBookmark(VxSdkNet::NewBookmark^ 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDataObject(VxSdkNet::NewDataObject^ newDataObject) {
     // Create a new data object and populate its fields using newDataObject
     VxSdk::VxNewDataObject vxDataObject;
-    VxSdk::Utilities::StrCopySafe(vxDataObject.clientType, Utils::ConvertSysString(newDataObject->ClientType));
-    vxDataObject.data = Utils::ConvertSysStringNonConst(newDataObject->Data);
+    VxSdk::Utilities::StrCopySafe(vxDataObject.clientType, Utils::ConvertCSharpString(newDataObject->ClientType).c_str());
+    std::string val = Utils::ConvertCSharpString(newDataObject->Data);
+    vxDataObject.data = (char*)val.c_str();
     vxDataObject.isPrivate = newDataObject->IsPrivate;
 
     // Make the call to add the data object into VideoXpert
@@ -97,16 +98,16 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDevice(VxSdkNet::NewDevice^ newD
     VxSdk::VxNewDevice vxNewDevice;
     vxNewDevice.shouldAutoCommission = newDevice->ShouldAutoCommission;
     vxNewDevice.port = newDevice->Port;
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.driverType, Utils::ConvertSysString(newDevice->DriverType));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.id, Utils::ConvertSysString(newDevice->Id));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.ip, Utils::ConvertSysString(newDevice->Ip));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.model, Utils::ConvertSysString(newDevice->Model));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.name, Utils::ConvertSysString(newDevice->Name));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.password, Utils::ConvertSysString(newDevice->Password));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.serial, Utils::ConvertSysString(newDevice->Serial));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.username, Utils::ConvertSysString(newDevice->Username));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.vendor, Utils::ConvertSysString(newDevice->Vendor));
-    VxSdk::Utilities::StrCopySafe(vxNewDevice.version, Utils::ConvertSysString(newDevice->Version));
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.driverType, Utils::ConvertCSharpString(newDevice->DriverType).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.id, Utils::ConvertCSharpString(newDevice->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.ip, Utils::ConvertCSharpString(newDevice->Ip).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.model, Utils::ConvertCSharpString(newDevice->Model).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.name, Utils::ConvertCSharpString(newDevice->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.password, Utils::ConvertCSharpString(newDevice->Password).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.serial, Utils::ConvertCSharpString(newDevice->Serial).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.username, Utils::ConvertCSharpString(newDevice->Username).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.vendor, Utils::ConvertCSharpString(newDevice->Vendor).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.version, Utils::ConvertCSharpString(newDevice->Version).c_str());
     vxNewDevice.type = VxSdk::VxDeviceType::Value(newDevice->Type);
     vxNewDevice.port = newDevice->Port;
 
@@ -119,7 +120,7 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDevice(VxSdkNet::NewDevice^ newD
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDrawing(System::String^ drawingName) {
     VxSdk::VxNewDrawing vxDrawing;
-    VxSdk::Utilities::StrCopySafe(vxDrawing.name, Utils::ConvertSysString(drawingName));
+    VxSdk::Utilities::StrCopySafe(vxDrawing.name, Utils::ConvertCSharpString(drawingName).c_str());
 
     // Make the call to add the drawing into VideoXpert
     VxSdk::VxResult::Value result = _system->AddDrawing(vxDrawing);
@@ -136,17 +137,17 @@ VxSdkNet::Export^ VxSdkNet::VXSystem::AddExport(VxSdkNet::NewExport^ newExport) 
         // Create new VxNewExportClip objects using the clip info contained in newExport
         vxExport.clips = new VxSdk::VxNewExportClip[vxExport.clipSize];
         for (int i = 0; i < vxExport.clipSize; i++) {
-            VxSdk::Utilities::StrCopySafe(vxExport.clips[i].dataSourceId, Utils::ConvertSysString(newExport->Clips[i]->DataSourceId));
-            VxSdk::Utilities::StrCopySafe(vxExport.clips[i].startTime, Utils::ConvertDateTimeToChar(newExport->Clips[i]->StartTime));
-            VxSdk::Utilities::StrCopySafe(vxExport.clips[i].endTime, Utils::ConvertDateTimeToChar(newExport->Clips[i]->EndTime));
+            VxSdk::Utilities::StrCopySafe(vxExport.clips[i].dataSourceId, Utils::ConvertCSharpString(newExport->Clips[i]->DataSourceId).c_str());
+            VxSdk::Utilities::StrCopySafe(vxExport.clips[i].startTime, Utils::ConvertCSharpDateTime(newExport->Clips[i]->StartTime).c_str());
+            VxSdk::Utilities::StrCopySafe(vxExport.clips[i].endTime, Utils::ConvertCSharpDateTime(newExport->Clips[i]->EndTime).c_str());
         }
     }
 
     vxExport.format = (VxSdk::VxExportFormat::Value)newExport->Format;
-    VxSdk::Utilities::StrCopySafe(vxExport.name, Utils::ConvertSysString(newExport->Name));
+    VxSdk::Utilities::StrCopySafe(vxExport.name, Utils::ConvertCSharpString(newExport->Name).c_str());
     // If the password field has a password set then the export will be password protected, if the password is not
     // set, the export will be public
-    VxSdk::Utilities::StrCopySafe(vxExport.password, Utils::ConvertSysString(newExport->Password));
+    VxSdk::Utilities::StrCopySafe(vxExport.password, Utils::ConvertCSharpString(newExport->Password).c_str());
 
     VxSdkNet::Export^ retExport = nullptr;
     // Attempt to create the export
@@ -168,7 +169,7 @@ VxSdkNet::Export^ VxSdkNet::VXSystem::AddExport(VxSdkNet::NewExport^ newExport) 
 
 VxSdkNet::ManualRecording^ VxSdkNet::VXSystem::AddManualRecording(VxSdkNet::NewManualRecording^ newManualRecording) {
     VxSdk::VxNewManualRecording vxNewManualRecording;
-    VxSdk::Utilities::StrCopySafe(vxNewManualRecording.dataSourceId, Utils::ConvertSysString(newManualRecording->DataSourceId));
+    VxSdk::Utilities::StrCopySafe(vxNewManualRecording.dataSourceId, Utils::ConvertCSharpString(newManualRecording->DataSourceId).c_str());
     vxNewManualRecording.postRecord = newManualRecording->PostRecord;
     vxNewManualRecording.preRecord = newManualRecording->PreRecord;
 
@@ -186,14 +187,14 @@ VxSdkNet::ManualRecording^ VxSdkNet::VXSystem::AddManualRecording(VxSdkNet::NewM
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddMonitorWall(System::String^ monitorWallName) {
     // Make the call to add the monitor wall into VideoXpert
-    VxSdk::VxResult::Value result = _system->CreateMonitorWall(Utils::ConvertSysString(monitorWallName));
+    VxSdk::VxResult::Value result = _system->CreateMonitorWall(Utils::ConvertCSharpString(monitorWallName).c_str());
     // Unless there was an issue creating the monitor wall the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRole(System::String^ roleName) {
     // Make the call to add the role into VideoXpert
-    VxSdk::VxResult::Value result = _system->AddRole(Utils::ConvertSysString(roleName));
+    VxSdk::VxResult::Value result = _system->AddRole(Utils::ConvertCSharpString(roleName).c_str());
     // Unless there was an issue creating the role the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
@@ -201,18 +202,19 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRole(System::String^ roleName) {
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRule(VxSdkNet::NewRule^ newRule) {
     // Create a new rule and populate its fields using newRule
     VxSdk::VxNewRule vxNewRule;
-    VxSdk::Utilities::StrCopySafe(vxNewRule.name, Utils::ConvertSysString(newRule->Name));
-    vxNewRule.script = Utils::ConvertSysStringNonConst(newRule->Script);
+    VxSdk::Utilities::StrCopySafe(vxNewRule.name, Utils::ConvertCSharpString(newRule->Name).c_str());
+    std::string val = Utils::ConvertCSharpString(newRule->Script);
+    vxNewRule.script = (char*)val.c_str();
     vxNewRule.isEnabled = newRule->IsEnabled;
     vxNewRule.triggerSize = newRule->RuleTriggers->Count;
     if (vxNewRule.triggerSize > 0)  {
         vxNewRule.triggers = new VxSdk::VxRuleTrigger[vxNewRule.triggerSize];
         for (int i = 0; i < vxNewRule.triggerSize; i++) {
-            VxSdk::Utilities::StrCopySafe(vxNewRule.triggers[i].situationType, Utils::ConvertSysString(newRule->RuleTriggers[i]->SituationType));
+            VxSdk::Utilities::StrCopySafe(vxNewRule.triggers[i].situationType, Utils::ConvertCSharpString(newRule->RuleTriggers[i]->SituationType).c_str());
             vxNewRule.triggers[i].sourceRefSize = newRule->RuleTriggers[i]->ResourceRefs->Count;
             vxNewRule.triggers[i].sourceRef = new VxSdk::VxResourceRef[vxNewRule.triggers[i].sourceRefSize];
             for (int ii = 0; ii < vxNewRule.triggers[i].sourceRefSize; ii++) {
-                VxSdk::Utilities::StrCopySafe(vxNewRule.triggers[i].sourceRef[ii].id, Utils::ConvertSysString(newRule->RuleTriggers[i]->ResourceRefs[ii]->Id));
+                VxSdk::Utilities::StrCopySafe(vxNewRule.triggers[i].sourceRef[ii].id, Utils::ConvertCSharpString(newRule->RuleTriggers[i]->ResourceRefs[ii]->Id).c_str());
                 vxNewRule.triggers[i].sourceRef[ii].type = (VxSdk::VxResourceType::Value)newRule->RuleTriggers[i]->ResourceRefs[ii]->Type;
             }
         }
@@ -224,7 +226,7 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRule(VxSdkNet::NewRule^ newRule)
         for (int i = 0; i < vxNewRule.timeTableIdSize; i++) {
             int idLength = newRule->TimeTables[i]->Id->Length + 1;
             vxNewRule.timeTableIds[i] = new char[idLength];
-            VxSdk::Utilities::StrCopySafe(vxNewRule.timeTableIds[i], Utils::ConvertSysString(newRule->TimeTables[i]->Id), idLength);
+            VxSdk::Utilities::StrCopySafe(vxNewRule.timeTableIds[i], Utils::ConvertCSharpString(newRule->TimeTables[i]->Id).c_str(), idLength);
         }
     }
 
@@ -244,8 +246,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRule(VxSdkNet::NewRule^ newRule)
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddSchedule(VxSdkNet::NewSchedule^ newSchedule) {
     // Create a schedule object and populate its fields using newSchedule
     VxSdk::VxNewSchedule vxSchedule;
-    VxSdk::Utilities::StrCopySafe(vxSchedule.id, Utils::ConvertSysString(newSchedule->Id));
-    VxSdk::Utilities::StrCopySafe(vxSchedule.name, Utils::ConvertSysString(newSchedule->Name));
+    VxSdk::Utilities::StrCopySafe(vxSchedule.id, Utils::ConvertCSharpString(newSchedule->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(vxSchedule.name, Utils::ConvertCSharpString(newSchedule->Name).c_str());
     vxSchedule.action = (VxSdk::VxScheduleAction::Value)newSchedule->Action;
     vxSchedule.useAllDataSources = newSchedule->UseAllDataSources;
 
@@ -254,8 +256,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddSchedule(VxSdkNet::NewSchedule^ 
     if (vxSchedule.scheduleTriggerSize > 0) {
         vxSchedule.scheduleTriggers = new VxSdk::VxNewScheduleTrigger[vxSchedule.scheduleTriggerSize];
         for (int i = 0; i < vxSchedule.scheduleTriggerSize; i++) {
-            VxSdk::Utilities::StrCopySafe(vxSchedule.scheduleTriggers[i].id, Utils::ConvertSysString(newSchedule->ScheduleTriggers[i]->Id));
-            VxSdk::Utilities::StrCopySafe(vxSchedule.scheduleTriggers[i].eventSituationType, Utils::ConvertSysString(newSchedule->ScheduleTriggers[i]->EventSituationType));
+            VxSdk::Utilities::StrCopySafe(vxSchedule.scheduleTriggers[i].id, Utils::ConvertCSharpString(newSchedule->ScheduleTriggers[i]->Id).c_str());
+            VxSdk::Utilities::StrCopySafe(vxSchedule.scheduleTriggers[i].eventSituationType, Utils::ConvertCSharpString(newSchedule->ScheduleTriggers[i]->EventSituationType).c_str());
             vxSchedule.scheduleTriggers[i].postTrigger = newSchedule->ScheduleTriggers[i]->PostTrigger;
             vxSchedule.scheduleTriggers[i].preTrigger = newSchedule->ScheduleTriggers[i]->PreTrigger;
             vxSchedule.scheduleTriggers[i].timeout = newSchedule->ScheduleTriggers[i]->Timeout;
@@ -267,9 +269,9 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddSchedule(VxSdkNet::NewSchedule^ 
                 vxSchedule.scheduleTriggers[i].eventProperties = new VxSdk::VxKvObject[vxSchedule.scheduleTriggers[i].eventPropertySize];
                 for (int ii = 0; ii < vxSchedule.scheduleTriggers[i].eventPropertySize; ii++) {
                     VxSdk::Utilities::StrCopySafe(vxSchedule.scheduleTriggers[i].eventProperties[ii].key,
-                        Utils::ConvertSysString(newSchedule->ScheduleTriggers[i]->EventProperties[ii].Key));
+                        Utils::ConvertCSharpString(newSchedule->ScheduleTriggers[i]->EventProperties[ii].Key).c_str());
                     VxSdk::Utilities::StrCopySafe(vxSchedule.scheduleTriggers[i].eventProperties[ii].value,
-                        Utils::ConvertSysString(newSchedule->ScheduleTriggers[i]->EventProperties[ii].Value));
+                        Utils::ConvertCSharpString(newSchedule->ScheduleTriggers[i]->EventProperties[ii].Value).c_str());
                 }
             }
         }
@@ -285,9 +287,9 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddSchedule(VxSdkNet::NewSchedule^ 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddSituation(VxSdkNet::NewSituation^ newSituation) {
     // Create a situation object and populate its fields using newSituation
     VxSdk::VxNewSituation vxSituation;
-    VxSdk::Utilities::StrCopySafe(vxSituation.name, Utils::ConvertSysString(newSituation->Name));
-    VxSdk::Utilities::StrCopySafe(vxSituation.sourceDeviceId, Utils::ConvertSysString(newSituation->SourceDeviceId));
-    VxSdk::Utilities::StrCopySafe(vxSituation.type, Utils::ConvertSysString(newSituation->Type));
+    VxSdk::Utilities::StrCopySafe(vxSituation.name, Utils::ConvertCSharpString(newSituation->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxSituation.sourceDeviceId, Utils::ConvertCSharpString(newSituation->SourceDeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxSituation.type, Utils::ConvertCSharpString(newSituation->Type).c_str());
     vxSituation.isAckNeeded = newSituation->IsAckNeeded;
     vxSituation.audibleLoopDelay = newSituation->AudibleLoopDelay;
     vxSituation.audiblePlayCount = newSituation->AudiblePlayCount;
@@ -318,8 +320,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddSituation(VxSdkNet::NewSituation
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddTag(VxSdkNet::NewTag^ newTag) {
     // Create a new tag object and populate its fields using newTag
     VxSdk::VxNewTag vxTag;
-    VxSdk::Utilities::StrCopySafe(vxTag.name, Utils::ConvertSysString(newTag->Name));
-    VxSdk::Utilities::StrCopySafe(vxTag.parentId, Utils::ConvertSysString(newTag->ParentId));
+    VxSdk::Utilities::StrCopySafe(vxTag.name, Utils::ConvertCSharpString(newTag->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxTag.parentId, Utils::ConvertCSharpString(newTag->ParentId).c_str());
     vxTag.isFolder = newTag->IsFolder;
     vxTag.isPublic = newTag->IsPublic;
 
@@ -332,16 +334,16 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddTag(VxSdkNet::NewTag^ newTag) {
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddTimeTable(VxSdkNet::NewTimeTable^ newTimeTable) {
     // Create a new time table object and populate its fields using newTimeTable
     VxSdk::VxNewTimeTable vxNewTimeTable;
-    VxSdk::Utilities::StrCopySafe(vxNewTimeTable.name, Utils::ConvertSysString(newTimeTable->Name));
-    VxSdk::Utilities::StrCopySafe(vxNewTimeTable.id, Utils::ConvertSysString(newTimeTable->Id));
+    VxSdk::Utilities::StrCopySafe(vxNewTimeTable.name, Utils::ConvertCSharpString(newTimeTable->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewTimeTable.id, Utils::ConvertCSharpString(newTimeTable->Id).c_str());
 
     if (newTimeTable->EndDate != System::DateTime::MinValue)
-        VxSdk::Utilities::StrCopySafe(vxNewTimeTable.endDate, Utils::ConvertDateTimeToCharNonConst(newTimeTable->EndDate));
+        VxSdk::Utilities::StrCopySafe(vxNewTimeTable.endDate, Utils::ConvertCSharpDateTime(newTimeTable->EndDate).c_str());
     else
         VxSdk::Utilities::StrCopySafe(vxNewTimeTable.endDate, new char[64]);
 
     if (newTimeTable->StartDate != System::DateTime::MinValue)
-        VxSdk::Utilities::StrCopySafe(vxNewTimeTable.startDate, Utils::ConvertDateTimeToCharNonConst(newTimeTable->StartDate));
+        VxSdk::Utilities::StrCopySafe(vxNewTimeTable.startDate, Utils::ConvertCSharpDateTime(newTimeTable->StartDate).c_str());
     else
         VxSdk::Utilities::StrCopySafe(vxNewTimeTable.startDate, new char[64]);
 
@@ -350,8 +352,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddTimeTable(VxSdkNet::NewTimeTable
         vxNewTimeTable.weeklyTimeRanges = new VxSdk::VxTimeRange[vxNewTimeTable.weeklyTimeRangeSize];
         for (int i = 0; i < vxNewTimeTable.weeklyTimeRangeSize; i++) {
             vxNewTimeTable.weeklyTimeRanges[i].day = (VxSdk::VxDayOfWeek::Value)newTimeTable->WeeklyTimeRanges[i]->Day;
-            VxSdk::Utilities::StrCopySafe(vxNewTimeTable.weeklyTimeRanges[i].endTime, Utils::ConvertDateTimeToTimeChar(newTimeTable->WeeklyTimeRanges[i]->EndTime));
-            VxSdk::Utilities::StrCopySafe(vxNewTimeTable.weeklyTimeRanges[i].startTime, Utils::ConvertDateTimeToTimeChar(newTimeTable->WeeklyTimeRanges[i]->StartTime));
+            VxSdk::Utilities::StrCopySafe(vxNewTimeTable.weeklyTimeRanges[i].endTime, Utils::ConvertCSharpTime(newTimeTable->WeeklyTimeRanges[i]->EndTime).c_str());
+            VxSdk::Utilities::StrCopySafe(vxNewTimeTable.weeklyTimeRanges[i].startTime, Utils::ConvertCSharpTime(newTimeTable->WeeklyTimeRanges[i]->StartTime).c_str());
         }
     }
 
@@ -368,21 +370,21 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddTimeTable(VxSdkNet::NewTimeTable
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddUser(VxSdkNet::NewUser^ newUser) {
     // Create a new user object and populate its fields using newUser
     VxSdk::VxNewUser vxNewUser;
-    VxSdk::Utilities::StrCopySafe(vxNewUser.domain, Utils::ConvertSysString(newUser->Domain));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.email, Utils::ConvertSysString(newUser->Email));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.employeeId, Utils::ConvertSysString(newUser->EmployeeId));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.firstName, Utils::ConvertSysString(newUser->FirstName));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.lastName, Utils::ConvertSysString(newUser->LastName));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.name, Utils::ConvertSysString(newUser->Name));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.note, Utils::ConvertSysString(newUser->Note));
-    VxSdk::Utilities::StrCopySafe(vxNewUser.password, Utils::ConvertSysString(newUser->Password));
+    VxSdk::Utilities::StrCopySafe(vxNewUser.domain, Utils::ConvertCSharpString(newUser->Domain).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.email, Utils::ConvertCSharpString(newUser->Email).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.employeeId, Utils::ConvertCSharpString(newUser->EmployeeId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.firstName, Utils::ConvertCSharpString(newUser->FirstName).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.lastName, Utils::ConvertCSharpString(newUser->LastName).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.name, Utils::ConvertCSharpString(newUser->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.note, Utils::ConvertCSharpString(newUser->Note).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.password, Utils::ConvertCSharpString(newUser->Password).c_str());
     vxNewUser.mustChangePassword = newUser->MustChangePassword;
     vxNewUser.phoneNumberSize = newUser->PhoneNumbers->Count;
     if (vxNewUser.phoneNumberSize > 0) {
         vxNewUser.phoneNumbers = new VxSdk::VxPhoneNumber[vxNewUser.phoneNumberSize];
         for (int i = 0; i < vxNewUser.phoneNumberSize; i++) {
             vxNewUser.phoneNumbers[i].type = (VxSdk::VxPhoneType::Value)newUser->PhoneNumbers[i].Key;
-            VxSdk::Utilities::StrCopySafe(vxNewUser.phoneNumbers[i].number, Utils::ConvertSysString(newUser->PhoneNumbers[i].Value));
+            VxSdk::Utilities::StrCopySafe(vxNewUser.phoneNumbers[i].number, Utils::ConvertCSharpString(newUser->PhoneNumbers[i].Value).c_str());
         }
     }
 
@@ -399,8 +401,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddUser(VxSdkNet::NewUser^ newUser)
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddVxMonitor(NewMonitor^ newMonitor) {
     // Create a new monitor object and populate its fields using newMonitor
     VxSdk::VxNewMonitor vxNewMonitor;
-    VxSdk::Utilities::StrCopySafe(vxNewMonitor.hostDeviceId, Utils::ConvertSysString(newMonitor->HostDeviceId));
-    VxSdk::Utilities::StrCopySafe(vxNewMonitor.name, Utils::ConvertSysString(newMonitor->Name));
+    VxSdk::Utilities::StrCopySafe(vxNewMonitor.hostDeviceId, Utils::ConvertCSharpString(newMonitor->HostDeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewMonitor.name, Utils::ConvertCSharpString(newMonitor->Name).c_str());
     vxNewMonitor.layout = (VxSdk::VxCellLayout::Value)newMonitor->Layout;
     vxNewMonitor.number = newMonitor->Number;
 
@@ -560,7 +562,7 @@ List<VxSdkNet::AlarmInput^>^ VxSdkNet::VXSystem::GetAlarmInputs(System::Collecti
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -599,7 +601,7 @@ List<VxSdkNet::Bookmark^>^ VxSdkNet::VXSystem::GetBookmarks(System::Collections:
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -639,7 +641,7 @@ List<VxSdkNet::DataObject^>^ VxSdkNet::VXSystem::GetDataObjects(System::Collecti
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -679,7 +681,7 @@ Collections::Generic::List<VxSdkNet::DataSource^>^ VxSdkNet::VXSystem::GetDataSo
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -718,7 +720,7 @@ List<VxSdkNet::DataStorage^>^ VxSdkNet::VXSystem::GetDataStorages(System::Collec
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -758,7 +760,7 @@ List<VxSdkNet::DeviceAssignment^>^ VxSdkNet::VXSystem::GetDeviceAssignments(Syst
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -797,7 +799,7 @@ Collections::Generic::List<VxSdkNet::Device^>^ VxSdkNet::VXSystem::GetDevices(Sy
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -836,7 +838,7 @@ Collections::Generic::List<VxSdkNet::ManualRecording^>^ VxSdkNet::VXSystem::GetM
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -875,7 +877,7 @@ List<VxSdkNet::Monitor^>^ VxSdkNet::VXSystem::GetMonitors(System::Collections::G
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -914,7 +916,7 @@ List<VxSdkNet::MonitorWall^>^ VxSdkNet::VXSystem::GetMonitorWalls(System::Collec
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -953,7 +955,7 @@ List<VxSdkNet::Drawing^>^ VxSdkNet::VXSystem::GetDrawings(System::Collections::G
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -993,7 +995,7 @@ List<VxSdkNet::Driver^>^ VxSdkNet::VXSystem::GetDrivers(System::Collections::Gen
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1033,7 +1035,7 @@ List<VxSdkNet::Event^>^ VxSdkNet::VXSystem::GetEvents(System::Collections::Gener
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1073,7 +1075,7 @@ List<VxSdkNet::Export^>^ VxSdkNet::VXSystem::GetExports(System::Collections::Gen
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1124,7 +1126,7 @@ List<VxSdkNet::RelayOutput^>^ VxSdkNet::VXSystem::GetRelayOutputs(System::Collec
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1163,7 +1165,7 @@ List<VxSdkNet::Role^>^ VxSdkNet::VXSystem::GetRoles(System::Collections::Generic
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1203,7 +1205,7 @@ System::Collections::Generic::List<VxSdkNet::Rule^>^ VxSdkNet::VXSystem::GetRule
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1243,7 +1245,7 @@ List<VxSdkNet::Schedule^>^ VxSdkNet::VXSystem::GetSchedules(System::Collections:
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1283,7 +1285,7 @@ List<VxSdkNet::Situation^>^ VxSdkNet::VXSystem::GetSituations(System::Collection
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1323,7 +1325,7 @@ List<VxSdkNet::Tag^>^ VxSdkNet::VXSystem::GetTags(System::Collections::Generic::
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1363,7 +1365,7 @@ System::Collections::Generic::List< VxSdkNet::TimeTable^>^ VxSdkNet::VXSystem::G
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1403,7 +1405,7 @@ List<VxSdkNet::User^>^ VxSdkNet::VXSystem::GetUsers(System::Collections::Generic
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -1433,16 +1435,16 @@ List<VxSdkNet::User^>^ VxSdkNet::VXSystem::GetUsers(System::Collections::Generic
 VxSdkNet::Results::Value VxSdkNet::VXSystem::InjectEvent(VxSdkNet::NewEvent^ newEvent) {
     // Create a new VxNewEvent object using the information contained in newEvent
     VxSdk::VxNewEvent vxEvent;
-    VxSdk::Utilities::StrCopySafe(vxEvent.generatorDeviceId, Utils::ConvertSysString(newEvent->GeneratorDeviceId));
-    VxSdk::Utilities::StrCopySafe(vxEvent.situationType, Utils::ConvertSysString(newEvent->SituationType));
-    VxSdk::Utilities::StrCopySafe(vxEvent.sourceDeviceId, Utils::ConvertSysString(newEvent->SourceDeviceId));
-    VxSdk::Utilities::StrCopySafe(vxEvent.time, Utils::ConvertDateTimeToChar(newEvent->Time));
+    VxSdk::Utilities::StrCopySafe(vxEvent.generatorDeviceId, Utils::ConvertCSharpString(newEvent->GeneratorDeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxEvent.situationType, Utils::ConvertCSharpString(newEvent->SituationType).c_str());
+    VxSdk::Utilities::StrCopySafe(vxEvent.sourceDeviceId, Utils::ConvertCSharpString(newEvent->SourceDeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxEvent.time, Utils::ConvertCSharpDateTime(newEvent->Time).c_str());
     vxEvent.propertySize = newEvent->Properties->Count;
     if (vxEvent.propertySize > 0) {
         vxEvent.properties =  new VxSdk::VxKvObject[vxEvent.propertySize];
         for (int i = 0; i < vxEvent.propertySize; i++) {
-            VxSdk::Utilities::StrCopySafe(vxEvent.properties[i].key, Utils::ConvertSysString(newEvent->Properties[i].Key));
-            VxSdk::Utilities::StrCopySafe(vxEvent.properties[i].value, Utils::ConvertSysString(newEvent->Properties[i].Value));
+            VxSdk::Utilities::StrCopySafe(vxEvent.properties[i].key, Utils::ConvertCSharpString(newEvent->Properties[i].Key).c_str());
+            VxSdk::Utilities::StrCopySafe(vxEvent.properties[i].value, Utils::ConvertCSharpString(newEvent->Properties[i].Value).c_str());
         }
     }
 
@@ -1457,8 +1459,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::InjectEvent(VxSdkNet::NewEvent^ new
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::Login(String^ username, String^ password) {
     // Enter the VideoXpert login information
-    VxSdk::Utilities::StrCopySafe(_loginInfo->username, Utils::ConvertSysString(username));
-    VxSdk::Utilities::StrCopySafe(_loginInfo->password, Utils::ConvertSysString(password));
+    VxSdk::Utilities::StrCopySafe(_loginInfo->username, Utils::ConvertCSharpString(username).c_str());
+    VxSdk::Utilities::StrCopySafe(_loginInfo->password, Utils::ConvertCSharpString(password).c_str());
     const int kSslPort = 443;
     _loginInfo->port = _loginInfo->port == 0 ? kSslPort : _loginInfo->port;
     _loginInfo->useSsl = true;
@@ -1481,7 +1483,7 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::Login(String^ username, String^ pas
 }
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::Login(String^ authToken) {
-    VxSdk::Utilities::StrCopySafe(_loginInfo->authToken, Utils::ConvertSysString(authToken));
+    VxSdk::Utilities::StrCopySafe(_loginInfo->authToken, Utils::ConvertCSharpString(authToken).c_str());
     const int kSslPort = 443;
     _loginInfo->port = _loginInfo->port == 0 ? kSslPort : _loginInfo->port;
     _loginInfo->useSsl = true;

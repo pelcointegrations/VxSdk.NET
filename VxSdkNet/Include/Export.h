@@ -108,7 +108,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> when the export completed.</value>
         property System::DateTime Completed {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_export->completedTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_export->completedTime); }
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace VxSdkNet {
         /// <value>The data URI.</value>
         property System::String^ DataUri {
         public:
-            System::String^ get() { return gcnew System::String(_export->dataUri); }
+            System::String^ get() { return Utils::ConvertCppString(_export->dataUri); }
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace VxSdkNet {
         /// <value>The export storage path.</value>
         property System::String^ ExportPath {
         public:
-            System::String^ get() { return gcnew System::String(_export->exportPath); }
+            System::String^ get() { return Utils::ConvertCppString(_export->exportPath); }
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_export->id); }
+            System::String^ get() { return Utils::ConvertCppString(_export->id); }
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace VxSdkNet {
         /// <value>The <c>DateTime</c> when the export was initiated.</value>
         property System::DateTime Initiated {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_export->initiatedTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_export->initiatedTime); }
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_export->name); }
+            System::String^ get() { return Utils::ConvertCppString(_export->name); }
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace VxSdkNet {
         /// <value>The owner name.</value>
         property System::String^ OwnerName {
         public:
-            System::String^ get() { return gcnew System::String(_export->owner); }
+            System::String^ get() { return Utils::ConvertCppString(_export->owner); }
         }
 
         /// <summary>

@@ -56,22 +56,22 @@ System::String^ VxSdkNet::Clip::GetSnapshotEndpoint(SnapshotFilter^ filter) {
         int filterPosition = 0;
         if (filter->EndTime != System::DateTime::MinValue) {
             vxFilter[filterPosition].key = VxSdk::VxSnapshotFilterItem::kEndTime;
-            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertDateTimeToChar(filter->EndTime));
+            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertCSharpDateTime(filter->EndTime).c_str());
             filterPosition++;
         }
         if (filter->StartTime != System::DateTime::MinValue) {
             vxFilter[filterPosition].key = VxSdk::VxSnapshotFilterItem::kStartTime;
-            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertDateTimeToChar(filter->StartTime));
+            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertCSharpDateTime(filter->StartTime).c_str());
             filterPosition++;
         }
         if (filter->Offset != NULL) {
             vxFilter[filterPosition].key = VxSdk::VxSnapshotFilterItem::kOffset;
-            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertSysString(filter->Offset.ToString()));
+            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertCSharpString(filter->Offset.ToString()).c_str());
             filterPosition++;
         }
         if (filter->Width != NULL) {
             vxFilter[filterPosition].key = VxSdk::VxSnapshotFilterItem::kWidth;
-            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertSysString(filter->Width.ToString()));
+            VxSdk::Utilities::StrCopySafe(vxFilter[filterPosition].value, Utils::ConvertCSharpString(filter->Width.ToString()).c_str());
         }
     }
     else {
@@ -90,5 +90,5 @@ System::String^ VxSdkNet::Clip::GetSnapshotEndpoint(SnapshotFilter^ filter) {
         // The result should now be kOK since we have allocated enough space
         _clip->GetSnapshotEndpoint(vxFilter, filterSize, snapshotEndpoint, size);
     }
-    return gcnew System::String(snapshotEndpoint);
+    return Utils::ConvertCppString(snapshotEndpoint);
 }

@@ -46,8 +46,8 @@ System::Collections::Generic::List<System::Collections::Generic::KeyValuePair<Sy
 
     // Populate the list with the reason data
     for (int i = 0; i < _gap->reasonDataSize; i++) {
-        System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(gcnew System::String(_gap->reasonData[i]->key),
-            gcnew System::String(_gap->reasonData[i]->value));
+        System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(Utils::ConvertCppString(_gap->reasonData[i]->key),
+            Utils::ConvertCppString(_gap->reasonData[i]->value));
 
         mList->Add(kvPair);
     }

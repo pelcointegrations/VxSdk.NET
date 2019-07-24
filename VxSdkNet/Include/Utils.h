@@ -1,4 +1,4 @@
-// Declares the utilities class.
+ï»¿// Declares the utilities class.
 #ifndef Utils_h__
 #define Utils_h__
 
@@ -82,7 +82,7 @@ namespace VxSdkNet {
 
             /// <summary>
             /// The requested operation is not possible due to a conflict with the resource. Typically this is due to a violation of a
-            /// uniqueness property on one of the resource’s fields.
+            /// uniqueness property on one of the resourceâ€™s fields.
             /// </summary>
             Conflict,
 
@@ -112,7 +112,7 @@ namespace VxSdkNet {
 
             /// <summary>
             /// The server is incapable of handling the client request due to the size of the resulting response.What constitutes
-            /// ’too large’ is entirely up to the server.
+            /// â€™too largeâ€™ is entirely up to the server.
             /// </summary>
             ResponseTooLarge,
 
@@ -487,22 +487,31 @@ namespace VxSdkNet {
     private class Utils {
     public:
         /// <summary>
-        /// Convert a system string to a char.
+        /// Convert a std string to a system string.
         /// </summary>
-        /// <param name="sysString">The system string.</param>
+        /// <param name="stdString">The string source</param>
         /// <returns>Null if it fails, else the converted string.</returns>
-        static const char* ConvertSysString(System::String^ sysString) {
-            msclr::interop::marshal_context^ ctx = gcnew msclr::interop::marshal_context();
-            return ctx->marshal_as<const char*>(sysString);
+        static System::String^ ConvertCppString(std::string &stdString) {
+            const char *strChars = stdString.c_str();
+            return ConvertCppString(strChars);
         }
 
         /// <summary>
-        /// Convert a system string to a char.
+        /// Convert a pointer to const char to a system string.
         /// </summary>
-        /// <param name="sysString">The system string.</param>
+        /// <param name="str">The string source</param>
         /// <returns>Null if it fails, else the converted string.</returns>
-        static char* ConvertSysStringNonConst(System::String^ sysString) {
-            return (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(sysString);
+        static System::String^ ConvertCppString(const char *charString) {
+            System::String^ str = System::String::Empty;
+            if (charString == nullptr) return str;
+
+            int strLen = strlen(charString);
+            if (strLen == 0) return str;
+
+            array<byte> ^bytes = gcnew array<byte>(strLen);
+            pin_ptr<byte> pinnedBytes = &bytes[0];
+            strcpy_s((char*)pinnedBytes, strLen + 1, charString);
+            return System::Text::Encoding::UTF8->GetString(bytes);
         }
 
         /// <summary>
@@ -510,93 +519,71 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="sysString">The system string.</param>
         /// <returns>Null if it fails, else the converted string.</returns>
-        static std::string ConvertSysStringStdString(System::String^ sysString) {
-            msclr::interop::marshal_context^ ctx = gcnew msclr::interop::marshal_context();
-            return ctx->marshal_as<std::string>(sysString);
+        static std::string ConvertCSharpString(System::String^ sysString) {
+            std::string stdString;
+            if (System::String::IsNullOrWhiteSpace(sysString)) return stdString;
+
+            array<byte> ^bytes = System::Text::Encoding::UTF8->GetBytes(sysString);
+            pin_ptr<byte> pinnedBytes = &bytes[0];
+            stdString = std::string((char*)pinnedBytes);
+            return stdString;
         }
 
         /// <summary>
         /// Convert a char to a DateTime.
         /// </summary>
-        /// <param name="dateTimeString">The date string.</param>
+        /// <param name="charString">The date string.</param>
         /// <returns>Default DateTime if it fails, else the parsed DateTime.</returns>
-        static System::DateTime ConvertCharToDateTime(char* dateTimeString) {
-            System::String^ value = gcnew System::String(dateTimeString);
+        static System::DateTime ConvertCppDateTime(const char* charString) {
+            System::DateTime parsedTime;
+            System::String^ value = Utils::ConvertCppString(charString);
+            if (System::String::IsNullOrWhiteSpace(value)) return parsedTime;
+
             array<System::String^>^ formats = gcnew array<System::String^>(2);
-            formats[0] = gcnew System::String("yyyy-MM-dd'T'HH:mm:ss.fff'Z'");
-            formats[1] = gcnew System::String("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            if (value == System::String::Empty)
-                return System::DateTime();
+            formats[0] = Utils::ConvertCppString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'");
+            formats[1] = Utils::ConvertCppString("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-            System::DateTime timeValue;
             System::Globalization::CultureInfo^ culture = System::Globalization::CultureInfo::InvariantCulture;
-            System::DateTime::TryParseExact(value, formats, culture, System::Globalization::DateTimeStyles::None, timeValue);
-            timeValue = System::DateTime::SpecifyKind(timeValue, System::DateTimeKind::Utc);
-            return timeValue;
+            System::DateTime::TryParseExact(value, formats, culture, System::Globalization::DateTimeStyles::None, parsedTime);
+            parsedTime = System::DateTime::SpecifyKind(parsedTime, System::DateTimeKind::Utc);
+            return parsedTime;
         }
 
         /// <summary>
-        /// Convert a DateTime to a char.
+        /// Convert a DateTime to a string.
         /// </summary>
         /// <param name="dateTime">The DateTime.</param>
-        /// <returns>The DateTime as a char.</returns>
-        static const char* ConvertDateTimeToChar(System::DateTime dateTime) {
+        /// <returns>The DateTime as a string.</returns>
+        static std::string ConvertCSharpDateTime(System::DateTime dateTime) {
             dateTime = dateTime.ToUniversalTime();
-            System::String^ timeString = dateTime.ToString(gcnew System::String("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"));
-            msclr::interop::marshal_context^ ctx = gcnew msclr::interop::marshal_context();
-            return ctx->marshal_as<const char*>(timeString);
+            System::String^ timeString = dateTime.ToString(Utils::ConvertCppString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"));
+            return Utils::ConvertCSharpString(timeString);
         }
 
         /// <summary>
-        /// Convert a DateTime to a char.
+        /// Convert a DateTime to a string in TimeOfDay format.
         /// </summary>
         /// <param name="dateTime">The DateTime.</param>
-        /// <returns>The DateTime as a char.</returns>
-        static char* ConvertDateTimeToCharNonConst(System::DateTime dateTime) {
-            dateTime = dateTime.ToUniversalTime();
-            System::String^ timeString = dateTime.ToString(gcnew System::String("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"));
-            msclr::interop::marshal_context^ ctx = gcnew msclr::interop::marshal_context();
-            return (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(timeString);
-        }
-
-        /// <summary>
-        /// Convert a DateTime to a char in TimeOfDay format.
-        /// </summary>
-        /// <param name="dateTime">The DateTime.</param>
-        /// <returns>The DateTime as a char in TimeOfDay format.</returns>
-        static const char* ConvertDateTimeToTimeChar(System::DateTime dateTime) {
-            System::String^ timeString = dateTime.ToString(gcnew System::String("HH:mm:ss"));
-            msclr::interop::marshal_context^ ctx = gcnew msclr::interop::marshal_context();
-            return ctx->marshal_as<const char*>(timeString);
-        }
-
-        /// <summary>
-        /// Convert a DateTime to a char in TimeOfDay format.
-        /// </summary>
-        /// <param name="dateTime">The DateTime.</param>
-        /// <returns>The DateTime as a char in TimeOfDay format.</returns>
-        static char* ConvertDateTimeToTimeCharNonConst(System::DateTime dateTime) {
-            System::String^ timeString = dateTime.ToString(gcnew System::String("HH:mm:ss"));
-            msclr::interop::marshal_context^ ctx = gcnew msclr::interop::marshal_context();
-            return (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(timeString);
+        /// <returns>The DateTime as a string in TimeOfDay format.</returns>
+        static std::string ConvertCSharpTime(System::DateTime dateTime) {
+            System::String^ timeString = dateTime.ToString(Utils::ConvertCppString("HH:mm:ss"));
+            return Utils::ConvertCSharpString(timeString);
         }
 
         /// <summary>
         /// Convert a char to a DateTime using TimeOfDay format.
         /// </summary>
-        /// <param name="timeString">The time string.</param>
+        /// <param name="charString">The time string.</param>
         /// <returns>Default DateTime if it fails, else the parsed DateTime.</returns>
-        static System::DateTime ConvertTimeCharToDateTime(char* timeString) {
+        static System::DateTime ConvertCppTime(const char* charString) {
             System::DateTime parsedTime;
-            System::String^ value = gcnew System::String(timeString);
-            if (value == System::String::Empty)
-                return parsedTime;
+            System::String^ value = Utils::ConvertCppString(charString);
+            if (System::String::IsNullOrWhiteSpace(value)) return parsedTime;
 
             array<System::String^>^ formats = gcnew array<System::String^>(2);
-            formats[0] = gcnew System::String("HH:mm:ss");
-            formats[1] = gcnew System::String("HH:mm:ss.fff");
+            formats[0] = Utils::ConvertCppString("HH:mm:ss");
+            formats[1] = Utils::ConvertCppString("HH:mm:ss.fff");
             System::DateTime::TryParseExact(value, formats, System::Globalization::CultureInfo::InvariantCulture, System::Globalization::DateTimeStyles::None, parsedTime);
-
             return parsedTime;
         }
     };
@@ -625,7 +612,7 @@ namespace VxSdkNet {
         /// <returns>The <see cref="Results::Value">Result</see> of setting the configuration.</returns>
         static VxSdkNet::Results::Value SetLogPath(System::String^ logPath) {
             // Set the log path
-            VxSdk::VxResult::Value result = VxSdk::VxSetLogPath(VxSdkNet::Utils::ConvertSysString(logPath));
+            VxSdk::VxResult::Value result = VxSdk::VxSetLogPath(VxSdkNet::Utils::ConvertCSharpString(logPath).c_str());
 
             return VxSdkNet::Results::Value(result);
         }

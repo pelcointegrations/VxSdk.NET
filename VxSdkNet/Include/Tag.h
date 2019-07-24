@@ -101,7 +101,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_tag->id); }
+            System::String^ get() { return Utils::ConvertCppString(_tag->id); }
         }
 
         /// <summary>
@@ -138,10 +138,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_tag->name); }
+            System::String^ get() { return Utils::ConvertCppString(_tag->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _tag->SetName(name);
             }
         }
@@ -158,7 +158,7 @@ namespace VxSdkNet {
                     _tag->SetParentId(nullptr);
                 else {
                     char parentId[64];
-                    VxSdk::Utilities::StrCopySafe(parentId, Utils::ConvertSysStringNonConst(value->Id));
+                    VxSdk::Utilities::StrCopySafe(parentId, Utils::ConvertCSharpString(value->Id).c_str());
                     _tag->SetParentId(parentId);
                 }
             }
@@ -179,7 +179,7 @@ namespace VxSdkNet {
         /// <value>The name of the user that owns this tag.</value>
         property System::String^ OwnerName {
         public:
-            System::String^ get() { return gcnew System::String(_tag->owner); }
+            System::String^ get() { return Utils::ConvertCppString(_tag->owner); }
         }
 
     internal:

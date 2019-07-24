@@ -138,10 +138,10 @@ namespace VxSdkNet {
         /// <value>The network domain.</value>
         property System::String^ Domain {
         public:
-            System::String^ get() { return gcnew System::String(_user->domain); }
+            System::String^ get() { return Utils::ConvertCppString(_user->domain); }
             void set(System::String^ value) {
                 char domain[64];
-                VxSdk::Utilities::StrCopySafe(domain, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(domain, Utils::ConvertCSharpString(value).c_str());
                 _user->SetDomain(domain);
             }
         }
@@ -152,10 +152,10 @@ namespace VxSdkNet {
         /// <value>The email address.</value>
         property System::String^ Email {
         public:
-            System::String^ get() { return gcnew System::String(_user->email); }
+            System::String^ get() { return Utils::ConvertCppString(_user->email); }
             void set(System::String^ value) {
                 char email[256];
-                VxSdk::Utilities::StrCopySafe(email, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(email, Utils::ConvertCSharpString(value).c_str());
                 _user->SetEmail(email);
             }
         }
@@ -166,10 +166,10 @@ namespace VxSdkNet {
         /// <value>The employee identifier.</value>
         property System::String^ EmployeeId {
         public:
-            System::String^ get() { return gcnew System::String(_user->employeeId); }
+            System::String^ get() { return Utils::ConvertCppString(_user->employeeId); }
             void set(System::String^ value) {
                 char employeeId[64];
-                VxSdk::Utilities::StrCopySafe(employeeId, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(employeeId, Utils::ConvertCSharpString(value).c_str());
                 _user->SetEmployeeId(employeeId);
             }
         }
@@ -180,10 +180,10 @@ namespace VxSdkNet {
         /// <value>The first name of user.</value>
         property System::String^ FirstName {
         public:
-            System::String^ get() { return gcnew System::String(_user->firstName); }
+            System::String^ get() { return Utils::ConvertCppString(_user->firstName); }
             void set(System::String^ value) {
                 char firstName[64];
-                VxSdk::Utilities::StrCopySafe(firstName, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(firstName, Utils::ConvertCSharpString(value).c_str());
                 _user->SetFirstName(firstName);
             }
         }
@@ -194,7 +194,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_user->id); }
+            System::String^ get() { return Utils::ConvertCppString(_user->id); }
         }
 
         /// <summary>
@@ -203,10 +203,10 @@ namespace VxSdkNet {
         /// <value>The last name of user.</value>
         property System::String^ LastName {
         public:
-            System::String^ get() { return gcnew System::String(_user->lastName); }
+            System::String^ get() { return Utils::ConvertCppString(_user->lastName); }
             void set(System::String^ value) {
                 char lastName[64];
-                VxSdk::Utilities::StrCopySafe(lastName, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(lastName, Utils::ConvertCSharpString(value).c_str());
                 _user->SetLastName(lastName);
             }
         }
@@ -217,7 +217,7 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_user->name); }
+            System::String^ get() { return Utils::ConvertCppString(_user->name); }
         }
 
         /// <summary>
@@ -226,10 +226,10 @@ namespace VxSdkNet {
         /// <value>Information about the user.</value>
         property System::String^ Note {
         public:
-            System::String^ get() { return gcnew System::String(_user->note); }
+            System::String^ get() { return Utils::ConvertCppString(_user->note); }
             void set(System::String^ value) {
                 char note[1024];
-                VxSdk::Utilities::StrCopySafe(note, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(note, Utils::ConvertCSharpString(value).c_str());
                 _user->SetNote(note);
             }
         }
@@ -240,7 +240,7 @@ namespace VxSdkNet {
         /// <value>The password experation date.</value>
         property System::DateTime PasswordExpiration {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_user->passwordExpiration); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_user->passwordExpiration); }
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace VxSdkNet {
                 for (int i = 0; i < _user->phoneNumberSize; i++)
                 {
                     System::Collections::Generic::KeyValuePair<User::PhoneType, System::String^> kvPair((User::PhoneType)_user->phoneNumbers[i]->type,
-                        gcnew System::String(_user->phoneNumbers[i]->number));
+                        Utils::ConvertCppString(_user->phoneNumbers[i]->number));
 
                     mList->Add(kvPair);
                 }
@@ -269,7 +269,7 @@ namespace VxSdkNet {
                 for (int i = 0; i < size; i++) {
                     numbers[i] = new VxSdk::VxPhoneNumber();
                     numbers[i]->type = (VxSdk::VxPhoneType::Value)value[i].Key;
-                    VxSdk::Utilities::StrCopySafe(numbers[i]->number, Utils::ConvertSysString(value[i].Value));
+                    VxSdk::Utilities::StrCopySafe(numbers[i]->number, Utils::ConvertCSharpString(value[i].Value).c_str());
                 }
 
                 _user->SetPhoneNumbers(numbers, size);

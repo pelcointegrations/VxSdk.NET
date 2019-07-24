@@ -45,8 +45,11 @@ namespace VxSdkNet {
         /// <value>The time at which the bookmark lock ends.</value>
         property System::DateTime EndTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_bookmarkLock->endTime); }
-            void set(System::DateTime value) { _bookmarkLock->SetEndTime(Utils::ConvertDateTimeToCharNonConst(value)); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_bookmarkLock->endTime); }
+            void set(System::DateTime value) { 
+                std::string val = Utils::ConvertCSharpDateTime(value);
+                _bookmarkLock->SetEndTime((char*)val.c_str());
+            }
         }
 
         /// <summary>
@@ -65,8 +68,11 @@ namespace VxSdkNet {
         /// <value>The time at which the bookmark lock begins.</value>
         property System::DateTime StartTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_bookmarkLock->startTime); }
-            void set(System::DateTime value) { _bookmarkLock->SetStartTime(Utils::ConvertDateTimeToCharNonConst(value)); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_bookmarkLock->startTime); }
+            void set(System::DateTime value) { 
+                std::string val = Utils::ConvertCSharpDateTime(value);
+                _bookmarkLock->SetStartTime((char*)val.c_str()); 
+            }
         }
 
     internal:

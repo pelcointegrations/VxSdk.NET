@@ -4,8 +4,8 @@
     <id>VxSdk.NET-Media</id>
     <title>VideoXpert SDK .NET Wrapper with Media Support</title>
     <version>3.0.0000</version>
-    <authors>Pelco by Schneider Electric</authors>
-    <owners>Pelco by Schneider Electric</owners>
+    <authors>Pelco</authors>
+    <owners>Pelco</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.githubusercontent.com/pelcointegrations/VideoXpertSdk/master/Nuget/pelco-integrations-64x64.png</iconUrl>
     <projectUrl>https://github.com/pelcointegrations/VxSdk.NET</projectUrl>
@@ -13,7 +13,7 @@
     <description>Provides a .NET wrapper for the Pelco VideoXpert SDK, which allows third party applications to integrate with the VideoXpert platform.  This package also provides media support via GStreamer, allowing applications to display video streams from VideoXpert systems.</description>
     <summary>A .NET wrapper for the Pelco VideoXpert SDK with media streaming support.</summary>
     <copyright>Copyright ©2019 Pelco</copyright>
-    <tags>videoxpert, vxsdk, sdk, pelco, schneider-electric, .net, wrapper, gstreamer</tags>
+    <tags>videoxpert, vxsdk, sdk, pelco, .net, wrapper, gstreamer</tags>
   </metadata>
     <files>
       <file src="VxSdk.NET-Media.targets" target="build\VxSdk.NET-Media.targets" />
@@ -50,9 +50,9 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstpbutils-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstreamer-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstriff-1.0-0.dll" target="build\x86\bin" />
-      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstrtp-1.0-0.dll" target="build\x86\bin" />	  
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstrtp-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstrtsp-1.0-0.dll" target="build\x86\bin" />
-      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstsdp-1.0-0.dll" target="build\x86\bin" />  
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstsdp-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgsttag-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgstvideo-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgthread-2.0-0.dll" target="build\x86\bin" />
@@ -69,6 +69,17 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libx264-148.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libxml2-2.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libz.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libgcc_s_sjlj-1.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libpixman-1-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libexpat-1.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libfreetype-6.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libfontconfig-1.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libcairo-2.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libharfbuzz-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libpango-1.0-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libpangocairo-1.0-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libpangoft2-1.0-0.dll" target="build\x86\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\libpangowin32-1.0-0.dll" target="build\x86\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gio\modules\libgiognutls.dll" target="build\x86\lib\gio\modules" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstautodetect.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstcoreelements.dll" target="build\x86\lib\gstreamer-1.0" />
@@ -89,6 +100,8 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstvideoconvert.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstvideoparsersbad.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstx264.dll" target="build\x86\lib\gstreamer-1.0" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstpango.dll" target="build\x86\lib\gstreamer-1.0" />
+
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\etc\ssl\certs\ca-certificates.crt" target="build\x86\etc\ssl\certs" />
 
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libbz2.dll" target="build\x64\bin" />
@@ -130,6 +143,17 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libx264-148.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libxml2-2.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libz.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libgcc_s_sjlj-1.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libpixman-1-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libexpat-1.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libfreetype-6.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libfontconfig-1.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libcairo-2.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libharfbuzz-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libpango-1.0-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libpangocairo-1.0-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libpangoft2-1.0-0.dll" target="build\x64\bin" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\libpangowin32-1.0-0.dll" target="build\x64\bin" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gio\modules\libgiognutls.dll" target="build\x64\lib\gio\modules" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstautodetect.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstcoreelements.dll" target="build\x64\lib\gstreamer-1.0" />
@@ -150,6 +174,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstvideoconvert.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstvideoparsersbad.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstx264.dll" target="build\x64\lib\gstreamer-1.0" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstpango.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\etc\ssl\certs\ca-certificates.crt" target="build\x64\etc\ssl\certs" />
     </files>
 </package>

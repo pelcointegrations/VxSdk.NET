@@ -17,9 +17,9 @@ VxSdkNet::Schedule::!Schedule() {
 VxSdkNet::Results::Value VxSdkNet::Schedule::AddScheduleTrigger(VxSdkNet::NewScheduleTrigger^ newScheduleTrigger) {
     // Create a new schedule trigger object
     VxSdk::VxNewScheduleTrigger newTrigger;
-    VxSdk::Utilities::StrCopySafe(newTrigger.id, Utils::ConvertSysString(newScheduleTrigger->Id));
-    VxSdk::Utilities::StrCopySafe(newTrigger.eventSituationType, Utils::ConvertSysString(newScheduleTrigger->EventSituationType));
-    VxSdk::Utilities::StrCopySafe(newTrigger.timeTableId, Utils::ConvertSysString(newScheduleTrigger->TimeTableId));
+    VxSdk::Utilities::StrCopySafe(newTrigger.id, Utils::ConvertCSharpString(newScheduleTrigger->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(newTrigger.eventSituationType, Utils::ConvertCSharpString(newScheduleTrigger->EventSituationType).c_str());
+    VxSdk::Utilities::StrCopySafe(newTrigger.timeTableId, Utils::ConvertCSharpString(newScheduleTrigger->TimeTableId).c_str());
     newTrigger.postTrigger = newScheduleTrigger->PostTrigger;
     newTrigger.preTrigger = newScheduleTrigger->PreTrigger;
     newTrigger.timeout = newScheduleTrigger->Timeout;
@@ -31,9 +31,9 @@ VxSdkNet::Results::Value VxSdkNet::Schedule::AddScheduleTrigger(VxSdkNet::NewSch
         newTrigger.eventProperties = new VxSdk::VxKvObject[newTrigger.eventPropertySize];
         for (int i = 0; i < newTrigger.eventPropertySize; i++) {
             VxSdk::Utilities::StrCopySafe(newTrigger.eventProperties[i].key,
-                Utils::ConvertSysString(newScheduleTrigger->EventProperties[i].Key));
+                Utils::ConvertCSharpString(newScheduleTrigger->EventProperties[i].Key).c_str());
             VxSdk::Utilities::StrCopySafe(newTrigger.eventProperties[i].value,
-                Utils::ConvertSysString(newScheduleTrigger->EventProperties[i].Value));
+                Utils::ConvertCSharpString(newScheduleTrigger->EventProperties[i].Value).c_str());
         }
     }
 
@@ -63,7 +63,7 @@ List<VxSdkNet::DataSource^>^ VxSdkNet::Schedule::GetLinkedDataSources(System::Co
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 

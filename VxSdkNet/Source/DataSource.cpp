@@ -34,8 +34,8 @@ VxSdkNet::DataSession^ VxSdkNet::DataSource::CreateMjpegStream() {
 
 VxSdkNet::PixelSearch^ VxSdkNet::DataSource::CreatePixelSearch(NewPixelSearch^ newPixelSearch) {
     VxSdk::VxNewPixelSearch vxNewPixelSearch;
-    VxSdk::Utilities::StrCopySafe(vxNewPixelSearch.searchEndTime, Utils::ConvertDateTimeToChar(newPixelSearch->SearchEndTime));
-    VxSdk::Utilities::StrCopySafe(vxNewPixelSearch.searchStartTime, Utils::ConvertDateTimeToChar(newPixelSearch->SearchStartTime));
+    VxSdk::Utilities::StrCopySafe(vxNewPixelSearch.searchEndTime, Utils::ConvertCSharpDateTime(newPixelSearch->SearchEndTime).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewPixelSearch.searchStartTime, Utils::ConvertCSharpDateTime(newPixelSearch->SearchStartTime).c_str());
     vxNewPixelSearch.columns = newPixelSearch->Columns;
     vxNewPixelSearch.rows = newPixelSearch->Rows;
     vxNewPixelSearch.zoneSize = static_cast<int>(newPixelSearch->Zones->Count);
@@ -83,7 +83,7 @@ List<VxSdkNet::DataStorage^>^ VxSdkNet::DataSource::GetAllDataStorages(System::C
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -122,7 +122,7 @@ List<VxSdkNet::ResourceRel^>^ VxSdkNet::DataSource::GetAudioRelations(System::Co
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -161,7 +161,7 @@ System::Collections::Generic::List<VxSdkNet::Bookmark^>^ VxSdkNet::DataSource::G
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -200,7 +200,7 @@ List<VxSdkNet::Clip^>^ VxSdkNet::DataSource::GetClips(System::Collections::Gener
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -239,7 +239,7 @@ List<VxSdkNet::DataStorage^>^ VxSdkNet::DataSource::GetDataStorages(System::Coll
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -278,7 +278,7 @@ List<VxSdkNet::Clip^>^ VxSdkNet::DataSource::GetEdgeClips(System::Collections::G
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -317,7 +317,7 @@ List<VxSdkNet::Gap^>^ VxSdkNet::DataSource::GetGaps(System::Collections::Generic
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -356,7 +356,7 @@ System::Collections::Generic::List<VxSdkNet::ResourceRel^>^ VxSdkNet::DataSource
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -395,7 +395,7 @@ List<VxSdkNet::Tag^>^ VxSdkNet::DataSource::GetTags(System::Collections::Generic
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -434,7 +434,7 @@ List<VxSdkNet::ResourceRel^>^ VxSdkNet::DataSource::GetVideoRelations(System::Co
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -563,5 +563,5 @@ System::String^ VxSdkNet::DataSource::_GetRtspEndpoint() {
         // The result should now be kOK since we have allocated enough space
         _dataSource->GetRtspEndpoint(rtspEndpoint, size);
     }
-    return gcnew System::String(rtspEndpoint);
+    return Utils::ConvertCppString(rtspEndpoint);
 }

@@ -74,7 +74,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_deviceAssignment->id); }
+            System::String^ get() { return Utils::ConvertCppString(_deviceAssignment->id); }
         }
 
     internal:

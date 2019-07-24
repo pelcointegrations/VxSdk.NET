@@ -91,7 +91,7 @@ namespace VxSdkNet {
                 System::DateTime get() {
                     char time[64];
                     _configTime->GetTime(time);
-                    return Utils::ConvertCharToDateTime(time);
+                    return Utils::ConvertCppDateTime(time);
                 }
             }
 
@@ -101,7 +101,7 @@ namespace VxSdkNet {
             /// <value>The external time server host address.</value>
             property System::String^ TimeServerAddress {
             public:
-                System::String^ get() { return gcnew System::String(_configTime->timeServerAddress); }
+                System::String^ get() { return Utils::ConvertCppString(_configTime->timeServerAddress); }
             }
 
         internal:
@@ -144,7 +144,7 @@ namespace VxSdkNet {
             /// <value>The host address.</value>
             property System::String^ HostAddress {
             public:
-                System::String^ get() { return gcnew System::String(_configNode->hostAddress); }
+                System::String^ get() { return Utils::ConvertCppString(_configNode->hostAddress); }
             }
 
             /// <summary>
@@ -215,7 +215,7 @@ namespace VxSdkNet {
             /// <value>The VxCore virtual IP.</value>
             property System::String^ CoreVirtualIp {
             public:
-                System::String^ get() { return gcnew System::String(_configCluster->coreVirtualIp); }
+                System::String^ get() { return Utils::ConvertCppString(_configCluster->coreVirtualIp); }
             }
 
             /// <summary>
@@ -225,7 +225,7 @@ namespace VxSdkNet {
             /// <value>The communication method.</value>
             property System::String^ MediaGatewayTranscast {
             public:
-                System::String^ get() { return gcnew System::String(_configCluster->mediaGatewayTranscast); }
+                System::String^ get() { return Utils::ConvertCppString(_configCluster->mediaGatewayTranscast); }
             }
 
             /// <summary>
@@ -234,7 +234,7 @@ namespace VxSdkNet {
             /// <value>The Media Gateway virtual IP.</value>
             property System::String^ MediaGatewayVirtualIp {
             public:
-                System::String^ get() { return gcnew System::String(_configCluster->mediaGatewayVirtualIp); }
+                System::String^ get() { return Utils::ConvertCppString(_configCluster->mediaGatewayVirtualIp); }
             }
 
             /// <summary>
@@ -243,7 +243,7 @@ namespace VxSdkNet {
             /// <value>The status description.</value>
             property System::String^ StatusDescription {
             public:
-                System::String^ get() { return gcnew System::String(_configCluster->statusDescription); }
+                System::String^ get() { return Utils::ConvertCppString(_configCluster->statusDescription); }
             }
 
             /// <summary>
@@ -315,7 +315,7 @@ namespace VxSdkNet {
             /// <value>The transmission type.</value>
             property System::String^ TransmissionType {
             public:
-                System::String^ get() { return gcnew System::String(_configStorage->transmissionType); }
+                System::String^ get() { return Utils::ConvertCppString(_configStorage->transmissionType); }
             }
 
         internal:

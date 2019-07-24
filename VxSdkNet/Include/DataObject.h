@@ -56,7 +56,7 @@ namespace VxSdkNet {
         /// <value>The client identifier.</value>
         property System::String^ ClientType {
         public:
-            System::String^ get() { return gcnew System::String(_dataObject->clientType); }
+            System::String^ get() { return Utils::ConvertCppString(_dataObject->clientType); }
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_dataObject->id); }
+            System::String^ get() { return Utils::ConvertCppString(_dataObject->id); }
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace VxSdkNet {
         /// <value>The name of the owner.</value>
         property System::String^ OwnerName {
         public:
-            System::String^ get() { return gcnew System::String(_dataObject->owner); }
+            System::String^ get() { return Utils::ConvertCppString(_dataObject->owner); }
         }
 
     internal:

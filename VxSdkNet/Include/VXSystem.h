@@ -678,7 +678,7 @@ namespace VxSdkNet {
         /// <value>The grace license expiration time.</value>
         property System::DateTime GraceLicenseExpirationTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_system->graceLicenseExpirationTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_system->graceLicenseExpirationTime); }
         }
 
         /// <summary>
@@ -695,7 +695,7 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The unique identifier.</value>
         property System::String^ Id {
-            System::String^ get() { return gcnew System::String(_system->id); }
+            System::String^ get() { return Utils::ConvertCppString(_system->id); }
         }
         
         /// <summary>
@@ -727,10 +727,10 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The friendly name.</value>
         property System::String^ Name {
-            System::String^ get() { return gcnew System::String(_system->name); }
+            System::String^ get() { return Utils::ConvertCppString(_system->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _system->SetName(name);
             }
         }

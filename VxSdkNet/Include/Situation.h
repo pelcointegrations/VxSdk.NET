@@ -169,10 +169,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_situation->name); }
+            System::String^ get() { return Utils::ConvertCppString(_situation->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _situation->SetName(name);
             }
         }
@@ -192,7 +192,7 @@ namespace VxSdkNet {
         /// <value>The service property identifier for the source of this situation.</value>
         property System::String^ ServicePropertyId {
         public:
-            System::String^ get() { return gcnew System::String(_situation->servicePropertyId); }
+            System::String^ get() { return Utils::ConvertCppString(_situation->servicePropertyId); }
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace VxSdkNet {
         /// <value>The service type for the source of this situation.</value>
         property System::String^ ServiceType {
         public:
-            System::String^ get() { return gcnew System::String(_situation->serviceType); }
+            System::String^ get() { return Utils::ConvertCppString(_situation->serviceType); }
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace VxSdkNet {
         /// <value>The unique source identifier.</value>
         property System::String^ SourceDeviceId {
         public:
-            System::String^ get() { return gcnew System::String(_situation->sourceDeviceId); }
+            System::String^ get() { return Utils::ConvertCppString(_situation->sourceDeviceId); }
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace VxSdkNet {
         /// <value>The situation type.</value>
         property System::String^ Type {
         public:
-            System::String^ get() { return gcnew System::String(_situation->type); }
+            System::String^ get() { return Utils::ConvertCppString(_situation->type); }
         }
 
     internal:

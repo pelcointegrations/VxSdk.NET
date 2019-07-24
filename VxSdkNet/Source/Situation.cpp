@@ -26,7 +26,7 @@ VxSdkNet::Notification^ VxSdkNet::Situation::AddNotification(VxSdkNet::NewNotifi
         for (int i = 0; i < vxNotification.roleIdSize; i++) {
             int idLength = roles[i]->Id->Length + 1;
             vxNotification.roleIds[i] = new char[idLength];
-            VxSdk::Utilities::StrCopySafe(vxNotification.roleIds[i], Utils::ConvertSysString(roles[i]->Id), idLength);
+            VxSdk::Utilities::StrCopySafe(vxNotification.roleIds[i], Utils::ConvertCSharpString(roles[i]->Id).c_str(), idLength);
         }
     }
 
@@ -55,7 +55,7 @@ System::Collections::Generic::List<VxSdkNet::DataSource^>^ VxSdkNet::Situation::
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -95,7 +95,7 @@ System::Collections::Generic::List<VxSdkNet::Device^>^ VxSdkNet::Situation::GetL
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -135,7 +135,7 @@ List<VxSdkNet::Notification^>^ VxSdkNet::Situation::GetNotifications(System::Col
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 

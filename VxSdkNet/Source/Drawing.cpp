@@ -17,9 +17,9 @@ VxSdkNet::Drawing::!Drawing() {
 VxSdkNet::Results::Value VxSdkNet::Drawing::AddMarker(NewMarker^ newMarker) {
     // Create a new marker object and populate its fields using newMarker
     VxSdk::VxNewMarker vxNewMarker;
-    VxSdk::Utilities::StrCopySafe(vxNewMarker.associatedDataSourceId, Utils::ConvertSysString(newMarker->AssociatedDataSourceId));
-    VxSdk::Utilities::StrCopySafe(vxNewMarker.layerName, Utils::ConvertSysString(newMarker->LayerName));
-    VxSdk::Utilities::StrCopySafe(vxNewMarker.name, Utils::ConvertSysString(newMarker->Name));
+    VxSdk::Utilities::StrCopySafe(vxNewMarker.associatedDataSourceId, Utils::ConvertCSharpString(newMarker->AssociatedDataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewMarker.layerName, Utils::ConvertCSharpString(newMarker->LayerName).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewMarker.name, Utils::ConvertCSharpString(newMarker->Name).c_str());
     vxNewMarker.direction = newMarker->Direction;
     vxNewMarker.x = newMarker->X;
     vxNewMarker.y = newMarker->Y;
@@ -63,7 +63,7 @@ System::String^ VxSdkNet::Drawing::GetImageUri() {
         // The result should now be kOK since we have allocated enough space
         _drawing->GetImage(imageEndpoint, size);
     }
-    return gcnew System::String(imageEndpoint);
+    return Utils::ConvertCppString(imageEndpoint);
 }
 
 VxSdkNet::ResourceLock^ VxSdkNet::Drawing::GetLock() {
@@ -91,7 +91,7 @@ System::Collections::Generic::List<VxSdkNet::Marker^>^ VxSdkNet::Drawing::GetMar
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -126,7 +126,7 @@ bool VxSdkNet::Drawing::HasMarkerWithResource(System::String^ resourceId) {
     VxSdk::VxCollectionFilter filters[1];
     markers.filters = filters;
     markers.filters[0].key = VxSdk::VxCollectionFilterItem::kResourceId;
-    VxSdk::Utilities::StrCopySafe(markers.filters[0].value, Utils::ConvertSysString(resourceId));
+    VxSdk::Utilities::StrCopySafe(markers.filters[0].value, Utils::ConvertCSharpString(resourceId).c_str());
 
     // Make the GetMarkers call, which will return with the total marker count, this allows the client to allocate memory.
     _drawing->GetMarkers(markers);
@@ -146,7 +146,7 @@ VxSdkNet::Results::Value VxSdkNet::Drawing::SetImage(System::String^ imagePath) 
     // Copy the image path to a new char
     int len = imagePath->Length + 1;
     char* image = new char[len];
-    VxSdk::Utilities::StrCopySafe(image, Utils::ConvertSysString(imagePath), len);
+    VxSdk::Utilities::StrCopySafe(image, Utils::ConvertCSharpString(imagePath).c_str(), len);
 
     // Set the image path
     return (VxSdkNet::Results::Value)_drawing->SetImage(image);

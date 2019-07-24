@@ -3,6 +3,7 @@
 #define DataInterface_h__
 
 #include "VxSdk.h"
+#include "Utils.h"
 
 namespace VxSdkNet {
 
@@ -106,7 +107,7 @@ namespace VxSdkNet {
         /// <value>The data encoding unique identifier.</value>
         property System::String^ DataEncodingId {
         public:
-            System::String^ get() { return gcnew System::String(_dataInterface->dataEncodingId); }
+            System::String^ get() { return Utils::ConvertCppString(_dataInterface->dataEncodingId); }
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace VxSdkNet {
         /// <value>The data interface endpoint.</value>
         property System::String^ DataEndpoint {
         public:
-            System::String^ get() { return gcnew System::String(_dataInterface->dataEndpoint); }
+            System::String^ get() { return Utils::ConvertCppString(_dataInterface->dataEndpoint); }
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace VxSdkNet {
         /// <value>The multicast test IP.</value>
         property System::String^ MulticastTestIp {
         public:
-            System::String^ get() { return gcnew System::String(_dataInterface->multicastTestIp); }
+            System::String^ get() { return Utils::ConvertCppString(_dataInterface->multicastTestIp); }
         }
 
         /// <summary>

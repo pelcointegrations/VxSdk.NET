@@ -52,7 +52,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_monitorWall->id); }
+            System::String^ get() { return Utils::ConvertCppString(_monitorWall->id); }
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace VxSdkNet {
                 int size = value->Count;
                 VxSdk::VxMonitorPosition* positions = new VxSdk::VxMonitorPosition[size];
                 for (int i = 0; i < size; i++) {
-                    VxSdk::Utilities::StrCopySafe(positions[i].monitorId, Utils::ConvertSysStringNonConst(value[i]->MonitorId));
+                    VxSdk::Utilities::StrCopySafe(positions[i].monitorId, Utils::ConvertCSharpString(value[i]->MonitorId).c_str());
                     positions[i].position.height = value[i]->Position->Height;
                     positions[i].position.left = value[i]->Position->Left;
                     positions[i].position.top = value[i]->Position->Top;
@@ -104,10 +104,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_monitorWall->name); }
+            System::String^ get() { return Utils::ConvertCppString(_monitorWall->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _monitorWall->SetName(name);
             }
         }

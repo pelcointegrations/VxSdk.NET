@@ -64,7 +64,9 @@ bool VxSdkNet::MediaControl::Play(float speed, VxSdkNet::MediaControl::RTSPNetwo
 }
 
 bool VxSdkNet::MediaControl::StartLocalRecording(System::String^ filePath, System::String^ fileName) {
-    return _control->StartLocalRecording(Utils::ConvertSysStringNonConst(filePath), Utils::ConvertSysStringNonConst(fileName));
+    std::string path = Utils::ConvertCSharpString(filePath);
+    std::string name = Utils::ConvertCSharpString(fileName);
+    return _control->StartLocalRecording((char*)path.c_str(), (char*)name.c_str());
 }
 
 void VxSdkNet::MediaControl::StopLocalRecording() {
@@ -72,7 +74,9 @@ void VxSdkNet::MediaControl::StopLocalRecording() {
 }
 
 bool VxSdkNet::MediaControl::SnapShot(System::String^ filePath, System::String^ fileName) {
-    return _control->SnapShot(Utils::ConvertSysStringNonConst(filePath), Utils::ConvertSysStringNonConst(fileName));
+    std::string path = Utils::ConvertCSharpString(filePath);
+    std::string name = Utils::ConvertCSharpString(fileName);
+    return _control->SnapShot((char*)path.c_str(), (char*)name.c_str());
 }
 
 bool VxSdkNet::MediaControl::Seek(System::DateTime time, float speed) {
@@ -161,4 +165,9 @@ void VxSdkNet::MediaControl::_FirePelcoDataEvent(MediaController::PelcoDataEvent
     // Fire the notification if there is a subscription to the Pelco data events
     if (_pelcoDataEvent != nullptr)
         return _pelcoDataEvent(gcnew PelcoDataManagedEvent(event));
+}
+
+bool VxSdkNet::MediaControl::AddVideoOverlayData(System::String^ overlayData, VideoOverlayDataPositions position, bool includeDateTime) {
+    std::string toPassIn(Utils::ConvertSysStringNonConst(overlayData));
+    return _control->AddVideoOverlayData(toPassIn, (MediaController::IController::VideoOverlayDataPosition) position, includeDateTime);
 }

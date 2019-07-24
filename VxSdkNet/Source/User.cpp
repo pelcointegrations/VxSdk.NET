@@ -35,7 +35,7 @@ System::Collections::Generic::List<VxSdkNet::DataObject^>^ VxSdkNet::User::GetDa
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -75,7 +75,7 @@ System::Collections::Generic::List<VxSdkNet::Role^>^ VxSdkNet::User::GetRoles(Sy
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -115,7 +115,7 @@ System::Collections::Generic::List<VxSdkNet::Tag^>^ VxSdkNet::User::GetTags(Syst
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -155,7 +155,7 @@ VxSdkNet::Results::Value VxSdkNet::User::RemoveFromRole(VxSdkNet::Role^ role) {
 
 VxSdkNet::Results::Value VxSdkNet::User::SetPassword(System::String^ newPassword, bool mustChangePassword) {
     char password[64];
-    VxSdk::Utilities::StrCopySafe(password, Utils::ConvertSysStringNonConst(newPassword));
+    VxSdk::Utilities::StrCopySafe(password, Utils::ConvertCSharpString(newPassword).c_str());
 
     // Make the call to set the users password
     VxSdk::VxResult::Value result = _user->SetPassword(password, mustChangePassword);

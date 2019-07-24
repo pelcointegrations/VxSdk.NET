@@ -26,7 +26,9 @@ namespace VxSdkNet {
         public:
             System::DateTime get() {
                 System::DateTime^ epochTime = gcnew System::DateTime(1970, 1, 1, 0, 0, 0, System::DateTimeKind::Utc);
-                return epochTime->AddSeconds(_event->unixTime);
+                epochTime = epochTime->AddSeconds(_event->unixTime);
+                // ticks are in 100ns increments
+                return epochTime->AddTicks(_event->unixTimeMicroSeconds * 10);
             }
         }
 

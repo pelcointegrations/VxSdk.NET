@@ -3,6 +3,7 @@
 #define Preset_h__
 
 #include "VxSdk.h"
+#include "Utils.h"
 
 namespace VxSdkNet {
 
@@ -36,7 +37,7 @@ namespace VxSdkNet {
         /// <value>The friendly description.</value>
         property System::String^ Description {
         public:
-            System::String^ get() { return gcnew System::String(_preset->description); }
+            System::String^ get() { return Utils::ConvertCppString(_preset->description); }
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_preset->name); }
+            System::String^ get() { return Utils::ConvertCppString(_preset->name); }
         }
 
         /// <summary>

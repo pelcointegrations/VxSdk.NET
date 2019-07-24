@@ -17,10 +17,10 @@ VxSdkNet::DataStorage::!DataStorage() {
 VxSdkNet::Results::Value VxSdkNet::DataStorage::AddClip(VxSdkNet::NewClip^ newClip) {
     // Create a new clip object and populate its fields using newClip
     VxSdk::VxNewClip vxNewClip;
-    VxSdk::Utilities::StrCopySafe(vxNewClip.dataSourceId, Utils::ConvertSysString(newClip->DataSourceId));
-    VxSdk::Utilities::StrCopySafe(vxNewClip.dataStorageId, Utils::ConvertSysString(newClip->DataStorageId));
-    VxSdk::Utilities::StrCopySafe(vxNewClip.startTime, Utils::ConvertDateTimeToChar(newClip->StartTime));
-    VxSdk::Utilities::StrCopySafe(vxNewClip.endTime, Utils::ConvertDateTimeToChar(newClip->EndTime));
+    VxSdk::Utilities::StrCopySafe(vxNewClip.dataSourceId, Utils::ConvertCSharpString(newClip->DataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewClip.dataStorageId, Utils::ConvertCSharpString(newClip->DataStorageId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewClip.startTime, Utils::ConvertCSharpDateTime(newClip->StartTime).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewClip.endTime, Utils::ConvertCSharpDateTime(newClip->EndTime).c_str());
 
     // Make the call to add the clip to the data storage 
     VxSdk::VxResult::Value result = _dataStorage->AddClip(vxNewClip);
@@ -31,7 +31,7 @@ VxSdkNet::Results::Value VxSdkNet::DataStorage::AddClip(VxSdkNet::NewClip^ newCl
 VxSdkNet::Results::Value VxSdkNet::DataStorage::AssignDevice(VxSdkNet::NewDeviceAssignment^ newDeviceAssignment) {
     // Create a new device assignment object and populate its fields using newDeviceAssignment
     VxSdk::VxNewDeviceAssignment vxNewDeviceAssignment;
-    VxSdk::Utilities::StrCopySafe(vxNewDeviceAssignment.deviceId, Utils::ConvertSysString(newDeviceAssignment->DeviceId));
+    VxSdk::Utilities::StrCopySafe(vxNewDeviceAssignment.deviceId, Utils::ConvertCSharpString(newDeviceAssignment->DeviceId).c_str());
     int size = newDeviceAssignment->DataSourceIds->Count;
 
     vxNewDeviceAssignment.dataSourceIdSize = size;
@@ -39,7 +39,7 @@ VxSdkNet::Results::Value VxSdkNet::DataStorage::AssignDevice(VxSdkNet::NewDevice
     for (int i = 0; i < size; i++) {
         int idLength = newDeviceAssignment->DataSourceIds[i]->Length + 1;
         vxNewDeviceAssignment.dataSourceIds[i] = new char[idLength];
-        VxSdk::Utilities::StrCopySafe(vxNewDeviceAssignment.dataSourceIds[i], Utils::ConvertSysString(newDeviceAssignment->DataSourceIds[i]), idLength);
+        VxSdk::Utilities::StrCopySafe(vxNewDeviceAssignment.dataSourceIds[i], Utils::ConvertCSharpString(newDeviceAssignment->DataSourceIds[i]).c_str(), idLength);
     }
 
     // Make the call to add the situation into VideoXpert
@@ -65,7 +65,7 @@ List<VxSdkNet::DataSource^>^ VxSdkNet::DataStorage::GetDataSources(System::Colle
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -104,7 +104,7 @@ List<VxSdkNet::DeviceAssignment^>^ VxSdkNet::DataStorage::GetDeviceAssignments(S
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 

@@ -43,6 +43,21 @@ namespace VxSdkNet {
         };
 
         /// <summary>
+        /// Options for data on the video being played
+        /// </summary>
+        enum class VideoOverlayDataPositions {
+            TopLeft,
+            TopCenter,
+            TopRight,
+            MiddleLeft,
+            MiddleCenter,
+            MiddleRight,
+            BottomLeft,
+            BottomCenter,
+            BottomRight
+        };
+
+        /// <summary>
         /// The native event callback delegate.
         /// </summary>
         /// <param name="timeEvent">The time event sent from the stream.</param>
@@ -232,6 +247,8 @@ namespace VxSdkNet {
             void add(PelcoDataEventDelegate ^eventDelegate);
             void remove(PelcoDataEventDelegate ^eventDelegate);
         }
+
+        bool AddVideoOverlayData(System::String^ overlayData, VideoOverlayDataPositions position, bool incudeDateTime);
 
     internal:
         MediaController::IController* _control;

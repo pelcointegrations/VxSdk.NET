@@ -33,7 +33,7 @@ System::String^ VxSdkNet::DataObject::_GetData() {
         // The result should now be kOK since we have allocated enough space
         _dataObject->GetData(data, size);
     }
-    return gcnew System::String(data);
+    return Utils::ConvertCppString(data);
 }
 
 VxSdkNet::User^ VxSdkNet::DataObject::_GetOwner() {
@@ -53,7 +53,7 @@ void VxSdkNet::DataObject::_SetData(System::String^ data) {
     // Copy the data string to a new char
     int dataSize = data->Length + 1;
     char* newData = new char[dataSize];
-    VxSdk::Utilities::StrCopySafe(newData, Utils::ConvertSysString(data), dataSize);
+    VxSdk::Utilities::StrCopySafe(newData, Utils::ConvertCSharpString(data).c_str(), dataSize);
 
     // Set the data value for the data object
     _dataObject->SetData(newData);

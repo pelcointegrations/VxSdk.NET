@@ -126,7 +126,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_drawing->id); }
+            System::String^ get() { return Utils::ConvertCppString(_drawing->id); }
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace VxSdkNet {
         /// <value>Last modified date.</value>
         property System::DateTime LastModified {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_drawing->lastModified); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_drawing->lastModified); }
         }
 
         /// <summary>
@@ -153,10 +153,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_drawing->name); }
+            System::String^ get() { return Utils::ConvertCppString(_drawing->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _drawing->SetName(name);
             }
         }
@@ -167,7 +167,7 @@ namespace VxSdkNet {
         /// <value>The Mime type.</value>
         property System::String^ MimeType {
         public:
-            System::String^ get() { return gcnew System::String(_drawing->mimeType); }
+            System::String^ get() { return Utils::ConvertCppString(_drawing->mimeType); }
         }
 
         /// <summary>

@@ -89,7 +89,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the gapped data source.</value>
         property System::String^ DataSourceId {
         public:
-            System::String^ get() { return gcnew System::String(_gap->dataSourceId); }
+            System::String^ get() { return Utils::ConvertCppString(_gap->dataSourceId); }
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the data storage with the gap.</value>
         property System::String^ DataStorageId {
         public:
-            System::String^ get() { return gcnew System::String(_gap->dataStorageId); }
+            System::String^ get() { return Utils::ConvertCppString(_gap->dataStorageId); }
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> of the end of the gap.</value>
         property System::DateTime EndTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_gap->endTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_gap->endTime); }
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> of the start of the gap.</value>
         property System::DateTime StartTime {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_gap->startTime); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_gap->startTime); }
         }
 
     internal:

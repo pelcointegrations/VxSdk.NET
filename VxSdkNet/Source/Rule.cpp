@@ -31,7 +31,7 @@ System::Collections::Generic::List<VxSdkNet::TimeTable^>^ VxSdkNet::Rule::GetTim
         for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
         {
             collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertSysString(kvp->Value));
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
         }
 
         // Add the filters to the collection 
@@ -76,7 +76,7 @@ System::String ^ VxSdkNet::Rule::_GetScript() {
         _rule->GetScript(scriptData, size);
     }
 
-    System::String^ script = gcnew System::String(scriptData);
+    System::String^ script = Utils::ConvertCppString(scriptData);
     delete[] scriptData;
     scriptData = nullptr;
 
@@ -96,7 +96,8 @@ System::Collections::Generic::List<VxSdkNet::RuleTrigger^>^ VxSdkNet::Rule::_Get
 
 VxSdkNet::Results::Value VxSdkNet::Rule::_SetScript(System::String ^ scriptData) {
     // Set the script value for the rule
-    return (VxSdkNet::Results::Value)_rule->SetScript(Utils::ConvertSysStringNonConst(scriptData));
+    std::string val = Utils::ConvertCSharpString(scriptData);
+    return (VxSdkNet::Results::Value)_rule->SetScript((char*)val.c_str());
 }
 
 VxSdkNet::Results::Value VxSdkNet::Rule::_SetTimeTables(System::Collections::Generic::List<TimeTable^>^ timeTableList) {
@@ -108,7 +109,7 @@ VxSdkNet::Results::Value VxSdkNet::Rule::_SetTimeTables(System::Collections::Gen
         for (int i = 0; i < timeTableListSize; i++) {
             int idSize = timeTableList[i]->Id->Length + 1;
             timeTableIds[i] = new char[idSize];
-            VxSdk::Utilities::StrCopySafe(timeTableIds[i], Utils::ConvertSysString(timeTableList[i]->Id), idSize);
+            VxSdk::Utilities::StrCopySafe(timeTableIds[i], Utils::ConvertCSharpString(timeTableList[i]->Id).c_str(), idSize);
         }
     }
 
@@ -132,11 +133,11 @@ VxSdkNet::Results::Value VxSdkNet::Rule::_SetTriggers(System::Collections::Gener
         triggers = new VxSdk::VxRuleTrigger*[triggerListSize];
         for (int i = 0; i < triggerListSize; i++) {
             triggers[i] = new VxSdk::VxRuleTrigger();
-            VxSdk::Utilities::StrCopySafe(triggers[i]->situationType, Utils::ConvertSysString(triggerList[i]->SituationType));
+            VxSdk::Utilities::StrCopySafe(triggers[i]->situationType, Utils::ConvertCSharpString(triggerList[i]->SituationType).c_str());
             triggers[i]->sourceRefSize = triggerList[i]->ResourceRefs->Count;
             triggers[i]->sourceRef = new VxSdk::VxResourceRef[triggers[i]->sourceRefSize];
             for (int ii = 0; ii < triggers[i]->sourceRefSize; ii++) {
-                VxSdk::Utilities::StrCopySafe(triggers[i]->sourceRef[ii].id, Utils::ConvertSysString(triggerList[i]->ResourceRefs[ii]->Id));
+                VxSdk::Utilities::StrCopySafe(triggers[i]->sourceRef[ii].id, Utils::ConvertCSharpString(triggerList[i]->ResourceRefs[ii]->Id).c_str());
                 triggers[i]->sourceRef[ii].type = (VxSdk::VxResourceType::Value)triggerList[i]->ResourceRefs[ii]->Type;
             }
         }

@@ -54,7 +54,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the associated data source.</value>
         property System::String^ DataSourceId {
         public:
-            System::String^ get() { return gcnew System::String(_bookmark->dataSourceId); }
+            System::String^ get() { return Utils::ConvertCppString(_bookmark->dataSourceId); }
         }
 
         /// <summary>
@@ -63,10 +63,10 @@ namespace VxSdkNet {
         /// <value>The friendly description.</value>
         property System::String^ Description {
         public:
-            System::String^ get() { return gcnew System::String(_bookmark->description); }
+            System::String^ get() { return Utils::ConvertCppString(_bookmark->description); }
             void set(System::String^ value) {
                 char description[255];
-                VxSdk::Utilities::StrCopySafe(description, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(description, Utils::ConvertCSharpString(value).c_str());
                 _bookmark->SetDescription(description);
             }
         }
@@ -78,7 +78,7 @@ namespace VxSdkNet {
         /// <value>The unique bookmark group identifier.</value>
         property System::String^ GroupId {
         public:
-            System::String^ get() { return gcnew System::String(_bookmark->groupId); }
+            System::String^ get() { return Utils::ConvertCppString(_bookmark->groupId); }
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_bookmark->id); }
+            System::String^ get() { return Utils::ConvertCppString(_bookmark->id); }
         }
 
         /// <summary>
@@ -105,10 +105,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_bookmark->name); }
+            System::String^ get() { return Utils::ConvertCppString(_bookmark->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _bookmark->SetName(name);
             }
         }
@@ -119,7 +119,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> at which the point of interest occurred.</value>
         property System::DateTime Time {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_bookmark->time); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_bookmark->time); }
         }
 
     internal:

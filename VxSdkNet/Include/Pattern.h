@@ -3,6 +3,7 @@
 #define Pattern_h__
 
 #include "VxSdk.h"
+#include "Utils.h"
 
 namespace VxSdkNet {
 
@@ -37,7 +38,7 @@ namespace VxSdkNet {
         /// <value>The friendly description.</value>
         property System::String^ Description {
         public:
-            System::String^ get() { return gcnew System::String(_pattern->description); }
+            System::String^ get() { return Utils::ConvertCppString(_pattern->description); }
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_pattern->name); }
+            System::String^ get() { return Utils::ConvertCppString(_pattern->name); }
         }
 
     internal:

@@ -51,7 +51,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_internalEvent->id); }
+            System::String^ get() { return Utils::ConvertCppString(_internalEvent->id); }
         }
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace VxSdkNet {
 
                 for (int i = 0; i < _internalEvent->propertySize; i++)
                 {
-                    System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(gcnew System::String(_internalEvent->properties[i].key),
-                        gcnew System::String(_internalEvent->properties[i].value));
+                    System::Collections::Generic::KeyValuePair<System::String^, System::String^> kvPair(Utils::ConvertCppString(_internalEvent->properties[i].key),
+                        Utils::ConvertCppString(_internalEvent->properties[i].value));
 
                     mList->Add(kvPair);
                 }
@@ -82,7 +82,7 @@ namespace VxSdkNet {
         /// <value>The system unique identifier.</value>
         property System::String^ SystemId {
         public:
-            System::String^ get() { return gcnew System::String(_internalEvent->systemId); }
+            System::String^ get() { return Utils::ConvertCppString(_internalEvent->systemId); }
         }
 
         /// <summary>

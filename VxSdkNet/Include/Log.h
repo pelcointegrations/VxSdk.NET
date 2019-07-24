@@ -42,7 +42,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> at which the log was completed.</value>
         property System::DateTime Completed {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_log->completed); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_log->completed); }
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_log->id); }
+            System::String^ get() { return Utils::ConvertCppString(_log->id); }
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace VxSdkNet {
         /// <value>A default <c>DateTime</c> if it fails, else the <c>DateTime</c> at which the log was requested.</value>
         property System::DateTime Initiated {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_log->initiated); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_log->initiated); }
         }
 
         /// <summary>

@@ -58,10 +58,10 @@ namespace VxSdkNet {
         /// <value>The friendly description.</value>
         property System::String^ Description {
         public:
-            System::String^ get() { return gcnew System::String(_relayOutput->description); }
+            System::String^ get() { return Utils::ConvertCppString(_relayOutput->description); }
             void set(System::String^ value) {
                 char description[64];
-                VxSdk::Utilities::StrCopySafe(description, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(description, Utils::ConvertCSharpString(value).c_str());
                 _relayOutput->SetDescription(description);
             }
         }
@@ -81,7 +81,7 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return gcnew System::String(_relayOutput->id); }
+            System::String^ get() { return Utils::ConvertCppString(_relayOutput->id); }
         }
 
         /// <summary>
@@ -108,10 +108,10 @@ namespace VxSdkNet {
         /// <value>The friendly name.</value>
         property System::String^ Name {
         public:
-            System::String^ get() { return gcnew System::String(_relayOutput->name); }
+            System::String^ get() { return Utils::ConvertCppString(_relayOutput->name); }
             void set(System::String^ value) {
                 char name[64];
-                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _relayOutput->SetName(name);
             }
         }

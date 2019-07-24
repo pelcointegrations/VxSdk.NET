@@ -55,10 +55,10 @@ namespace VxSdkNet {
         /// <value>The unique identifier of the data source.</value>
         property System::String^ DataSourceId {
         public:
-            System::String^ get() { return gcnew System::String(_monitorCell->dataSourceId); }
+            System::String^ get() { return Utils::ConvertCppString(_monitorCell->dataSourceId); }
             void set(System::String^ value) {
                 char id[64];
-                VxSdk::Utilities::StrCopySafe(id, Utils::ConvertSysStringNonConst(value));
+                VxSdk::Utilities::StrCopySafe(id, Utils::ConvertCSharpString(value).c_str());
                 _monitorCell->SetDataSource(id);
             }
         }
@@ -88,10 +88,10 @@ namespace VxSdkNet {
         /// <value>The seek time.</value>
         property System::DateTime Time {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_monitorCell->time); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_monitorCell->time); }
             void set(System::DateTime value) {
                 char temp[64];
-                VxSdk::Utilities::StrCopySafe(temp, Utils::ConvertDateTimeToChar(value));
+                VxSdk::Utilities::StrCopySafe(temp, Utils::ConvertCSharpDateTime(value).c_str());
                 _monitorCell->SetTime(temp);
             }
         }
@@ -102,7 +102,7 @@ namespace VxSdkNet {
         /// <value>The time.</value>
         property System::DateTime TimeAnchor {
         public:
-            System::DateTime get() { return Utils::ConvertCharToDateTime(_monitorCell->timeAnchor); }
+            System::DateTime get() { return Utils::ConvertCppDateTime(_monitorCell->timeAnchor); }
         }
 
     internal:
