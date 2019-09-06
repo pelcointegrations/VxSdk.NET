@@ -19,13 +19,11 @@
       <file src="VxSdk.NET-Media.targets" target="build\VxSdk.NET-Media.targets" />
 
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\VxSdk.dll" target="build\x86" />
-      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\cpprest140_2_9.dll" target="build\x86" />			
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\bin\VxSdk-Media.dll" target="build\x86" />		
       <file src="..\VxSdkNetMedia\bin\x86\Release\VxSdk.NET-Media.dll" target="lib\x86\VxSdk.NET-Media.dll" />
       <file src="..\VxSdkNetMedia\bin\x86\Release\VxSdk.NET-Media.xml" target="lib\x86\VxSdk.NET-Media.xml" />
 
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\VxSdk.dll" target="build\x64" />
-      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\cpprest140_2_9.dll" target="build\x64" />			
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\bin\VxSdk-Media.dll" target="build\x64" />	
       <file src="..\VxSdkNetMedia\bin\x64\Release\VxSdk.NET-Media.dll" target="lib\x64\VxSdk.NET-Media.dll" />
       <file src="..\VxSdkNetMedia\bin\x64\Release\VxSdk.NET-Media.xml" target="lib\x64\VxSdk.NET-Media.xml" />

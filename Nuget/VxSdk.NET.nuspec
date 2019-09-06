@@ -19,12 +19,10 @@
       <file src="VxSdk.NET.targets" target="build\VxSdk.NET.targets" />
 
       <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\Win32\bin\VxSdk.dll" target="build\x86" />
-      <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\Win32\bin\cpprest140_2_9.dll" target="build\x86" />	
       <file src="..\VxSdkNet\bin\x86\Release\VxSdk.NET.dll" target="lib\x86\VxSdk.NET.dll" />
       <file src="..\VxSdkNet\bin\x86\Release\VxSdk.NET.xml" target="lib\x86\VxSdk.NET.xml" />
 
       <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\x64\bin\VxSdk.dll" target="build\x64" />
-      <file src="..\VxSdkNet\packages\VideoXpertSdk*\build\native\x64\bin\cpprest140_2_9.dll" target="build\x64" />	
       <file src="..\VxSdkNet\bin\x64\Release\VxSdk.NET.dll" target="lib\x64\VxSdk.NET.dll" />
       <file src="..\VxSdkNet\bin\x64\Release\VxSdk.NET.xml" target="lib\x64\VxSdk.NET.xml" />
     </files>
