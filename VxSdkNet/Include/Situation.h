@@ -171,7 +171,7 @@ namespace VxSdkNet {
         public:
             System::String^ get() { return Utils::ConvertCppString(_situation->name); }
             void set(System::String^ value) {
-                char name[64];
+                char name[MAX_SITUATION_NAME_LENGTH];
                 VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
                 _situation->SetName(name);
             }
