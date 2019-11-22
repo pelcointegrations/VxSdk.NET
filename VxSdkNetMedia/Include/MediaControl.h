@@ -32,6 +32,26 @@ namespace VxSdkNet {
         };
 
         /// <summary>
+        /// Values that represent the aspect ratio of the video stream.
+        /// </summary>
+        enum class AspectRatios {
+            /// <summary>16:9 aspect ratio (Default).</summary>
+            k16x9,
+
+            /// <summary>4:3 aspect ratio.</summary>
+            k4x3,
+
+            /// <summary>1:1 aspect ratio.</summary>
+            k1x1,
+
+            /// <summary>3:2 aspect ratio.</summary>
+            k3x2,
+
+            /// <summary>5:49 aspect ratio.</summary>
+            k5x4
+        };
+
+        /// <summary>
         /// Values that represent the different transport modes for an RTSP stream (ignored for MJPEG Pull).
         /// </summary>
         enum class RTSPNetworkTransports {
@@ -222,6 +242,24 @@ namespace VxSdkNet {
         /// <value>The current stream mode.</value>
         property Modes Mode {
             Modes get() { return (Modes)_control->GetMode(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the current aspect ratio.
+        /// </summary>
+        /// <value>The aspect ratio.</value>
+        property AspectRatios AspectRatio {
+            AspectRatios get() { return (AspectRatios)_control->GetAspectRatio(); }
+            void set(AspectRatios value) { _control->SetAspectRatio((MediaController::IStream::AspectRatios)value); }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the rendered video should stretch to fit its display window.
+        /// </summary>
+        /// <value>True if the rendered video should stretch to fit its display window, otherwise false.</value>
+        property bool StretchToFit {
+            bool get() { return _control->GetStretchToFit(); }
+            void set(bool value) { _control->SetStretchToFit(value); }
         }
 
         /// <summary>

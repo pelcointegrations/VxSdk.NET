@@ -96,6 +96,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstsoup.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstudp.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstvideoconvert.dll" target="build\x86\lib\gstreamer-1.0" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstvideocrop.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstvideoparsersbad.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstx264.dll" target="build\x86\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\Win32\lib\gstreamer-1.0\libgstpango.dll" target="build\x86\lib\gstreamer-1.0" />
@@ -170,6 +171,7 @@
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstsoup.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstudp.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstvideoconvert.dll" target="build\x64\lib\gstreamer-1.0" />
+      <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstvideocrop.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstvideoparsersbad.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstx264.dll" target="build\x64\lib\gstreamer-1.0" />
       <file src="..\VxSdkNetMedia\packages\VideoXpertSdk-Media\build\native\x64\lib\gstreamer-1.0\libgstpango.dll" target="build\x64\lib\gstreamer-1.0" />
