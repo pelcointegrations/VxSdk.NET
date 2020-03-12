@@ -91,6 +91,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the lock configuration for this bookmark.
         /// </summary>
         /// <value>The lock configuration.</value>
@@ -125,6 +134,7 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxBookmark* _bookmark;
         VxSdkNet::DataSource^ _GetDataSource();
+        VxSdkNet::ResourceLimits^ _GetLimits();
         VxSdkNet::BookmarkLock^ _GetLock();
     };
 }

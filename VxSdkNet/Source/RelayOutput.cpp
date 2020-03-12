@@ -31,6 +31,18 @@ VxSdkNet::Device^ VxSdkNet::RelayOutput::_GetHostDevice() {
     return nullptr;
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::RelayOutput::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _relayOutput->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 void VxSdkNet::RelayOutput::_SetRelayState(RelayStates state) {
     switch(state) {
         case RelayStates::Active:

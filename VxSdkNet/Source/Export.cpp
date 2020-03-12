@@ -36,6 +36,18 @@ List<VxSdkNet::ExportClip^>^ VxSdkNet::Export::_GetClips() {
     return mlist;
 }
 
+VxSdkNet::ExportStream^ VxSdkNet::Export::_GetExportStream() {
+    // Get the export stream for this export
+    VxSdk::IVxExportStream* exportStream = nullptr;
+    VxSdk::VxResult::Value result = _export->GetExportStream(exportStream);
+
+    // Return the export stream if GetExportStream was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew VxSdkNet::ExportStream(exportStream);
+
+    return nullptr;
+}
+
 VxSdkNet::User^ VxSdkNet::Export::_GetOwner() {
     // Get the user that owns this export
     VxSdk::IVxUser* user = nullptr;

@@ -1,8 +1,11 @@
 /// <summary>
 /// Implements the device class.
 /// </summary>
+#include "AnalyticSession.h"
+#include "DbBackups.h"
 #include "Device.h"
 #include "Monitor.h"
+#include "NewAnalyticSession.h"
 
 using namespace System::Collections::Generic;
 
@@ -15,10 +18,32 @@ VxSdkNet::Device::!Device() {
     _device = nullptr;
 }
 
+VxSdkNet::Results::Value VxSdkNet::Device::AddAnalyticSession(NewAnalyticSession^ newAnalyticSession) {
+    VxSdk::VxNewAnalyticSession vxNewAnalyticSession;
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataEncodingId, Utils::ConvertCSharpString(newAnalyticSession->DataEncodingId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataSourceId, Utils::ConvertCSharpString(newAnalyticSession->DataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.deviceId, Utils::ConvertCSharpString(newAnalyticSession->DeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.id, Utils::ConvertCSharpString(newAnalyticSession->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.source, Utils::ConvertCSharpString(newAnalyticSession->Source).c_str());
+
+    // Attempt to add the analytic session
+    return VxSdkNet::Results::Value(_device->AddAnalyticSession(vxNewAnalyticSession));
+}
+
 VxSdkNet::Results::Value VxSdkNet::Device::CreateLog() {
     // Make the call to create a new log on the device
     VxSdk::VxResult::Value result = _device->CreateLog();
     // Unless there was an issue creating the log the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::Device::DeleteAnalyticSession(AnalyticSession^ analyticSession) {
+    // Create aa analytic session object
+    VxSdk::IVxAnalyticSession* delAnalyticSession = analyticSession->_analyticSession;
+
+    // To delete an analytic session simply make a DeleteAnalyticSession call
+    VxSdk::VxResult::Value result = delAnalyticSession->DeleteAnalyticSession();
+    // Unless there was an issue deleting the analytic session the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
 
@@ -30,6 +55,45 @@ VxSdkNet::Results::Value VxSdkNet::Device::DeleteLog(VxSdkNet::Log^ logItem) {
     VxSdk::VxResult::Value result = delLog->DeleteLog();
     // Unless there was an issue deleting the log the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
+}
+
+List<VxSdkNet::AccessPoint^>^ VxSdkNet::Device::GetAccessPoints(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed access point objects
+    List<AccessPoint^>^ mlist = gcnew List<AccessPoint^>();
+    // Create a collection of unmanaged access point objects
+    VxSdk::VxCollection<VxSdk::IVxAccessPoint**> accessPoints;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        accessPoints.filterSize = filters->Count;
+        accessPoints.filters = collFilters;
+    }
+
+    // Make the GetAccessPoints call, which will return with the total count of access points, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _device->GetAccessPoints(accessPoints);
+    // Unless there are no access points on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // An array of pointers is allocated using the size returned by the previous GetAccessPoints call
+        accessPoints.collection = new VxSdk::IVxAccessPoint * [accessPoints.collectionSize];
+        result = _device->GetAccessPoints(accessPoints);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < accessPoints.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::AccessPoint(accessPoints.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] accessPoints.collection;
+    }
+    return mlist;
 }
 
 List<VxSdkNet::AlarmInput^>^ VxSdkNet::Device::GetAlarmInputs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
@@ -67,6 +131,45 @@ List<VxSdkNet::AlarmInput^>^ VxSdkNet::Device::GetAlarmInputs(System::Collection
         }
         // Remove the memory we previously allocated to the collection
         delete[] alarmInputs.collection;
+    }
+    return mlist;
+}
+
+List<VxSdkNet::AnalyticSession^>^ VxSdkNet::Device::GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed analytic sessions
+    List<AnalyticSession^>^ mlist = gcnew List<AnalyticSession^>();
+    // Create a collection of unmanaged analytic sessions
+    VxSdk::VxCollection<VxSdk::IVxAnalyticSession**> analyticSessions;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        analyticSessions.filterSize = filters->Count;
+        analyticSessions.filters = collFilters;
+    }
+
+    // Make the GetAnalyticSessions call, which will return with the total analytic session count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _device->GetAnalyticSessions(analyticSessions);
+    // As long as there are analytic sessions for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxAnalyticSession collection
+        analyticSessions.collection = new VxSdk::IVxAnalyticSession * [analyticSessions.collectionSize];
+        result = _device->GetAnalyticSessions(analyticSessions);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < analyticSessions.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::AnalyticSession(analyticSessions.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] analyticSessions.collection;
     }
     return mlist;
 }
@@ -270,8 +373,19 @@ VxSdkNet::Results::Value VxSdkNet::Device::Refresh() {
     return (VxSdkNet::Results::Value)_device->Refresh();
 }
 
+VxSdkNet::Results::Value VxSdkNet::Device::Replace(System::String^ replacementDeviceId) {
+    // Make the call to replace this device
+    VxSdk::VxResult::Value result = _device->Replace(Utils::ConvertCSharpString(replacementDeviceId).c_str());
+    // Unless there was an issue replacing the device the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::Device::Silence() {
     return (VxSdkNet::Results::Value)_device->Silence();
+}
+
+VxSdkNet::Results::Value VxSdkNet::Device::TriggerRefresh() {
+    return (VxSdkNet::Results::Value)_device->TriggerRefresh();
 }
 
 bool VxSdkNet::Device::_CanCreateLogs() {
@@ -290,4 +404,96 @@ VxSdkNet::DataStorage^ VxSdkNet::Device::_GetDataStorage() {
         return gcnew VxSdkNet::DataStorage(dataStorage);
 
     return nullptr;
+}
+
+VxSdkNet::DbBackups^ VxSdkNet::Device::_GetDatabaseBackups() {
+    // Get the database backups for this this device
+    VxSdk::IVxDbBackups* dbBackups = nullptr;
+    VxSdk::VxResult::Value result = _device->GetDatabaseBackups(dbBackups);
+
+    // Return the database backups if GetDatabaseBackups was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew VxSdkNet::DbBackups(dbBackups);
+
+    return nullptr;
+}
+
+VxSdkNet::Diagnostics^ VxSdkNet::Device::_GetDiagnostics() {
+    // Get the diagnostics from the device
+    VxSdk::VxDiagnostics* diagnostics = nullptr;
+    VxSdk::VxResult::Value result = _device->GetDiagnostics(diagnostics);
+
+    // Return the diagnostics if GetDiagnostics was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew Diagnostics(diagnostics);
+
+    return nullptr;
+}
+
+List<System::String^>^ VxSdkNet::Device::_GetEndpoints() {
+    // Create a list of strings
+    List<System::String^>^ mlist = gcnew List<System::String^>();
+    // Add each endpoint to the string list
+    for (int i = 0; i < _device->endpointsSize; i++)
+        mlist->Add(Utils::ConvertCppString(_device->endpoints[i]));
+
+    return mlist;
+}
+
+List<System::String^>^ VxSdkNet::Device::_GetLicensableFeatures() {
+    // Create a list of strings
+    List<System::String^>^ mlist = gcnew List<System::String^>();
+    // Add each licensable feature to the string list
+    for (int i = 0; i < _device->licensableFeaturesSize; i++)
+        mlist->Add(Utils::ConvertCppString(_device->licensableFeatures[i]));
+
+    return mlist;
+}
+
+List<System::String^>^ VxSdkNet::Device::_GetLicensedFeatures() {
+    // Create a list of strings
+    List<System::String^>^ mlist = gcnew List<System::String^>();
+    // Add each licensed feature to the string list
+    for (int i = 0; i < _device->licensedFeaturesSize; i++)
+        mlist->Add(Utils::ConvertCppString(_device->licensedFeatures[i]));
+
+    return mlist;
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::Device::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _device->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
+bool VxSdkNet::Device::_HasDiagnostics() {
+    bool result;
+    _device->HasDiagnostics(result);
+    return result;
+}
+
+void VxSdkNet::Device::_SetEndpoints(List<System::String^>^ endpoints)
+{
+    int size = endpoints->Count;
+    char** endpointUris = new char* [size];
+    for (int i = 0; i < size; i++) {
+        int uriLength = endpoints[i]->Length + 1;
+        endpointUris[i] = new char[uriLength];
+        VxSdk::Utilities::StrCopySafe(endpointUris[i], Utils::ConvertCSharpString(endpoints[i]).c_str(), uriLength);
+    }
+
+    _device->SetEndpoints(endpointUris, size);
+    for (int i = 0; i < size; i++) {
+        delete endpointUris[i];
+        endpointUris[i] = nullptr;
+    }
+
+    delete[] endpointUris;
+    endpointUris = nullptr;
 }

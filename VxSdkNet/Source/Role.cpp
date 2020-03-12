@@ -81,6 +81,18 @@ VxSdkNet::Results::Value VxSdkNet::Role::RemovePrivilege(VxSdkNet::Privilege^ pr
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::Role::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _role->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 System::Collections::Generic::List<VxSdkNet::Privilege^>^ VxSdkNet::Role::_GetPrivileges() {
     // Create a list of managed privileges
     List<Privilege^>^ mlist = gcnew List<Privilege^>();

@@ -7,8 +7,13 @@
 #include "DataSession.h"
 #include "NewPixelSearch.h"
 #include "PtzController.h"
+#include "LinkedPtzInfo.h"
+#include "Member.h"
+#include "AnalyticConfig.h"
 
 namespace VxSdkNet {
+    ref class AnalyticSession;
+    ref class NewAnalyticSession;
     ref class Bookmark;
     ref class DataStorage;
     ref class Device;
@@ -26,20 +31,19 @@ namespace VxSdkNet {
     public:
 
         /// <summary>
-        /// Values that represent the particular type of a data source.
+        /// Values that represent a capability supported by a data source.
         /// </summary>
-        enum class Types {
+        enum class DataSourceCapability {
             /// <summary>An error or unknown value was returned.</summary>
             Unknown,
-
-            /// <summary>A video data source.</summary>
-            Video,
-
-            /// <summary>An audio data source.</summary>
-            Audio,
-
-            /// <summary>A metadata data source.</summary>
-            Metadata
+            /// <summary>Focus capability.</summary>
+            Focus,
+            /// <summary>Iris capability.</summary>
+            Iris,
+            /// <summary>Pan/tilt capability.</summary>
+            PanTilt,
+            /// <summary>Zoom capability.</summary>
+            Zoom
         };
 
         /// <summary>
@@ -54,6 +58,23 @@ namespace VxSdkNet {
 
             /// <summary>The device is online.</summary>
             Online
+        };
+
+        /// <summary>
+        /// Values that represent the particular type of a data source.
+        /// </summary>
+        enum class Types {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+
+            /// <summary>A video data source.</summary>
+            Video,
+
+            /// <summary>An audio data source.</summary>
+            Audio,
+
+            /// <summary>A metadata data source.</summary>
+            Metadata
         };
 
         /// <summary>
@@ -75,6 +96,13 @@ namespace VxSdkNet {
         !DataSource();
 
         /// <summary>
+        /// Adds a new analytic session for this data source.
+        /// </summary>
+        /// <param name="newAnalyticSession">The new analytic session to be added.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the analytic session.</returns>
+        Results::Value AddAnalyticSession(NewAnalyticSession^ newAnalyticSession);
+
+        /// <summary>
         /// Create a new MJPEG stream.
         /// </summary>
         /// <returns><c>nullptr</c> if it fails, else the new MJPEG streams <see cref="DataSession"/>.</returns>
@@ -87,7 +115,14 @@ namespace VxSdkNet {
         /// <returns><c>nullptr</c> if it fails, else the new pixel search result.</returns>
         VxSdkNet::PixelSearch^ CreatePixelSearch(VxSdkNet::NewPixelSearch^ newPixelSearch);
 
-         /// <summary>
+        /// <summary>
+        /// Delete an analytic session from this data source.
+        /// </summary>
+        /// <param name="analyticSession">The analytic session to be deleted from the data source.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the analytic session.</returns>
+        Results::Value DeleteAnalyticSession(AnalyticSession^ analyticSession);
+
+        /// <summary>
         /// Delete a pixel search result.
         /// </summary>
         /// <param name="pixelSearchItem">The pixel search to be deleted.</param>
@@ -101,6 +136,14 @@ namespace VxSdkNet {
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> of all associated data storages.</returns>
         System::Collections::Generic::List<DataStorage^>^ GetAllDataStorages(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Gets the analytic sessions for this data source.
+        /// <para>Available filters: AdvancedQuery, DataSourceId, DeviceId, Id, ModifiedSince.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> of analytic sessions.</returns>
+        System::Collections::Generic::List<AnalyticSession^>^ GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get all possible audio resource relations for this data source (both linked and non-linked) using an optional collection filter.
@@ -196,6 +239,24 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the analytic configuration for this data source.
+        /// </summary>
+        /// <value>The analytic configuration.</value>
+        property VxSdkNet::AnalyticConfig^ AnalyticConfig {
+        public:
+            VxSdkNet::AnalyticConfig^ get() { return _GetAnalyticConfig(); }
+        }
+
+        /// <summary>
+        /// Gets all of the analytic sessions for this data source.
+        /// </summary>
+        /// <value>A <c>List</c> of analytic sessions.</value>
+        property System::Collections::Generic::List<AnalyticSession^>^ AnalyticSessions {
+        public:
+            System::Collections::Generic::List<AnalyticSession^>^ get() { return GetAnalyticSessions(nullptr); }
+        }
+
+        /// <summary>
         /// Gets all possible audio resource relations for this data source (both linked and non-linked).
         /// Each linked resource shall be considered to be associated to this data source while non-linked resources
         /// shall not be (they are available to be associated).
@@ -222,6 +283,21 @@ namespace VxSdkNet {
         property bool CanPixelSearch {
         public:
             bool get() { return _CanPixelSearch(); }
+        }
+
+        /// <summary>
+        /// Gets the list of capabilities supported by this data source, if any.
+        /// </summary>
+        /// <value>A <c>List</c> of supported capabilities.</value>
+        property System::Collections::Generic::List<DataSourceCapability>^ Capabilities {
+        public:
+            System::Collections::Generic::List<DataSourceCapability>^ get() {
+                System::Collections::Generic::List<DataSourceCapability>^ mlist = gcnew System::Collections::Generic::List<DataSourceCapability>();
+                for (int i = 0; i < _dataSource->capabilitiesSize; i++)
+                    mlist->Add((DataSourceCapability)_dataSource->capabilities[i]);
+
+                return mlist;
+            }
         }
 
         /// <summary>
@@ -385,6 +461,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the currently linked audio resource relation for this data source, if any.
         /// </summary>
         /// <value>The linked audio resource if available, otherwise <c>nullptr</c>.</value>
@@ -409,6 +494,15 @@ namespace VxSdkNet {
                 filter->Add(Filters::Value::Linked, "true");
                 return GetMetadataRelations(filter);
             }
+        }
+
+        /// <summary>
+        /// Gets the member system that this data source resides in.
+        /// </summary>
+        /// <value>The member.</value>
+        property Member^ MemberSystem {
+        public:
+            Member^ get() { return _GetMember(); }
         }
 
         /// <summary>
@@ -505,6 +599,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the source URI of the data source.
+        /// </summary>
+        /// <value>The source URI.</value>
+        property System::String^ SourceEndpoint {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_dataSource->sourceEndpoint); }
+        }
+
+        /// <summary>
         /// Gets the current operational state of the associated device.
         /// </summary>
         /// <value>The current device state.</value>
@@ -542,12 +645,26 @@ namespace VxSdkNet {
             System::Collections::Generic::List<ResourceRel^>^ get() { return GetVideoRelations(nullptr); }
         }
 
+        /// <summary>
+        /// Gets information on any data sources that are tracking this data source. Only available if this data
+        /// source supports linked PTZ. 
+        /// </summary>
+        /// <value>A <c>List</c> of linked PTZ info resources.</value>
+        property System::Collections::Generic::List<LinkedPtzInfo^>^ VxLinkedPtzInfo {
+        public:
+            System::Collections::Generic::List<LinkedPtzInfo^>^ get() { return _GetLinkedPtzInfo(); }
+        }
+
     internal:
         VxSdk::IVxDataSource* _dataSource;
         bool _CanPixelSearch();
         bool _CanPtz();
+        VxSdkNet::AnalyticConfig^ _GetAnalyticConfig();
         System::Collections::Generic::List<DataInterface^>^ _GetDataInterfaces();
         VxSdkNet::Device^ _GetHostDevice();
+        VxSdkNet::ResourceLimits^ _GetLimits();
+        System::Collections::Generic::List<VxSdkNet::LinkedPtzInfo^>^ _GetLinkedPtzInfo();
+        VxSdkNet::Member^ _GetMember();
         VxSdkNet::Configuration::Motion^ _GetMotionConfig();
         System::Collections::Generic::List<UserInfo^>^ _GetMultiviewInfo();
         PtzController^ _GetPtzController();

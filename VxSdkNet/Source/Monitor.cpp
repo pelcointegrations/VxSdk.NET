@@ -32,6 +32,18 @@ VxSdkNet::Device^ VxSdkNet::Monitor::_GetHostDevice() {
     return nullptr;
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::Monitor::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _monitor->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 List<VxSdkNet::MonitorCell^>^ VxSdkNet::Monitor::_GetMonitorCells() {
     // Create a list of managed monitor cell objects
     List<MonitorCell^>^ mlist = gcnew List<MonitorCell^>();

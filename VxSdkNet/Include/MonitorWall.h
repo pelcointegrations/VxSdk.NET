@@ -4,8 +4,9 @@
 
 #include "VxSdk.h"
 #include "Utils.h"
-#include "MonitorPosition.h"
 #include "Monitor.h"
+#include "MonitorPosition.h"
+#include "MonitorSelection.h"
 
 namespace VxSdkNet {
     /// <summary>
@@ -33,6 +34,12 @@ namespace VxSdkNet {
         !MonitorWall();
 
         /// <summary>
+        /// Clears the current monitor selection from this monitor wall.
+        /// </summary>
+        /// <returns>The <see cref="Results::Value">Result</see> of the request.</returns>
+        Results::Value ClearMonitorSelection();
+
+        /// <summary>
         /// Get the monitors associated with this monitor wall using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, Id, ModifiedSince, Name, Number.</para>
         /// </summary>
@@ -41,10 +48,28 @@ namespace VxSdkNet {
         System::Collections::Generic::List<Monitor^>^ GetMonitors(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Gets the monitor selections associated with this monitor wall.
+        /// </summary>
+        /// <returns>A <c>List</c> of monitor selections.</returns>
+        System::Collections::Generic::List<MonitorSelection^>^ GetMonitorSelections();
+
+        /// <summary>
         /// Refreshes this instances properties.
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
         Results::Value Refresh();
+
+        /// <summary>
+        /// Updates the monitor/cell selection (for this user) on the monitor wall.
+        /// <para>
+        /// Note that each user can independently select a different monitor/cell for remote-control of a monitor wall.
+        /// </para>
+        /// </summary>
+        /// <param name="cellIndex">Index of the monitor cell to select within the monitor (1-based). If 0, the current monitor cell selection (if any) will be cleared.</param>
+        /// <param name="monitorIndex">Index of the monitor to select within a monitor wall (1-based). If 0, the current monitor selection (if any) will be cleared.</param>
+        /// <param name="inputMode">Input mode for the selected monitor cell. If <see cref="MonitorSelection::CellInputMode::Unknown"/>, the current input mode will be used.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the request.</returns>
+        Results::Value SetMonitorSelection(int cellIndex, int monitorIndex, MonitorSelection::CellInputMode inputMode);
 
         /// <summary>
         /// Gets the unique monitor wall identifier.
@@ -53,6 +78,15 @@ namespace VxSdkNet {
         property System::String^ Id {
         public:
             System::String^ get() { return Utils::ConvertCppString(_monitorWall->id); }
+        }
+
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
         }
 
         /// <summary>
@@ -114,6 +148,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxMonitorWall* _monitorWall;
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // MonitorWall_h__

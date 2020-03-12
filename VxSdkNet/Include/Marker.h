@@ -135,6 +135,15 @@ namespace VxSdkNet {
                 _marker->SetLayerName(layerName);
             }
         }
+
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
         
         /// <summary>
         /// Gets or sets the friendly name of the marker.
@@ -173,6 +182,7 @@ namespace VxSdkNet {
         VxSdkNet::DataSource^ _GetAssociatedDataSource();
         VxSdkNet::Drawing^ _GetAssociatedDrawing();
         VxSdkNet::Drawing^ _GetDrawing();
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // Marker_h__

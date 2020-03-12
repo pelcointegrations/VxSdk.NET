@@ -54,6 +54,10 @@ List<VxSdkNet::DataSource^>^ VxSdkNet::DeviceAssignment::GetDataSources(System::
     return mlist;
 }
 
+VxSdkNet::Results::Value VxSdkNet::DeviceAssignment::Refresh() {
+    return (VxSdkNet::Results::Value)_deviceAssignment->Refresh();
+}
+
 VxSdkNet::DataStorage^ VxSdkNet::DeviceAssignment::_GetDataStorage() {
     // Get the data storage object
     VxSdk::IVxDataStorage* dataStorage = nullptr;
@@ -77,5 +81,17 @@ VxSdkNet::Device^ VxSdkNet::DeviceAssignment::_GetDevice() {
         return gcnew VxSdkNet::Device(device);
 
     // Return nullptr if GetDevice is unsuccessful
+    return nullptr;
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::DeviceAssignment::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _deviceAssignment->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
     return nullptr;
 }

@@ -2,14 +2,17 @@
 #ifndef Device_h__
 #define Device_h__
 
+#include "AccessPoint.h"
 #include "AlarmInput.h"
 #include "DataSource.h"
-#include "DeviceAssignment.h"
 #include "DataStorage.h"
+#include "DeviceAssignment.h"
+#include "Diagnostics.h"
 #include "Log.h"
 #include "RelayOutput.h"
 
 namespace VxSdkNet {
+    ref class DbBackups;
     ref class Monitor;
 
     /// <summary>
@@ -38,7 +41,10 @@ namespace VxSdkNet {
             NsmManager,
 
             /// <summary>NSM5200 member.</summary>
-            NsmMember
+            NsmMember,
+
+            /// <summary>Expired credentials..</summary>
+            AuthExpired
         };
 
         /// <summary>
@@ -85,7 +91,13 @@ namespace VxSdkNet {
             Ui,
 
             /// <summary>An error or unknown value was returned.</summary>
-            Unknown
+            Unknown,
+
+            /// <summary>An analytic server.</summary>
+            AnalyticServer,
+
+            /// <summary>A VideoXpert database.</summary>
+            Database
         };
 
         /// <summary>
@@ -107,10 +119,24 @@ namespace VxSdkNet {
         !Device();
 
         /// <summary>
+        /// Adds a new analytic session for this device.
+        /// </summary>
+        /// <param name="newAnalyticSession">The new analytic session to be added.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the analytic session.</returns>
+        Results::Value AddAnalyticSession(NewAnalyticSession^ newAnalyticSession);
+
+        /// <summary>
         /// Creates a new log for this device, the contents of which shall be determined by the server by default.
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of creating the log.</returns>
         Results::Value CreateLog();
+
+        /// <summary>
+        /// Delete an analytic session from this device.
+        /// </summary>
+        /// <param name="analyticSession">The analytic session to be deleted from the device.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the analytic session.</returns>
+        Results::Value DeleteAnalyticSession(AnalyticSession^ analyticSession);
 
         /// <summary>
         /// Delete a log from this device.
@@ -120,12 +146,28 @@ namespace VxSdkNet {
         Results::Value DeleteLog(Log^ logItem);
 
         /// <summary>
+        /// Gets the access points residing on the device.
+        /// <para>Available filters: kAdvancedQuery, kHasStatus, kId, kModifiedSince, kName, kState, kType.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> of access points.</returns>
+        System::Collections::Generic::List<AccessPoint^>^ GetAccessPoints(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
         /// Get the alarm inputs hosted by this device using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, Id, ModifiedSince, Name, State.</para>
         /// </summary>
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> of alarm inputs.</returns>
         System::Collections::Generic::List<AlarmInput^>^ GetAlarmInputs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Gets the analytic sessions for this device.
+        /// <para>Available filters: AdvancedQuery, DataSourceId, DeviceId, Id, ModifiedSince.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> of analytic sessions.</returns>
+        System::Collections::Generic::List<AnalyticSession^>^ GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get the data sources hosted by this device using an optional collection filter.
@@ -174,10 +216,33 @@ namespace VxSdkNet {
         Results::Value Refresh();
 
         /// <summary>
+        /// Replaces an offline device with a new device. Not available for all types of devices.
+        /// </summary>
+        /// <param name="replacementDeviceId">The ID of the replacement device.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of replacing this device.</returns>
+        Results::Value Replace(System::String^ replacementDeviceId);
+
+        /// <summary>
         /// Silences all audible alarms on the device.
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of the request.</returns>
         Results::Value Silence();
+
+        /// <summary>
+        /// Triggers a refresh of this device> on the VideoXpert system; updating it by retrieving the latest
+        /// information directly from the device.
+        /// </summary>
+        /// <returns>The <see cref="Results::Value">Result</see> of refreshing the device.</returns>
+        Results::Value TriggerRefresh();
+
+        /// <summary>
+        /// Gets the access points hosted by this device.
+        /// </summary>
+        /// <value>A <c>List</c> of access points.</value>
+        property System::Collections::Generic::List<AccessPoint^>^ AccessPoints {
+        public:
+            System::Collections::Generic::List<AccessPoint^>^ get() { return GetAccessPoints(nullptr); }
+        }
 
         /// <summary>
         /// Gets the alarm inputs hosted by this device.
@@ -189,12 +254,30 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets all of the analytic sessions for this device.
+        /// </summary>
+        /// <value>A <c>List</c> of analytic sessions.</value>
+        property System::Collections::Generic::List<AnalyticSession^>^ AnalyticSessions {
+        public:
+            System::Collections::Generic::List<AnalyticSession^>^ get() { return GetAnalyticSessions(nullptr); }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this device is capable of generating logs.
         /// </summary>
         /// <value><c>true</c> if this device is capable of generating logs, <c>false</c> if not.</value>
         property bool CanCreateLogs {
         public:
             bool get() { return _CanCreateLogs(); }
+        }
+
+        /// <summary>
+        /// Gets the database backup information for this device, if any.
+        /// </summary>
+        /// <value>The database backups for the device if available, otherwise <c>nullptr</c>.</value>
+        property DbBackups^ DatabaseBackups {
+        public:
+            DbBackups^ get() { return _GetDatabaseBackups(); }
         }
 
         /// <summary>
@@ -225,6 +308,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any diagnostics provided by this device.
+        /// </summary>
+        /// <value>The device diagnostics.</value>
+        property Diagnostics^ DeviceDiagnostics {
+        public:
+            Diagnostics^ get() { return _GetDiagnostics(); }
+        }
+
+        /// <summary>
         /// Gets the driver device identifier.
         /// </summary>
         /// <value>The driver device identifier.</value>
@@ -244,6 +336,40 @@ namespace VxSdkNet {
                 char driverTypeId[64];
                 VxSdk::Utilities::StrCopySafe(driverTypeId, Utils::ConvertCSharpString(value).c_str());
                 _device->SetDriverTypeId(driverTypeId);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the list of source URIs that the device will support.
+        /// </summary>
+        /// <value>A <c>List</c> of source URIs.</value>
+        property System::Collections::Generic::List<System::String^>^ Endpoints {
+        public:
+            System::Collections::Generic::List<System::String^>^ get() { return _GetEndpoints(); }
+            void set(System::Collections::Generic::List<System::String^>^ value) { _SetEndpoints(value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this device provides any diagnostic information.
+        /// </summary>
+        /// <value><c>true</c> if this device provides diagnostic information, <c>false</c> if not.</value>
+        property bool HasDeviceDiagnostics {
+        public:
+            bool get() { return _HasDiagnostics(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the hostname of the device. If set, takes precedence over the ip. The combination
+        /// of <c>Hostname</c>, <c>Ip</c>, <c>Port</c> and <c>Type</c> must be unique.
+        /// </summary>
+        /// <value>The hostname.</value>
+        property System::String^ Hostname {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_device->hostname); }
+            void set(System::String^ value) {
+                char hostname[256];
+                VxSdk::Utilities::StrCopySafe(hostname, Utils::ConvertCSharpString(value).c_str());
+                _device->SetHostname(hostname);
             }
         }
 
@@ -286,6 +412,33 @@ namespace VxSdkNet {
         property bool IsLicenseRequired {
         public:
             bool get() { return _device->isLicenseRequired; }
+        }
+
+        /// <summary>
+        /// Gets the list of supported features that may be licensed for use by this device.
+        /// </summary>
+        /// <value>A <c>List</c> of licensable features.</value>
+        property System::Collections::Generic::List<System::String^>^ LicensableFeatures {
+        public:
+            System::Collections::Generic::List<System::String^>^ get() { return _GetLicensableFeatures(); }
+        }
+
+        /// <summary>
+        /// Gets the list of supported features that are currently licensed for use by this device.
+        /// </summary>
+        /// <value>A <c>List</c> of licensed features.</value>
+        property System::Collections::Generic::List<System::String^>^ LicensedFeatures {
+        public:
+            System::Collections::Generic::List<System::String^>^ get() { return _GetLicensedFeatures(); }
+        }
+
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
         }
 
         /// <summary>
@@ -453,6 +606,14 @@ namespace VxSdkNet {
         VxSdk::IVxDevice* _device;
         bool _CanCreateLogs();
         VxSdkNet::DataStorage^ _GetDataStorage();
+        VxSdkNet::DbBackups^ _GetDatabaseBackups();
+        Diagnostics^ _GetDiagnostics();
+        System::Collections::Generic::List<System::String^>^ _GetEndpoints();
+        System::Collections::Generic::List<System::String^>^ _GetLicensableFeatures();
+        System::Collections::Generic::List<System::String^>^ _GetLicensedFeatures();
+        VxSdkNet::ResourceLimits^ _GetLimits();
+        bool _HasDiagnostics();
+        void _SetEndpoints(System::Collections::Generic::List<System::String^>^ endpoints);
     };
 }
 #endif // Device_h__

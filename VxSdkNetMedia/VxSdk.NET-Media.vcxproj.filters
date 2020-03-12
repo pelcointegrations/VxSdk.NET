@@ -251,6 +251,96 @@
     <ClInclude Include="Include\PelcoDataEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Diagnostics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\AccessPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\MonitorSelection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ExportStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ExportStreamClip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewVolume.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewVolumeGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Volume.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\VolumeGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\LinkedPtzInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Retention.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\UserAccount.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\LicenseSup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\LicenseSupEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\DbBackup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\DbBackups.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Member.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewMember.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\FileRecovery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\AnalyticBehavior.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\AnalyticConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\AnalyticSession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewAnalyticBehavior.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewAnalyticSession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ObjectCounter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ObjectZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\GridPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ResourceLimits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\LdapValidationCredentials.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\SmtpInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MediaControl.cpp">
@@ -383,6 +473,42 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\VxSdkNet\Source\Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\AccessPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\ExportStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\Volume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\VolumeGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\UserAccount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\DbBackup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\DbBackups.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\Member.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\FileRecovery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\AnalyticBehavior.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\AnalyticConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\AnalyticSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

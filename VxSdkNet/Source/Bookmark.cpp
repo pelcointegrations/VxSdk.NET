@@ -30,6 +30,18 @@ VxSdkNet::DataSource^ VxSdkNet::Bookmark::_GetDataSource() {
     return nullptr;
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::Bookmark::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _bookmark->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 VxSdkNet::BookmarkLock^ VxSdkNet::Bookmark::_GetLock() {
     // Get the bookmark lock
     VxSdk::IVxBookmarkLock* bookmarkLock = nullptr;

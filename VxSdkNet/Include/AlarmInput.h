@@ -4,6 +4,7 @@
 
 #include "VxSdk.h"
 #include "Utils.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
     ref class Device;
@@ -26,6 +27,20 @@ namespace VxSdkNet {
 
             /// <summary>The alarm input is inactive.</summary>
             Inactive
+        };
+
+        /// <summary>
+        /// Values that represent the types of alarm inputs.
+        /// </summary>
+        enum class AlarmInputTypes {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+
+            /// <summary>The alarm input is a generic alarm.</summary>
+            Alarm,
+
+            /// <summary>The alarm input is a fire alarm.</summary>
+            Fire
         };
 
         /// <summary>
@@ -85,6 +100,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the friendly name.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -107,9 +131,20 @@ namespace VxSdkNet {
             AlarmStates get() { return AlarmStates(_alarmInput->state); }
         }
 
+        /// <summary>
+        /// Gets or sets the particular type of this alarm input
+        /// </summary>
+        /// <value>The alarm input type.</value>
+        property AlarmInputTypes Type {
+        public:
+            AlarmInputTypes get() { return AlarmInputTypes(_alarmInput->type); }
+            void set(AlarmInputTypes value) { _alarmInput->SetType((VxSdk::VxAlarmInputType::Value)value); }
+        }
+
     internal:
         VxSdk::IVxAlarmInput* _alarmInput;
         VxSdkNet::Device^ _GetHostDevice();
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // AlarmInput_h__

@@ -20,6 +20,12 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets or sets whether the user can login to the system using local credentials instead of using LDAP.
+        /// </summary>
+        /// <value><c>true</c> to allow using local credentials for login, otherwise <c>false</c>.</value>
+        property bool CanBypassLdap;
+
+        /// <summary>
         /// Gets or sets the network domain for this user.
         /// </summary>
         /// <value>The network domain.</value>
@@ -42,6 +48,13 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The first name of user.</value>
         property System::String^ FirstName;
+
+        /// <summary>
+        /// Gets or sets whether password expiration will be disabled for this account or if it will use the global
+        /// password expiration setting.
+        /// </summary>
+        /// <value><c>true</c> to disable password expiration, otherwise <c>false</c>.</value>
+        property bool IsPasswordExpirationDisabled;
 
         /// <summary>
         /// Gets or sets the last name of user.

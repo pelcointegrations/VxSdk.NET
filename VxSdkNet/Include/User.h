@@ -7,6 +7,7 @@
 #include "DataObject.h"
 #include "Role.h"
 #include "Tag.h"
+#include "UserAccount.h"
 
 namespace VxSdkNet {
 
@@ -114,6 +115,14 @@ namespace VxSdkNet {
         VxSdkNet::Results::Value SetPassword(System::String^ newPassword, bool mustChangePassword);
 
         /// <summary>
+        /// Gets the user account configuration for this user.
+        /// </summary>
+        /// <value>The user account.</value>
+        property UserAccount^ Account {
+            UserAccount^ get() { return _GetUserAccount(); }
+        }
+
+        /// <summary>
         /// Gets or sets the state of the user account, either enabled or disabled.
         /// </summary>
         /// <value>The state of the user account.</value>
@@ -212,6 +221,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the friendly name, within the domain, of the user.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -302,6 +320,8 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxUser* _user;
         bool _GetAccountState();
+        VxSdkNet::ResourceLimits^ _GetLimits();
+        UserAccount^ _GetUserAccount();
     };
 }
 #endif // User_h__

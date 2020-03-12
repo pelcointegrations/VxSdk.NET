@@ -167,24 +167,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\AccessPoint.h" />
     <ClInclude Include="Include\AlarmInput.h" />
+    <ClInclude Include="Include\AnalyticBehavior.h" />
+    <ClInclude Include="Include\AnalyticConfig.h" />
+    <ClInclude Include="Include\AnalyticSession.h" />
     <ClInclude Include="Include\Bookmark.h" />
     <ClInclude Include="Include\BookmarkLock.h" />
     <ClInclude Include="Include\Configuration.h" />
     <ClInclude Include="Include\DataObject.h" />
     <ClInclude Include="Include\DataStorage.h" />
+    <ClInclude Include="Include\DbBackup.h" />
+    <ClInclude Include="Include\DbBackups.h" />
     <ClInclude Include="Include\DeviceAssignment.h" />
+    <ClInclude Include="Include\Diagnostics.h" />
     <ClInclude Include="Include\Drawing.h" />
     <ClInclude Include="Include\Driver.h" />
+    <ClInclude Include="Include\ExportStream.h" />
+    <ClInclude Include="Include\ExportStreamClip.h" />
+    <ClInclude Include="Include\FileRecovery.h" />
     <ClInclude Include="Include\Gap.h" />
+    <ClInclude Include="Include\LdapValidationCredentials.h" />
     <ClInclude Include="Include\License.h" />
     <ClInclude Include="Include\LicenseFeature.h" />
+    <ClInclude Include="Include\ResourceLimits.h" />
+    <ClInclude Include="Include\LinkedPtzInfo.h" />
     <ClInclude Include="Include\ManualRecording.h" />
     <ClInclude Include="Include\Marker.h" />
+    <ClInclude Include="Include\Member.h" />
     <ClInclude Include="Include\Monitor.h" />
     <ClInclude Include="Include\MonitorCell.h" />
     <ClInclude Include="Include\MonitorPosition.h" />
+    <ClInclude Include="Include\MonitorSelection.h" />
     <ClInclude Include="Include\MonitorWall.h" />
+    <ClInclude Include="Include\NewAnalyticBehavior.h" />
+    <ClInclude Include="Include\NewAnalyticSession.h" />
     <ClInclude Include="Include\NewBookmark.h" />
     <ClInclude Include="Include\NewClip.h" />
     <ClInclude Include="Include\NewDataObject.h" />
@@ -192,6 +209,7 @@
     <ClInclude Include="Include\NewDeviceAssignment.h" />
     <ClInclude Include="Include\NewEvent.h" />
     <ClInclude Include="Include\NewManualRecording.h" />
+    <ClInclude Include="Include\NewMember.h" />
     <ClInclude Include="Include\NewMonitor.h" />
     <ClInclude Include="Include\NewMarker.h" />
     <ClInclude Include="Include\NewNotification.h" />
@@ -201,6 +219,15 @@
     <ClInclude Include="Include\NewSchedule.h" />
     <ClInclude Include="Include\NewScheduleTrigger.h" />
     <ClInclude Include="Include\NewSituation.h" />
+    <ClInclude Include="Include\NewVolume.h" />
+    <ClInclude Include="Include\NewVolumeGroup.h" />
+    <ClInclude Include="Include\ObjectCounter.h" />
+    <ClInclude Include="Include\ObjectZone.h" />
+    <ClInclude Include="Include\GridPoint.h" />
+    <ClInclude Include="Include\Retention.h" />
+    <ClInclude Include="Include\SmtpInfo.h" />
+    <ClInclude Include="Include\Volume.h" />
+    <ClInclude Include="Include\VolumeGroup.h" />
     <ClInclude Include="Include\NewTag.h" />
     <ClInclude Include="Include\NewTimeTable.h" />
     <ClInclude Include="Include\NewUser.h" />
@@ -243,22 +270,36 @@
     <ClInclude Include="Include\Situation.h" />
     <ClInclude Include="Include\InternalEvent.h" />
     <ClInclude Include="Include\VXSystem.h" />
+    <ClInclude Include="Include\LicenseSup.h" />
+    <ClInclude Include="Include\LicenseSupEvent.h" />
+    <ClInclude Include="Include\UserAccount.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AccessPoint.cpp" />
     <ClCompile Include="Source\AlarmInput.cpp" />
+    <ClCompile Include="Source\AnalyticBehavior.cpp" />
+    <ClCompile Include="Source\AnalyticConfig.cpp" />
+    <ClCompile Include="Source\AnalyticSession.cpp" />
     <ClCompile Include="Source\Bookmark.cpp" />
     <ClCompile Include="Source\BookmarkLock.cpp" />
     <ClCompile Include="Source\Configuration.cpp" />
     <ClCompile Include="Source\DataObject.cpp" />
     <ClCompile Include="Source\DataStorage.cpp" />
+    <ClCompile Include="Source\DbBackup.cpp" />
+    <ClCompile Include="Source\DbBackups.cpp" />
     <ClCompile Include="Source\DeviceAssignment.cpp" />
     <ClCompile Include="Source\Drawing.cpp" />
     <ClCompile Include="Source\Driver.cpp" />
+    <ClCompile Include="Source\ExportStream.cpp" />
+    <ClCompile Include="Source\FileRecovery.cpp" />
     <ClCompile Include="Source\Gap.cpp" />
     <ClCompile Include="Source\License.cpp" />
     <ClCompile Include="Source\LicenseFeature.cpp" />
     <ClCompile Include="Source\ManualRecording.cpp" />
     <ClCompile Include="Source\Marker.cpp" />
+    <ClCompile Include="Source\Member.cpp" />
+    <ClCompile Include="Source\Volume.cpp" />
+    <ClCompile Include="Source\VolumeGroup.cpp" />
     <ClCompile Include="Source\Clip.cpp" />
     <ClCompile Include="Source\DataInterface.cpp" />
     <ClCompile Include="Source\DataSource.cpp" />
@@ -288,18 +329,19 @@
     <ClCompile Include="Source\User.cpp" />
     <ClCompile Include="Source\VXSystem.cpp" />
     <ClCompile Include="Source\Event.cpp" />
+    <ClCompile Include="Source\UserAccount.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\VxSdkNet.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk.3.0.11\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.11\build\native\VideoXpertSdk.targets')" />
+    <Import Project="packages\VideoXpertSdk.3.0.27\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.27\build\native\VideoXpertSdk.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.11\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.11\build\native\VideoXpertSdk.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.27\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.27\build\native\VideoXpertSdk.targets'))" />
   </Target>
 </Project>

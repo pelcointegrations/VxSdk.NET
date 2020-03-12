@@ -160,6 +160,18 @@ VxSdkNet::Results::Value VxSdkNet::Tag::Unlink(List<VxSdkNet::Device^>^ devices)
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::Tag::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _tag->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 VxSdkNet::User^ VxSdkNet::Tag::_GetOwner() {
     // Get the user that owns this tag
     VxSdk::IVxUser* user = nullptr;

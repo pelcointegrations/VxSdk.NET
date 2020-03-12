@@ -167,24 +167,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\VxSdkNet\Include\AccessPoint.h" />
     <ClInclude Include="..\VxSdkNet\Include\AlarmInput.h" />
+    <ClInclude Include="..\VxSdkNet\Include\AnalyticBehavior.h" />
+    <ClInclude Include="..\VxSdkNet\Include\AnalyticConfig.h" />
+    <ClInclude Include="..\VxSdkNet\Include\AnalyticSession.h" />
     <ClInclude Include="..\VxSdkNet\Include\Bookmark.h" />
     <ClInclude Include="..\VxSdkNet\Include\BookmarkLock.h" />
     <ClInclude Include="..\VxSdkNet\Include\Configuration.h" />
     <ClInclude Include="..\VxSdkNet\Include\DataObject.h" />
     <ClInclude Include="..\VxSdkNet\Include\DataStorage.h" />
+    <ClInclude Include="..\VxSdkNet\Include\DbBackup.h" />
+    <ClInclude Include="..\VxSdkNet\Include\DbBackups.h" />
     <ClInclude Include="..\VxSdkNet\Include\DeviceAssignment.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Diagnostics.h" />
     <ClInclude Include="..\VxSdkNet\Include\Drawing.h" />
     <ClInclude Include="..\VxSdkNet\Include\Driver.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ExportStream.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ExportStreamClip.h" />
+    <ClInclude Include="..\VxSdkNet\Include\FileRecovery.h" />
     <ClInclude Include="..\VxSdkNet\Include\Gap.h" />
+    <ClInclude Include="..\VxSdkNet\Include\LdapValidationCredentials.h" />
     <ClInclude Include="..\VxSdkNet\Include\License.h" />
     <ClInclude Include="..\VxSdkNet\Include\LicenseFeature.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ResourceLimits.h" />
+    <ClInclude Include="..\VxSdkNet\Include\LinkedPtzInfo.h" />
     <ClInclude Include="..\VxSdkNet\Include\ManualRecording.h" />
     <ClInclude Include="..\VxSdkNet\Include\Marker.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Member.h" />
     <ClInclude Include="..\VxSdkNet\Include\Monitor.h" />
     <ClInclude Include="..\VxSdkNet\Include\MonitorCell.h" />
     <ClInclude Include="..\VxSdkNet\Include\MonitorPosition.h" />
+    <ClInclude Include="..\VxSdkNet\Include\MonitorSelection.h" />
     <ClInclude Include="..\VxSdkNet\Include\MonitorWall.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewAnalyticBehavior.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewAnalyticSession.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewBookmark.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewClip.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewDataObject.h" />
@@ -192,6 +209,7 @@
     <ClInclude Include="..\VxSdkNet\Include\NewDeviceAssignment.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewEvent.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewManualRecording.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewMember.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewMonitor.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewMarker.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewNotification.h" />
@@ -201,6 +219,15 @@
     <ClInclude Include="..\VxSdkNet\Include\NewSchedule.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewScheduleTrigger.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewSituation.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewVolume.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewVolumeGroup.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ObjectCounter.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ObjectZone.h" />
+    <ClInclude Include="..\VxSdkNet\Include\GridPoint.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Retention.h" />
+    <ClInclude Include="..\VxSdkNet\Include\SmtpInfo.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Volume.h" />
+    <ClInclude Include="..\VxSdkNet\Include\VolumeGroup.h" />
     <ClInclude Include="Include\MediaControl.h" />
     <ClInclude Include="Include\MediaEvent.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewTag.h" />
@@ -247,22 +274,36 @@
     <ClInclude Include="..\VxSdkNet\Include\Situation.h" />
     <ClInclude Include="..\VxSdkNet\Include\InternalEvent.h" />
     <ClInclude Include="..\VxSdkNet\Include\VXSystem.h" />
+    <ClInclude Include="..\VxSdkNet\Include\LicenseSup.h" />
+    <ClInclude Include="..\VxSdkNet\Include\LicenseSupEvent.h" />
+    <ClInclude Include="..\VxSdkNet\Include\UserAccount.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\VxSdkNet\Source\AccessPoint.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\AlarmInput.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\AnalyticBehavior.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\AnalyticConfig.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\AnalyticSession.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Bookmark.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\BookmarkLock.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Configuration.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DataObject.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DataStorage.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\DbBackup.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\DbBackups.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DeviceAssignment.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Drawing.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Driver.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\ExportStream.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\FileRecovery.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Gap.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\License.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\LicenseFeature.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\ManualRecording.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Marker.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\Member.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\Volume.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\VolumeGroup.cpp" />
     <ClCompile Include="Source\MediaControl.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Clip.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DataInterface.cpp" />
@@ -293,6 +334,7 @@
     <ClCompile Include="..\VxSdkNet\Source\User.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\VXSystem.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Event.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\UserAccount.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\VxSdkNetMedia.rc" />
@@ -302,12 +344,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk-Media.3.0.38\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.38\build\native\VideoXpertSdk-Media.targets')" />
+    <Import Project="packages\VideoXpertSdk-Media.3.0.56\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.56\build\native\VideoXpertSdk-Media.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.38\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.38\build\native\VideoXpertSdk-Media.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.56\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.56\build\native\VideoXpertSdk-Media.targets'))" />
   </Target>
 </Project>

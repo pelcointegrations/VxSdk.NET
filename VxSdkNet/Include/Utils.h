@@ -499,7 +499,7 @@ namespace VxSdkNet {
         /// <summary>
         /// Convert a pointer to const char to a system string.
         /// </summary>
-        /// <param name="str">The string source</param>
+        /// <param name="charString">The string source</param>
         /// <returns>Null if it fails, else the converted string.</returns>
         static System::String^ ConvertCppString(const char *charString) {
             System::String^ str = System::String::Empty;

@@ -31,6 +31,13 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The unique identifier.</value>
         property System::String^ DeviceId;
+
+        /// <summary>
+        /// Gets or sets the unique ID of the volume group to use for this device. If not provided, a volume
+        /// group will be selected automatically.
+        /// </summary>
+        /// <value>The unique identifier.</value>
+        property System::String^ VolumeGroupId;
     };
 }
 #endif // NewDeviceAssignment_h__

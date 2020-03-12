@@ -4,6 +4,7 @@
 
 #include "VxSdk.h"
 #include "Utils.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
 
@@ -79,6 +80,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the name of the user that has locked the ptz controller, if any.
         /// </summary>
         /// <value>The owner if it is set, else <c>nullptr</c>.</value>
@@ -90,6 +100,7 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxPtzLock* _ptzLock;
         int _GetExpireTime();
+        VxSdkNet::ResourceLimits^ _GetLimits();
         bool _GetLockState();
         System::String^ _GetOwner();
     };

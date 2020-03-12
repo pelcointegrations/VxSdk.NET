@@ -21,6 +21,7 @@
 #include "NewEvent.h"
 #include "NewExport.h"
 #include "NewManualRecording.h"
+#include "NewMember.h"
 #include "NewMonitor.h"
 #include "NewNotification.h"
 #include "NewRule.h"
@@ -103,6 +104,13 @@ namespace VxSdkNet {
         Results::Value AcknowledgeAllEvents() { return (Results::Value)_system->AcknowledgeAllEvents(); }
 
         /// <summary>
+        /// Add a new analytic session to the VideoXpert system.
+        /// </summary>
+        /// <param name="newAnalyticSession">The new analytic session to be added.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the analytic session.</returns>
+        Results::Value AddAnalyticSession(NewAnalyticSession^ newAnalyticSession);
+
+        /// <summary>
         /// Add a new bookmark on the VideoXpert system.
         /// </summary>
         /// <param name="newBookmark">The new bookmark to be added to the system.</param>
@@ -143,6 +151,13 @@ namespace VxSdkNet {
         /// <param name="newManualRecording">The new manual recording to be added.</param>
         /// <returns><c>nullptr</c> if it fails, else the new manual recording.</returns>
         ManualRecording^ AddManualRecording(NewManualRecording^ newManualRecording);
+
+        /// <summary>
+        /// Add a new member system to be aggregated.
+        /// </summary>
+        /// <param name="newMember">The new member system to be aggregated.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the member.</returns>
+        Results::Value AddMember(NewMember^ newMember);
 
         /// <summary>
         /// Add a new monitor wall on the VideoXpert system.
@@ -221,6 +236,13 @@ namespace VxSdkNet {
         /// <param name="device">The device to decommission.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of decommissioning the device.</returns>
         Results::Value DecommissionDevice(Device^ device);
+
+        /// <summary>
+        /// Delete an analytic session from the VideoXpert system.
+        /// </summary>
+        /// <param name="analyticSession">The analytic session to be deleted from the VideoXpert system.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the analytic session.</returns>
+        Results::Value DeleteAnalyticSession(AnalyticSession^ analyticSession);
 
         /// <summary>
         /// Delete a bookmark from the VideoXpert system.
@@ -329,12 +351,28 @@ namespace VxSdkNet {
         Results::Value DeleteVxMonitor(Monitor^ monitorItem);
 
         /// <summary>
+        /// Gets the access points from the VideoXpert system using an optional collection filter.
+        /// <para>Available filters: kAdvancedQuery, kHasStatus, kId, kModifiedSince, kName, kState, kType.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the access points on the system.</returns>
+        System::Collections::Generic::List<AccessPoint^>^ GetAccessPoints(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
         /// Get the alarm inputs from the VideoXpert system using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, Id, ModifiedSince, Name, State.</para>
         /// </summary>
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the alarm inputs on the system.</returns>
         System::Collections::Generic::List<AlarmInput^>^ GetAlarmInputs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Gets the analytic sessions from the VideoXpert system using an optional collection filter.
+        /// <para>Available filters: AdvancedQuery, DataSourceId, DeviceId, Id, ModifiedSince.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the analytic sessions on the system.</returns>
+        System::Collections::Generic::List<AnalyticSession^>^ GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get the bookmarks from the VideoXpert system using an optional collection filter.
@@ -429,6 +467,14 @@ namespace VxSdkNet {
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the manual recordings on the system.</returns>
         System::Collections::Generic::List<ManualRecording^>^ GetManualRecordings(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Gets the member systems that this system is aggregating using an optional collection filter.
+        /// <para>Available filters: AdvancedQuery, Host, Id, ModifiedSince, Name, State.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the member systems.</returns>
+        System::Collections::Generic::List<Member^>^ GetMembers(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get the monitors residing on the system using an optional collection filter.
@@ -539,6 +585,13 @@ namespace VxSdkNet {
         Results::Value Refresh();
 
         /// <summary>
+        /// Remove the member system; it will no longer be aggregated.
+        /// </summary>
+        /// <param name="memberItem">The member system to be removed.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of removing the member system.</returns>
+        Results::Value RemoveMember(Member^ memberItem);
+
+        /// <summary>
         /// Subscribe to system events by situation type, regardless of its notification setting.
         /// </summary>
         /// <param name="eventDelegate">The event delegate to be used when an event is received.</param>
@@ -556,11 +609,48 @@ namespace VxSdkNet {
         Results::Value SubscribeToEventsByType(EventDelegate^ eventDelegate, System::Collections::Generic::List<Situation^>^ situations, bool userNotification);
 
         /// <summary>
+        /// Gets a value indicating whether or not the member administrator credentials provided are valid.
+        /// </summary>
+        /// <param name="host">The host address.</param>
+        /// <param name="port">The host port.</param>
+        /// <param name="username">The username for access to the member.</param>
+        /// <param name="password">The password for access to the member.</param>
+        /// <returns><c>true</c> if the administrator credentials are determined to be valid, otherwise <c>false</c>.</returns>
+        bool ValidateMember(System::String^ host, int port, System::String^ username, System::String^ password);
+
+        /// <summary>
+        /// Gets the access points from the VideoXpert system.
+        /// </summary>
+        /// <value>A <c>List</c> containing the access points on the system.</value>
+        property System::Collections::Generic::List<AccessPoint^>^ AccessPoints {
+        public:
+            System::Collections::Generic::List<AccessPoint^>^ get() { return GetAccessPoints(nullptr); }
+        }
+
+        /// <summary>
         /// Gets the alarm inputs from the VideoXpert system.
         /// </summary>
         /// <value>A <c>List</c> containing the alarm inputs on the system.</value>
         property System::Collections::Generic::List<AlarmInput^>^ AlarmInputs {
             System::Collections::Generic::List<AlarmInput^>^ get() { return GetAlarmInputs(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets all of the analytic sessions from the VideoXpert system.
+        /// </summary>
+        /// <value>A <c>List</c> of analytic sessions.</value>
+        property System::Collections::Generic::List<AnalyticSession^>^ AnalyticSessions {
+        public:
+            System::Collections::Generic::List<AnalyticSession^>^ get() { return GetAnalyticSessions(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the authorization configuration.
+        /// </summary>
+        /// <value>The authorization configuration.</value>
+        property VxSdkNet::Configuration::Auth^ AuthConfig {
+        public:
+            VxSdkNet::Configuration::Auth^ get() { return _GetAuthConfig(); }
         }
 
         /// <summary>
@@ -574,6 +664,15 @@ namespace VxSdkNet {
                 return autoUnlockTime;
             }
             void set(int value) { _system->SetBookmarkAutoUnlockTime(value); }
+        }
+
+        /// <summary>
+        /// Gets the bookmark configuration.
+        /// </summary>
+        /// <value>The bookmark configuration.</value>
+        property VxSdkNet::Configuration::Bookmark^ BookmarkConfig {
+        public:
+            VxSdkNet::Configuration::Bookmark^ get() { return _GetBookmarkConfig(); }
         }
 
         /// <summary>
@@ -697,6 +796,15 @@ namespace VxSdkNet {
         property System::String^ Id {
             System::String^ get() { return Utils::ConvertCppString(_system->id); }
         }
+
+        /// <summary>
+        /// Gets the LDAP configuration.
+        /// </summary>
+        /// <value>The LDAP configuration.</value>
+        property VxSdkNet::Configuration::Ldap^ LdapConfig {
+        public:
+            VxSdkNet::Configuration::Ldap^ get() { return _GetLdapConfig(); }
+        }
         
         /// <summary>
         /// Gets the manual recordings from the VideoXpert system.
@@ -704,6 +812,14 @@ namespace VxSdkNet {
         /// <value>A <c>List</c> containing the manual recordings on the system.</value>
         property System::Collections::Generic::List<ManualRecording^>^ ManualRecordings {
             System::Collections::Generic::List<ManualRecording^>^ get() { return GetManualRecordings(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the member systems that this system is aggregating.
+        /// </summary>
+        /// <value>A <c>List</c> containing the member systems.</value>
+        property System::Collections::Generic::List<Member^>^ Members {
+            System::Collections::Generic::List<Member^>^ get() { return GetMembers(nullptr); }
         }
         
         /// <summary>
@@ -766,6 +882,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Schedule^>^ Schedules {
             System::Collections::Generic::List<Schedule^>^ get() { return GetSchedules(nullptr); }
         }
+
+        /// <summary>
+        /// Gets the server configuration.
+        /// </summary>
+        /// <value>The server configuration.</value>
+        property VxSdkNet::Configuration::Server^ ServerConfig {
+        public:
+            VxSdkNet::Configuration::Server^ get() { return _GetServerConfig(); }
+        }
         
         /// <summary>
         /// Gets the situations from the VideoXpert system.
@@ -774,7 +899,25 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Situation^>^ Situations {
             System::Collections::Generic::List<Situation^>^ get() { return GetSituations(nullptr); }
         }
-        
+
+        /// <summary>
+        /// Gets the SMTP configuration.
+        /// </summary>
+        /// <value>The SMTP configuration.</value>
+        property VxSdkNet::Configuration::Smtp^ SmtpConfig {
+        public:
+            VxSdkNet::Configuration::Smtp^ get() { return _GetSmtpConfig(); }
+        }
+
+        /// <summary>
+        /// Gets the SNMP agent configuration.
+        /// </summary>
+        /// <value>The SNMP agent configuration.</value>
+        property VxSdkNet::Configuration::Snmp^ SnmpConfig {
+        public:
+            VxSdkNet::Configuration::Snmp^ get() { return _GetSnmpConfig(); }
+        }
+
         /// <summary>
         /// Gets the tags from the VideoXpert system.
         /// </summary>
@@ -789,6 +932,17 @@ namespace VxSdkNet {
         /// <value>A <c>List</c> containing the time tables on the system.</value>
         property System::Collections::Generic::List<TimeTable^>^ TimeTables {
             System::Collections::Generic::List<TimeTable^>^ get() { return GetTimeTables(nullptr); }
+        }
+
+
+
+        /// <summary>
+        /// Gets the Twilio SMS account configuration.
+        /// </summary>
+        /// <value>The Twilio SMS account configuration.</value>
+        property VxSdkNet::Configuration::Twilio^ TwilioConfig {
+        public:
+            VxSdkNet::Configuration::Twilio^ get() { return _GetTwilioConfig(); }
         }
         
         /// <summary>
@@ -824,9 +978,16 @@ namespace VxSdkNet {
         static InternalEventDelegate ^ _sdkEvent;
         static void _FireEvent(VxSdk::IVxEvent* vxEvent);
         static void _FireInternalEvent(VxSdk::VxInternalEvent* vxInternalEvent);
+        Configuration::Auth^ _GetAuthConfig();
+        Configuration::Bookmark^ _GetBookmarkConfig();
         Configuration::Cluster^ _GetClusterConfig();
         VxSdkNet::User^ _GetCurrentUser();
         VxSdkNet::Device^ _GetHostDevice();
+        Configuration::Ldap^ _GetLdapConfig();
+        Configuration::Server^ _GetServerConfig();
+        Configuration::Smtp^ _GetSmtpConfig();
+        Configuration::Snmp^ _GetSnmpConfig();
+        Configuration::Twilio^ _GetTwilioConfig();
     };
 }
 #endif // VXSystem_h__

@@ -42,6 +42,12 @@ namespace VxSdkNet {
         System::Collections::Generic::List<DataSource^>^ GetDataSources(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Refreshes this instances properties.
+        /// </summary>
+        /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
+        Results::Value Refresh();
+
+        /// <summary>
         /// Gets the data sources assigned by this device assignment.
         /// </summary>
         /// <value>A <c>List</c> of data sources.</value>
@@ -77,10 +83,35 @@ namespace VxSdkNet {
             System::String^ get() { return Utils::ConvertCppString(_deviceAssignment->id); }
         }
 
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the volume group to use for this device. If not provided, a volume
+        /// group will be selected automatically.
+        /// </summary>
+        /// <value>The unique identifier.</value>
+        property System::String^ VolumeGroupId {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_deviceAssignment->volumeGroupId); }
+            void set(System::String^ value) {
+                char volumeGroupId[64];
+                VxSdk::Utilities::StrCopySafe(volumeGroupId, Utils::ConvertCSharpString(value).c_str());
+                _deviceAssignment->SetVolumeGroupId(volumeGroupId);
+            }
+        }
+
     internal:
         VxSdk::IVxDeviceAssignment* _deviceAssignment;
         VxSdkNet::DataStorage^ _GetDataStorage();
         VxSdkNet::Device^ _GetDevice();
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // DeviceAssignment_h__

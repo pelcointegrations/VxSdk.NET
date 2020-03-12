@@ -115,6 +115,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the data sources associated with this tag.
         /// </summary>
         /// <value>A <c>List</c> of data sources.</value>
@@ -184,6 +193,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxTag* _tag;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         User^ _GetOwner();
         Tag^ _GetParent();
     };

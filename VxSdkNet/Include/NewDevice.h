@@ -13,10 +13,31 @@ namespace VxSdkNet {
     public:
 
         /// <summary>
+        /// Default constructor.
+        /// </summary>
+        NewDevice() {
+            Endpoints = gcnew System::Collections::Generic::List<System::String^>();
+        }
+
+        /// <summary>
         /// Gets or sets the associated driver type identifier.
         /// </summary>
         /// <value>The associated driver type identifier.</value>
         property System::String^ DriverType;
+
+        /// <summary>
+        /// Gets or sets the list of source URIs that the device will support. If the device type is <c>Generic</c>
+        /// then at least 1 URI must be provided. The URI must be unique, otherwise <c>Conflict</c> will  be returned.
+        /// </summary>
+        /// <value>A <c>List</c> of source URIs.</value>
+        property System::Collections::Generic::List<System::String^>^ Endpoints;
+
+        /// <summary>
+        /// Gets or sets the host address of the device. If set, takes precedence over the ip. The combination
+        /// of <c>Host</c>, <c>Ip</c>, <c>Port</c> and <c>Type</c> must be unique.
+        /// <para> NOTE: One of either <c>Host</c> or <c>Ip</c> must be provided. </para>
+        /// </summary>
+        property System::String^ Host;
 
         /// <summary>
         /// Gets or sets the ID of the device.
@@ -27,6 +48,9 @@ namespace VxSdkNet {
         /// <summary>
         /// Gets or sets the IP of the device.
         /// </summary>
+        /// <remarks>
+        /// DEPRECATED: Use <see cref="Host"/> instead.
+        /// </remarks>
         /// <value>The IP.</value>
         property System::String^ Ip;
 

@@ -1,8 +1,10 @@
 /// <summary>
 /// Implements the VX System class.
 /// </summary>
+#include "AnalyticSession.h"
 #include "VxSystem.h"
 #include "VxSdk.h"
+#include "NewAnalyticSession.h"
 
 namespace {
     /// <summary>
@@ -62,6 +64,18 @@ VxSdkNet::VXSystem::!VXSystem() {
     }
 }
 
+VxSdkNet::Results::Value VxSdkNet::VXSystem::AddAnalyticSession(NewAnalyticSession^ newAnalyticSession) {
+    VxSdk::VxNewAnalyticSession vxNewAnalyticSession;
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataEncodingId, Utils::ConvertCSharpString(newAnalyticSession->DataEncodingId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataSourceId, Utils::ConvertCSharpString(newAnalyticSession->DataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.deviceId, Utils::ConvertCSharpString(newAnalyticSession->DeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.id, Utils::ConvertCSharpString(newAnalyticSession->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.source, Utils::ConvertCSharpString(newAnalyticSession->Source).c_str());
+
+    // Attempt to add the analytic session
+    return VxSdkNet::Results::Value(_system->AddAnalyticSession(vxNewAnalyticSession));
+}
+
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddBookmark(VxSdkNet::NewBookmark^ newBookmark) {
     // Create a bookmark object and populate its fields using newBookmark
     VxSdk::VxNewBookmark vxBookmark;
@@ -97,10 +111,10 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDataObject(VxSdkNet::NewDataObje
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDevice(VxSdkNet::NewDevice^ newDevice) {
     VxSdk::VxNewDevice vxNewDevice;
     vxNewDevice.shouldAutoCommission = newDevice->ShouldAutoCommission;
-    vxNewDevice.port = newDevice->Port;
     VxSdk::Utilities::StrCopySafe(vxNewDevice.driverType, Utils::ConvertCSharpString(newDevice->DriverType).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewDevice.id, Utils::ConvertCSharpString(newDevice->Id).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewDevice.ip, Utils::ConvertCSharpString(newDevice->Ip).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDevice.host, Utils::ConvertCSharpString(newDevice->Host).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewDevice.model, Utils::ConvertCSharpString(newDevice->Model).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewDevice.name, Utils::ConvertCSharpString(newDevice->Name).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewDevice.password, Utils::ConvertCSharpString(newDevice->Password).c_str());
@@ -110,7 +124,15 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddDevice(VxSdkNet::NewDevice^ newD
     VxSdk::Utilities::StrCopySafe(vxNewDevice.version, Utils::ConvertCSharpString(newDevice->Version).c_str());
     vxNewDevice.type = VxSdk::VxDeviceType::Value(newDevice->Type);
     vxNewDevice.port = newDevice->Port;
-
+    vxNewDevice.endpointsSize = static_cast<int>(newDevice->Endpoints->Count);
+    if (vxNewDevice.endpointsSize > 0) {
+        vxNewDevice.endpoints = new char* [vxNewDevice.endpointsSize];
+        for (int i = 0; i < vxNewDevice.endpointsSize; i++) {
+            int endpointLength = newDevice->Endpoints[i]->Length + 1;
+            vxNewDevice.endpoints[i] = new char[endpointLength];
+            VxSdk::Utilities::StrCopySafe(vxNewDevice.endpoints[i], Utils::ConvertCSharpString(newDevice->Endpoints[i]).c_str(), endpointLength);
+        }
+    }
 
     // Make the call to add the device into VideoXpert
     VxSdk::VxResult::Value result = _system->AddDevice(vxNewDevice);
@@ -183,6 +205,22 @@ VxSdkNet::ManualRecording^ VxSdkNet::VXSystem::AddManualRecording(VxSdkNet::NewM
         retManualRecording = gcnew VxSdkNet::ManualRecording(manualRecordingItem);
     }
     return retManualRecording;
+}
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::AddMember(NewMember^ newMember) {
+    // Create a new member object and populate its fields using newMember
+    VxSdk::VxNewMember vxNewMember;
+    VxSdk::Utilities::StrCopySafe(vxNewMember.host, Utils::ConvertCSharpString(newMember->Host).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewMember.username, Utils::ConvertCSharpString(newMember->Username).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewMember.password, Utils::ConvertCSharpString(newMember->Password).c_str());
+    vxNewMember.bandwidth = newMember->Bandwidth;
+    vxNewMember.port = newMember->Port;
+    vxNewMember.rtspCapability = (VxSdk::VxRtspCapability::Value)newMember->RtspCapabilities;
+
+    // Make the call to add the member into VideoXpert
+    VxSdk::VxResult::Value result = _system->AddMember(vxNewMember);
+    // Unless there was an issue adding the member the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddMonitorWall(System::String^ monitorWallName) {
@@ -379,6 +417,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddUser(VxSdkNet::NewUser^ newUser)
     VxSdk::Utilities::StrCopySafe(vxNewUser.note, Utils::ConvertCSharpString(newUser->Note).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewUser.password, Utils::ConvertCSharpString(newUser->Password).c_str());
     vxNewUser.mustChangePassword = newUser->MustChangePassword;
+    vxNewUser.canBypassLdap = newUser->CanBypassLdap;
+    vxNewUser.isPasswordExpirationDisabled = newUser->IsPasswordExpirationDisabled;
     vxNewUser.phoneNumberSize = newUser->PhoneNumbers->Count;
     if (vxNewUser.phoneNumberSize > 0) {
         vxNewUser.phoneNumbers = new VxSdk::VxPhoneNumber[vxNewUser.phoneNumberSize];
@@ -442,6 +482,16 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::DecommissionDevice(VxSdkNet::Device
     license = nullptr;
 
     return (VxSdkNet::Results::Value)result;
+}
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteAnalyticSession(AnalyticSession^ analyticSession) {
+    // Create aa analytic session object
+    VxSdk::IVxAnalyticSession* delAnalyticSession = analyticSession->_analyticSession;
+
+    // To delete an analytic session simply make a DeleteAnalyticSession call
+    VxSdk::VxResult::Value result = delAnalyticSession->DeleteAnalyticSession();
+    // Unless there was an issue deleting the analytic session the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteBookmark(VxSdkNet::Bookmark^ bookmarkItem) {
@@ -549,6 +599,45 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteVxMonitor(VxSdkNet::Monitor^ 
     return VxSdkNet::Results::Value(result);
 }
 
+List<VxSdkNet::AccessPoint^>^ VxSdkNet::VXSystem::GetAccessPoints(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed access point objects
+    List<AccessPoint^>^ mlist = gcnew List<AccessPoint^>();
+    // Create a collection of unmanaged access point objects
+    VxSdk::VxCollection<VxSdk::IVxAccessPoint**> accessPoints;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        accessPoints.filterSize = filters->Count;
+        accessPoints.filters = collFilters;
+    }
+
+    // Make the GetAccessPoints call, which will return with the total count of access points, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetAccessPoints(accessPoints);
+    // Unless there are no access points on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // An array of pointers is allocated using the size returned by the previous GetAccessPoints call
+        accessPoints.collection = new VxSdk::IVxAccessPoint * [accessPoints.collectionSize];
+        result = _system->GetAccessPoints(accessPoints);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < accessPoints.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::AccessPoint(accessPoints.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] accessPoints.collection;
+    }
+    return mlist;
+}
+
 List<VxSdkNet::AlarmInput^>^ VxSdkNet::VXSystem::GetAlarmInputs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed alarm input objects
     List<AlarmInput^>^ mlist = gcnew List<AlarmInput^>();
@@ -584,6 +673,45 @@ List<VxSdkNet::AlarmInput^>^ VxSdkNet::VXSystem::GetAlarmInputs(System::Collecti
         }
         // Remove the memory we previously allocated to the collection
         delete[] alarmInputs.collection;
+    }
+    return mlist;
+}
+
+List<VxSdkNet::AnalyticSession^>^ VxSdkNet::VXSystem::GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed analytic sessions
+    List<AnalyticSession^>^ mlist = gcnew List<AnalyticSession^>();
+    // Create a collection of unmanaged analytic sessions
+    VxSdk::VxCollection<VxSdk::IVxAnalyticSession**> analyticSessions;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        analyticSessions.filterSize = filters->Count;
+        analyticSessions.filters = collFilters;
+    }
+
+    // Make the GetAnalyticSessions call, which will return with the total analytic session count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetAnalyticSessions(analyticSessions);
+    // As long as there are analytic sessions for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxAnalyticSession collection
+        analyticSessions.collection = new VxSdk::IVxAnalyticSession * [analyticSessions.collectionSize];
+        result = _system->GetAnalyticSessions(analyticSessions);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < analyticSessions.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::AnalyticSession(analyticSessions.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] analyticSessions.collection;
     }
     return mlist;
 }
@@ -860,6 +988,45 @@ Collections::Generic::List<VxSdkNet::ManualRecording^>^ VxSdkNet::VXSystem::GetM
         }
         // Remove the memory we previously allocated to the collection
         delete[] manualRecordings.collection;
+    }
+    return mlist;
+}
+
+Collections::Generic::List<VxSdkNet::Member^>^ VxSdkNet::VXSystem::GetMembers(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed member objects
+    List<VxSdkNet::Member^>^ mlist = gcnew List<VxSdkNet::Member^>();
+    // Create a collection of unmanaged member objects
+    VxSdk::VxCollection<VxSdk::IVxMember**> members;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        members.filterSize = filters->Count;
+        members.filters = collFilters;
+    }
+
+    // Make the GetMembers call, which will return with the total member count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetMembers(members);
+    // Unless there are no members on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxMember collection
+        members.collection = new VxSdk::IVxMember*[members.collectionSize];
+        result = _system->GetMembers(members);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < members.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::Member(members.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] members.collection;
     }
     return mlist;
 }
@@ -1508,6 +1675,13 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::Refresh() {
     return (VxSdkNet::Results::Value)_system->Refresh();
 }
 
+VxSdkNet::Results::Value VxSdkNet::VXSystem::RemoveMember(Member^ memberItem) {
+    // To delete a member simply make a RemoveMember call
+    VxSdk::VxResult::Value result = memberItem->_member->RemoveMember();
+    // Unless there was an issue removing the member the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::VXSystem::SubscribeToEventsByType(VxSdkNet::VXSystem::EventDelegate^ eventDelegate, List<Situation^>^ situations) {
     VxSdkNet::Results::Value result = SubscribeToEventsByType(eventDelegate, situations, false);
     return result;
@@ -1536,6 +1710,12 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::SubscribeToEventsByType(VxSdkNet::V
     return VxSdkNet::Results::Value(result);
 }
 
+bool VxSdkNet::VXSystem::ValidateMember(System::String^ host, int port, System::String^ username, System::String^ password) {
+    bool result;
+    _system->ValidateMember(result, Utils::ConvertCSharpString(host).c_str(), port, Utils::ConvertCSharpString(username).c_str(), Utils::ConvertCSharpString(password).c_str());
+    return result;
+}
+
 void VxSdkNet::VXSystem::_FireEvent(VxSdk::IVxEvent* vxEvent) {
     // Fire the notification if there is a subscription to the system events
     if (_systemEvent != nullptr)
@@ -1546,6 +1726,40 @@ void VxSdkNet::VXSystem::_FireInternalEvent(VxSdk::VxInternalEvent* vxInternalEv
     // Fire the notification if there is a subscription to the internal events
     if (_sdkEvent != nullptr)
         return _sdkEvent(gcnew VxSdkNet::InternalEvent(vxInternalEvent));
+}
+
+VxSdkNet::Configuration::Auth^ VxSdkNet::VXSystem::_GetAuthConfig() {
+    // Get the auth configuration
+    VxSdk::IVxConfiguration::Auth* authConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetAuthenticationConfiguration(authConfig);
+
+    // Return the auth configuration if GetAuthenticationConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Auth(authConfig);
+    }
+    else if (authConfig != nullptr) {
+        authConfig->Delete();
+        authConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Bookmark^ VxSdkNet::VXSystem::_GetBookmarkConfig() {
+    // Get the bookmark configuration
+    VxSdk::IVxConfiguration::Bookmark* bookmarkConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetBookmarkConfiguration(bookmarkConfig);
+
+    // Return the bookmark configuration if GetBookmarkConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Bookmark(bookmarkConfig);
+    }
+    else if (bookmarkConfig != nullptr) {
+        bookmarkConfig->Delete();
+        bookmarkConfig = nullptr;
+    }
+
+    return nullptr;
 }
 
 VxSdkNet::Configuration::Cluster^ VxSdkNet::VXSystem::_GetClusterConfig() {
@@ -1594,6 +1808,91 @@ VxSdkNet::Device^ VxSdkNet::VXSystem::_GetHostDevice() {
     else if (device != nullptr) {
         device->Delete();
         device = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Ldap^ VxSdkNet::VXSystem::_GetLdapConfig() {
+    // Get the LDAP configuration
+    VxSdk::IVxConfiguration::Ldap* ldapConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetLdapConfiguration(ldapConfig);
+
+    // Return the LDAP configuration if GetLdapConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Ldap(ldapConfig);
+    }
+    else if (ldapConfig != nullptr) {
+        ldapConfig->Delete();
+        ldapConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Server^ VxSdkNet::VXSystem::_GetServerConfig() {
+    // Get the  server configuration
+    VxSdk::IVxConfiguration::Server* serverConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetServerConfiguration(serverConfig);
+
+    // Return the  server configuration if GetServerConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Server(serverConfig);
+    }
+    else if (serverConfig != nullptr) {
+        serverConfig->Delete();
+        serverConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Smtp^ VxSdkNet::VXSystem::_GetSmtpConfig() {
+    // Get the SMTP configuration
+    VxSdk::IVxConfiguration::Smtp* smtpConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetSmtpConfiguration(smtpConfig);
+
+    // Return the SMTP configuration if GetSmtpConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Smtp(smtpConfig);
+    }
+    else if (smtpConfig != nullptr) {
+        smtpConfig->Delete();
+        smtpConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Snmp^ VxSdkNet::VXSystem::_GetSnmpConfig() {
+    // Get the SNMP configuration
+    VxSdk::IVxConfiguration::Snmp* snmpConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetSnmpConfiguration(snmpConfig);
+
+    // Return the SNMP configuration if GetSnmpConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Snmp(snmpConfig);
+    }
+    else if (snmpConfig != nullptr) {
+        snmpConfig->Delete();
+        snmpConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Twilio^ VxSdkNet::VXSystem::_GetTwilioConfig() {
+    // Get the Twilio configuration
+    VxSdk::IVxConfiguration::Twilio* twilioConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetTwilioConfiguration(twilioConfig);
+
+    // Return the Twilio configuration if GetTwilioConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Twilio(twilioConfig);
+    }
+    else if (twilioConfig != nullptr) {
+        twilioConfig->Delete();
+        twilioConfig = nullptr;
     }
 
     return nullptr;

@@ -7,6 +7,7 @@
 #include "DataSource.h"
 #include "NewScheduleTrigger.h"
 #include "ScheduleTrigger.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
 
@@ -112,6 +113,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the data sources associated with this schedule.
         /// </summary>
         /// <value>A <c>List</c> of data sources.</value>
@@ -155,6 +165,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxSchedule* _schedule;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         System::Collections::Generic::List<ScheduleTrigger^>^ _GetScheduleTriggers();
     };
 }

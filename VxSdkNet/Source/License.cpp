@@ -37,3 +37,15 @@ List<VxSdkNet::LicenseFeature^>^ VxSdkNet::License::_GetLicenseFeatures() {
     }
     return mlist;
 }
+
+VxSdkNet::LicenseSup^ VxSdkNet::License::_GetLicenseSup() {
+    // Get the license sup info
+    VxSdk::VxLicenseSup* licenseSup = nullptr;
+    VxSdk::VxResult::Value result = _license->GetLicenseSup(licenseSup);
+
+    // Return the license sup info if GetLicenseSup was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew LicenseSup(*licenseSup);
+
+    return nullptr;
+}

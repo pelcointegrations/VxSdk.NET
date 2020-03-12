@@ -550,6 +550,18 @@ VxSdkNet::Results::Value VxSdkNet::Privilege::Unlink(List<VxSdkNet::User^>^ user
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::Privilege::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _privilege->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 int VxSdkNet::Privilege::_GetPriority() {
     // Get and return the priority
     int priority;

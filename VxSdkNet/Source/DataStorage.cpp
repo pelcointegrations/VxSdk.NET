@@ -32,6 +32,7 @@ VxSdkNet::Results::Value VxSdkNet::DataStorage::AssignDevice(VxSdkNet::NewDevice
     // Create a new device assignment object and populate its fields using newDeviceAssignment
     VxSdk::VxNewDeviceAssignment vxNewDeviceAssignment;
     VxSdk::Utilities::StrCopySafe(vxNewDeviceAssignment.deviceId, Utils::ConvertCSharpString(newDeviceAssignment->DeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDeviceAssignment.volumeGroupId, Utils::ConvertCSharpString(newDeviceAssignment->VolumeGroupId).c_str());
     int size = newDeviceAssignment->DataSourceIds->Count;
 
     vxNewDeviceAssignment.dataSourceIdSize = size;
@@ -130,6 +131,45 @@ List<VxSdkNet::DeviceAssignment^>^ VxSdkNet::DataStorage::GetDeviceAssignments(S
     return mlist;
 }
 
+System::Collections::Generic::List<VxSdkNet::Retention^>^ VxSdkNet::DataStorage::GetRetentions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed retention objects
+    List<Retention^>^ mlist = gcnew List<Retention^>();
+    // Create a collection of unmanaged retention objects
+    VxSdk::VxCollection<VxSdk::VxRetention**> retentions;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        retentions.filterSize = filters->Count;
+        retentions.filters = collFilters;
+    }
+
+    // Make the GetRetentions call, which will return with the total count of retentions, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _dataStorage->GetRetentions(retentions);
+    // Unless there are no retentions on the data storage, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // An array of pointers is allocated using the size returned by the previous GetRetentions call
+        retentions.collection = new VxSdk::VxRetention * [retentions.collectionSize];
+        result = _dataStorage->GetRetentions(retentions);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < retentions.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::Retention(retentions.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] retentions.collection;
+    }
+    return mlist;
+}
+
 VxSdkNet::Results::Value VxSdkNet::DataStorage::Refresh() {
     return (VxSdkNet::Results::Value)_dataStorage->Refresh();
 }
@@ -152,6 +192,18 @@ VxSdkNet::Device^ VxSdkNet::DataStorage::_GetHostDevice() {
     // Return the device if GetHostDevice was successful
     if (result == VxSdk::VxResult::kOK)
         return gcnew Device(device);
+
+    return nullptr;
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::DataStorage::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _dataStorage->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
 
     return nullptr;
 }

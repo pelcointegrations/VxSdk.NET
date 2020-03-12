@@ -4,6 +4,7 @@
 
 #include "VxSdk.h"
 #include "ExportClip.h"
+#include "ExportStream.h"
 #include "User.h"
 #include "Utils.h"
 
@@ -222,6 +223,20 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the plain text password for this export if it's protected.
+        /// </summary>
+        /// <remarks>Note: Only available when logged in as the built-in admin user.</remarks>
+        /// <value>The password if available, otherwise <c>nullptr</c>.</value>
+        property System::String^ Password {
+        public:
+            System::String^ get() {
+                char password[64];
+                VxSdk::VxResult::Value result = _export->GetPassword(password);
+                return (result == VxSdk::VxResult::kOK) ? Utils::ConvertCppString(password) : nullptr;
+            }
+        }
+
+        /// <summary>
         /// Gets a value from 0 to 100. This specifies how close the export is to
         /// completion. 0 indicates that the export has not been triggered; 100 indicates
         /// that the export is complete.
@@ -261,9 +276,19 @@ namespace VxSdkNet {
             StateReasons get() { return (StateReasons)_export->statusReason; }
         }
 
+        /// <summary>
+        /// Gets the export stream for this export.
+        /// </summary>
+        /// <value>The export stream for this export.</value>
+        property ExportStream^ Stream {
+        public:
+            ExportStream^ get() { return _GetExportStream(); }
+        }
+
     internal:
         VxSdk::IVxExport* _export;
         System::Collections::Generic::List<ExportClip^>^ _GetClips();
+        ExportStream^ _GetExportStream();
         User^ _GetOwner();
     };
 }

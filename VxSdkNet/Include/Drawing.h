@@ -77,7 +77,7 @@ namespace VxSdkNet {
         /// <summary>
         /// Gets the image uri, if any.
         /// </summary>
-        /// <returns>The the image uri.</returns>
+        /// <returns>The image uri.</returns>
         System::String^ GetImageUri();
 
         /// <summary>
@@ -121,6 +121,26 @@ namespace VxSdkNet {
         Results::Value SetLock();
 
         /// <summary>
+        /// Gets or sets an integer that defines an ARGB color for the map background.
+        /// </summary>
+        /// <value>An integer that defines an ARGB color.</value>
+        property unsigned int BackgroundColor {
+        public:
+            unsigned int get() { return _drawing->backgroundColor; }
+            void set(unsigned int value) { _drawing->SetBackgroundColor(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets an integer that defines an ARGB color for the camera number text.
+        /// </summary>
+        /// <value>An integer that defines an ARGB color.</value>
+        property unsigned int CameraNumberColor {
+        public:
+            unsigned int get() { return _drawing->cameraNumberColor; }
+            void set(unsigned int value) { _drawing->SetCameraNumberColor(value); }
+        }
+
+        /// <summary>
         /// Gets the unique drawing identifier.
         /// </summary>
         /// <value>The unique identifier.</value>
@@ -139,12 +159,31 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the markers associated with this drawing.
         /// </summary>
         /// <value>A <c>List</c> of the associated markers.</value>
         property System::Collections::Generic::List<Marker^>^ Markers {
         public:
             System::Collections::Generic::List<Marker^>^ get() { return GetMarkers(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets or sets the size, in pixels, of marker icons.
+        /// </summary>
+        /// <value>The size, in pixels.</value>
+        property int MarkerSize {
+        public:
+            int get() { return _drawing->markerSize; }
+            void set(int value) { _drawing->SetMarkerSize(value); }
         }
 
         /// <summary>
@@ -179,8 +218,19 @@ namespace VxSdkNet {
             DrawingProvider get() { return DrawingProvider(_drawing->provider); }
         }
 
+        /// <summary>
+        /// Gets or sets whether the camera number text overlays should be displayed. 
+        /// </summary>
+        /// <value><c>true</c> to display camera number text overlays, <c>false</c> if not.</value>
+        property bool ShowCameraNumbers {
+        public:
+            bool get() { return _drawing->showCameraNumbers; }
+            void set(bool value) { _drawing->SetShowCameraNumbers(value); }
+        }
+
     internal:
         VxSdk::IVxDrawing* _drawing;
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // Drawing_h__

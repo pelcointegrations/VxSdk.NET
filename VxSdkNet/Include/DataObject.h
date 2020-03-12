@@ -5,6 +5,7 @@
 #include "VxSdk.h"
 #include "Utils.h"
 #include "DataObject.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
     ref class User;
@@ -69,6 +70,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the <see cref="User"/> that owns this data object.
         /// </summary>
         /// <value>The owner of this data object.</value>
@@ -89,6 +99,7 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxDataObject* _dataObject;
         System::String^ _GetData();
+        VxSdkNet::ResourceLimits^ _GetLimits();
         VxSdkNet::User^ _GetOwner();
         void _SetData(System::String^);
     };

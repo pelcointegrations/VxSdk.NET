@@ -4,6 +4,7 @@
 
 #include "VxSdk.h"
 #include "LicenseFeature.h"
+#include "LicenseSup.h"
 #include "Utils.h"
 
 namespace VxSdkNet {
@@ -68,6 +69,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the software upgrade licensing information.
+        /// <para>Note: Only available when logged in as the built-in admin user.</para>
+        /// </summary>
+        /// <value>The software upgrade licensing information.</value>
+        property LicenseSup^ LicenseSupInfo {
+            LicenseSup^ get() { return _GetLicenseSup(); }
+        }
+
+        /// <summary>
         /// Gets the type of system that this license is applied to.
         /// </summary>
         /// <value>The system license <see cref="SystemLicenseTypes">Type</see>.</value>
@@ -79,6 +89,7 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxLicense* _license;
         System::Collections::Generic::List<LicenseFeature^>^ _GetLicenseFeatures();
+        LicenseSup^ _GetLicenseSup();
     };
 }
 #endif // License_h__

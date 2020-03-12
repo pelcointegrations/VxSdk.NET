@@ -79,6 +79,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the friendly name.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -112,6 +121,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxRole* _role;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         System::Collections::Generic::List<Privilege^>^ _GetPrivileges();
     };
 }

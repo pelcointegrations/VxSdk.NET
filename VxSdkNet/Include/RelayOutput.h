@@ -103,6 +103,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the friendly name.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -129,6 +138,7 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxRelayOutput* _relayOutput;
         VxSdkNet::Device^ _GetHostDevice();
+        VxSdkNet::ResourceLimits^ _GetLimits();
         void _SetRelayState(RelayStates state);
     };
 }

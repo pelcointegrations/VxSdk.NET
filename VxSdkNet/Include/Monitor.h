@@ -145,6 +145,25 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the index of the full screen monitor cell (-1 if no cells are maximized).
+        /// </summary>
+        /// <value>The index of the cell.</value>
+        property int MaximizedCell {
+        public:
+            int get() { return _monitor->maximizedCell; }
+            void set(int value) { _monitor->SetMaximizedCell(value); }
+        }
+
+        /// <summary>
         /// Gets the cells currently active on this monitor.
         /// </summary>
         /// <value>A <c>List</c> of the currently active cells.</value>
@@ -175,8 +194,42 @@ namespace VxSdkNet {
             void set(int value) { _monitor->SetNumber(value); }
         }
 
+        /// <summary>
+        /// Gets or sets the play speed of the display data.
+        /// </summary>
+        /// <value>The play speed.</value>
+        property float SyncSpeed {
+        public:
+            float get() { return _monitor->syncSpeed; }
+            void set(float value) { _monitor->SetSyncSpeed(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the time at which the data should initially seek to (does not track time as the data plays).
+        /// </summary>
+        /// <value>The seek time.</value>
+        property System::DateTime SyncTime {
+        public:
+            System::DateTime get() { return Utils::ConvertCppDateTime(_monitor->syncTime); }
+            void set(System::DateTime value) {
+                char temp[64];
+                VxSdk::Utilities::StrCopySafe(temp, Utils::ConvertCSharpDateTime(value).c_str());
+                _monitor->SetSyncTime(temp);
+            }
+        }
+
+        /// <summary>
+        /// Gets the wall clock time at which the data playback should begin.
+        /// </summary>
+        /// <value>The time.</value>
+        property System::DateTime SyncTimeAnchor {
+        public:
+            System::DateTime get() { return Utils::ConvertCppDateTime(_monitor->syncTimeAnchor); }
+        }
+
     internal:
         VxSdk::IVxMonitor* _monitor;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         System::Collections::Generic::List<MonitorCell^>^ _GetMonitorCells();
         System::Collections::Generic::List<VxSdkNet::Monitor::Layouts>^ _GetAvailableLayouts();
         VxSdkNet::Device^ _GetHostDevice();

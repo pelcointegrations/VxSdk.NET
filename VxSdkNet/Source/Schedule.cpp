@@ -19,11 +19,13 @@ VxSdkNet::Results::Value VxSdkNet::Schedule::AddScheduleTrigger(VxSdkNet::NewSch
     VxSdk::VxNewScheduleTrigger newTrigger;
     VxSdk::Utilities::StrCopySafe(newTrigger.id, Utils::ConvertCSharpString(newScheduleTrigger->Id).c_str());
     VxSdk::Utilities::StrCopySafe(newTrigger.eventSituationType, Utils::ConvertCSharpString(newScheduleTrigger->EventSituationType).c_str());
+    VxSdk::Utilities::StrCopySafe(newTrigger.inactiveEventSituationType, Utils::ConvertCSharpString(newScheduleTrigger->InactiveEventSituationType).c_str());
     VxSdk::Utilities::StrCopySafe(newTrigger.timeTableId, Utils::ConvertCSharpString(newScheduleTrigger->TimeTableId).c_str());
     newTrigger.postTrigger = newScheduleTrigger->PostTrigger;
     newTrigger.preTrigger = newScheduleTrigger->PreTrigger;
     newTrigger.timeout = newScheduleTrigger->Timeout;
     newTrigger.framerate = VxSdk::VxRecordingFramerate::Value(newScheduleTrigger->Framerate);
+    newTrigger.action = (VxSdk::VxScheduleAction::Value)newScheduleTrigger->Action;
 
     // Add any event properties to the new schedule trigger   
     newTrigger.eventPropertySize = newScheduleTrigger->EventProperties->Count;
@@ -119,6 +121,18 @@ VxSdkNet::Results::Value VxSdkNet::Schedule::Unlink(List<VxSdkNet::DataSource^>^
 
     // Unless there was an issue unlinking the data sources the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::Schedule::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _schedule->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
 }
 
 List<VxSdkNet::ScheduleTrigger^>^ VxSdkNet::Schedule::_GetScheduleTriggers() {

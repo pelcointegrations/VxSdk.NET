@@ -18,6 +18,18 @@ VxSdkNet::Results::Value VxSdkNet::TimeTable::Refresh() {
     return (VxSdkNet::Results::Value)_timeTable->Refresh();
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::TimeTable::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _timeTable->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 System::Collections::Generic::List<VxSdkNet::TimeRange^>^ VxSdkNet::TimeTable::_GetWeeklyTimeRanges() {
     // Create a list of managed time range objects
     List<VxSdkNet::TimeRange^>^ mlist = gcnew List<VxSdkNet::TimeRange^>();

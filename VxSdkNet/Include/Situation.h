@@ -41,6 +41,18 @@ namespace VxSdkNet {
         Notification^ AddNotification(NewNotification^ newNotification);
 
         /// <summary>
+        /// Deletes the custom audio file.
+        /// </summary>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the custom audio file.</returns>
+        Results::Value DeleteAudioFile();
+
+        /// <summary>
+        /// Gets the custom audio file uri, if any.
+        /// </summary>
+        /// <returns>The audio file uri.</returns>
+        System::String^ GetAudioFileUri();
+
+        /// <summary>
         /// Get the data sources associated with this situation using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, ModifiedSince.</para>
         /// </summary>
@@ -90,6 +102,14 @@ namespace VxSdkNet {
         /// <param name="notification">The notification to be removed.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of removing the notification.</returns>
         Results::Value RemoveNotification(Notification^ notification);
+
+        /// <summary>
+        /// Sets the custom audio file used by clients for audible notifications. The maximum allowable size
+        /// of the file is 5 MB.
+        /// </summary>
+        /// <param name="audioFilePath">The local path to the audio file.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of setting the audio file.</returns>
+        Results::Value SetAudioFile(System::String^ audioFilePath);
 
         /// <summary>
         /// Remove device association from this situation.
@@ -143,6 +163,15 @@ namespace VxSdkNet {
         public:
             bool get() { return _situation->isAckNeeded; }
             void set(bool value) { _situation->SetAckNeeded(value); }
+        }
+
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
         }
 
         /// <summary>
@@ -291,6 +320,21 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets a list of device types that may be the source of events for this situation.
+        /// </summary>
+        /// <value>A <c>List</c> of device types.</value>
+        property System::Collections::Generic::List<Device::Types>^ SourceDeviceTypes {
+        public:
+            System::Collections::Generic::List<Device::Types>^ get() {
+                System::Collections::Generic::List<Device::Types>^ mlist = gcnew System::Collections::Generic::List<Device::Types>();
+                for (int i = 0; i < _situation->sourceDeviceTypesSize; i++)
+                    mlist->Add((Device::Types)_situation->sourceDeviceTypes[i]);
+
+                return mlist;
+            }
+        }
+
+        /// <summary>
         /// Gets the situation type.
         /// </summary>
         /// <value>The situation type.</value>
@@ -301,6 +345,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxSituation* _situation;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         System::Collections::Generic::List<int>^ _GetSnoozeIntervals();
     };
 }

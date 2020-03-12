@@ -257,6 +257,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the time remaining (in seconds) until the PTZ lock expires.
         /// </summary>
         /// <value>The expire time in seconds.</value>
@@ -357,6 +366,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxPtzController* _ptzController;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         PtzLimits^ _GetPtzLimits();
         PtzLock^ _GetPtzLock();
     };

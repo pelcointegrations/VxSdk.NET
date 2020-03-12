@@ -16,6 +16,22 @@ namespace VxSdkNet {
     public:
 
         /// <summary>
+        /// Values that represent the status of gap filling.
+        /// </summary>
+        enum class GapFillerStatus {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+            /// <summary>Gap filler is disabled.</summary>
+            Disabled,
+            /// <summary>Failed to fill the gap.</summary>
+            Failed,
+            /// <summary>Gap filling is pending.</summary>
+            Pending,
+            /// <summary>Gap filler status is unavailable.</summary>
+            Unavailable
+        };
+
+        /// <summary>
         /// Values that represent the reason for a gap.
         /// </summary>
         enum class GapReasons {
@@ -108,6 +124,15 @@ namespace VxSdkNet {
         property System::DateTime EndTime {
         public:
             System::DateTime get() { return Utils::ConvertCppDateTime(_gap->endTime); }
+        }
+
+        /// <summary>
+        /// Gets the status of filling this gap.
+        /// </summary>
+        /// <value>The status.</value>
+        property GapFillerStatus GapFillingStatus {
+        public:
+            GapFillerStatus get() { return GapFillerStatus(_gap->gapFillerStatus); }
         }
 
         /// <summary>

@@ -36,6 +36,18 @@ System::String^ VxSdkNet::DataObject::_GetData() {
     return Utils::ConvertCppString(data);
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::DataObject::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _dataObject->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 VxSdkNet::User^ VxSdkNet::DataObject::_GetOwner() {
     // Get the user object
     VxSdk::IVxUser* user = nullptr;

@@ -63,6 +63,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the time at which the bookmark lock begins. Must be after <see cref="EndTime">EndTime</see>.
         /// </summary>
         /// <value>The time at which the bookmark lock begins.</value>
@@ -77,6 +86,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxBookmarkLock* _bookmarkLock;
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // BookmarkLock_h__

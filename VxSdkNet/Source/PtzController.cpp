@@ -204,6 +204,18 @@ VxSdkNet::Results::Value VxSdkNet::PtzController::TriggerRefresh() {
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::PtzController::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _ptzController->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 VxSdkNet::PtzLimits^ VxSdkNet::PtzController::_GetPtzLimits() {
     // Get the ptz limit values from the ptz controller
     VxSdk::VxPtzLimits* ptzLimits = nullptr;

@@ -3,6 +3,7 @@
 #define DataSession_h__
 
 #include "VxSdk.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
 
@@ -67,6 +68,22 @@ namespace VxSdkNet {
         property System::String^ JpegUri {
         public:
             System::String^ get() { return Utils::ConvertCppString(_dataSession->jpegUri); }
+        }
+
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() {
+                    VxSdk::VxLimits* limits = nullptr;
+                    VxSdk::VxResult::Value result = _dataSession->GetLimits(limits);
+                    if (result == VxSdk::VxResult::kOK)
+                        return gcnew ResourceLimits(limits);
+
+                    return nullptr;
+            }
         }
 
         /// <summary>

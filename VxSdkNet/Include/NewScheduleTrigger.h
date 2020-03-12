@@ -24,7 +24,16 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets or sets the type of event that will activate the schedule trigger, if any.
+        /// Gets or sets the action performed when the schedule trigger activates.
+        /// </summary>
+        /// <value>The <see cref="ScheduleTrigger::Actions">Action</see>.</value>
+        property ScheduleTrigger::Actions Action;
+
+        /// <summary>
+        /// Gets or sets the type of event that will activate the schedule trigger. If set, the schedule trigger is
+        /// considered an "event" trigger, otherwise it is considered a "timed" trigger. If set, the schedule trigger
+        /// only activates when this type of event occurs.
+        /// <para>See <see cref="InactiveEventSituationType"/> for information on when the trigger will deactivate.</para>
         /// </summary>
         /// <value>The event situation type.</value>
         property System::String^ EventSituationType;
@@ -46,6 +55,15 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The unique identifier.</value>
         property System::String^ Id;
+
+        /// <summary>
+        /// Gets or sets the type of event that will cause this schedule trigger to no longer be considered active. If
+        /// set, the schedule trigger event state will no longer be considered active. If not set, the schedule trigger
+        /// event status will immediately be considered inactive after event occurs.
+        /// <para>NOTE: This property is ignored if <see cref="EventSituationType"/> is not set.</para>
+        /// </summary>
+        /// <value>The event situation type.</value>
+        property System::String^ InactiveEventSituationType;
 
         /// <summary>
         /// Gets or sets the amount of time, from 0 to 300 seconds, to continue to consider the schedule trigger active when it becomes

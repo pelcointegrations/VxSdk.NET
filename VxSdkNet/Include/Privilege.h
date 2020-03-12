@@ -382,6 +382,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets the data sources associated with this privilege.
         /// </summary>
         /// <value>A <c>List</c> of data sources.</value>
@@ -502,6 +511,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxPrivilege* _privilege;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         int _GetPriority();
         bool _GetRestricted();
     };

@@ -4,6 +4,7 @@
 
 #include "VxSdk.h"
 #include "Clip.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
 
@@ -13,6 +14,21 @@ namespace VxSdkNet {
     /// </summary>
     public ref class ScheduleTrigger {
     public:
+
+        /// <summary>
+        /// Values that represent schedule recording actions.
+        /// </summary>
+        enum class Actions {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+
+            /// <summary>Record only the resource (associated with the Schedule) that was
+            /// the source of the event causing the schedule trigger to activate.</summary>
+            EventSourceRecord,
+
+            /// <summary>Record all resources associated with the schedule.</summary>
+            Record
+        };
 
         /// <summary>
         /// Constructor.
@@ -39,13 +55,27 @@ namespace VxSdkNet {
         Results::Value Refresh();
 
         /// <summary>
+        /// Gets or sets the action performed when the schedule trigger activates.
+        /// </summary>
+        /// <value>The <see cref="Actions">Action</see>.</value>
+        property Actions Action {
+        public:
+            Actions get() { return (Actions)_scheduleTrigger->action; }
+            void set(Actions value) { _scheduleTrigger->SetAction((VxSdk::VxScheduleAction::Value)value); }
+        }
+
+        /// <summary>
         /// Gets or sets the type of event that will activate the schedule trigger, if any.
         /// </summary>
         /// <value>The event situation type.</value>
         property System::String^ EventSituationType {
         public:
              System::String^ get() { return gcnew  System::String(_scheduleTrigger->eventSituationType); }
-            void set( System::String^ value) { VxSdk::Utilities::StrCopySafe(_scheduleTrigger->eventSituationType, Utils::ConvertCSharpString(value).c_str()); }
+             void set(System::String^ value) {
+                 char situationType[128];
+                 VxSdk::Utilities::StrCopySafe(situationType, Utils::ConvertCSharpString(value).c_str());
+                 _scheduleTrigger->SetEventSituationType(situationType);
+             }
         }
 
         /// <summary>
@@ -102,6 +132,29 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets or sets the type of event that will activate the schedule trigger, if any.
+        /// </summary>
+        /// <value>The event situation type.</value>
+        property System::String^ InactiveEventSituationType {
+        public:
+            System::String^ get() { return gcnew  System::String(_scheduleTrigger->inactiveEventSituationType); }
+            void set(System::String^ value) {
+                char situationType[128];
+                VxSdk::Utilities::StrCopySafe(situationType, Utils::ConvertCSharpString(value).c_str());
+                _scheduleTrigger->SetInactiveEventSituationType(situationType);
+            }
+        }
+
+        /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the amount of time, from 0 to 300 seconds, to continue to consider the schedule trigger active when it becomes
         /// inactive ("post alarm").
         /// </summary>
@@ -141,11 +194,16 @@ namespace VxSdkNet {
         property System::String^ TimeTableId {
         public:
             System::String^ get() { return Utils::ConvertCppString(_scheduleTrigger->timeTableId); }
-            void set(System::String^ value) { VxSdk::Utilities::StrCopySafe(_scheduleTrigger->timeTableId, Utils::ConvertCSharpString(value).c_str()); }
+            void set(System::String^ value) {
+                char timeTableId[64];
+                VxSdk::Utilities::StrCopySafe(timeTableId, Utils::ConvertCSharpString(value).c_str());
+                _scheduleTrigger->SetTimeTableId(timeTableId);
+            }
         }
 
     internal:
         VxSdk::IVxScheduleTrigger* _scheduleTrigger;
+        VxSdkNet::ResourceLimits^ _GetLimits();
     };
 }
 #endif // ScheduleTrigger_h__

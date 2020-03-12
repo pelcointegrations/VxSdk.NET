@@ -1,9 +1,11 @@
 /// <summary>
 /// Implements the data source class.
 /// </summary>
+#include "AnalyticSession.h"
 #include "Bookmark.h"
 #include "DataStorage.h"
 #include "Gap.h"
+#include "NewAnalyticSession.h"
 #include "ResourceRel.h"
 #include "UserInfo.h"
 #include "Tag.h"
@@ -17,6 +19,18 @@ VxSdkNet::DataSource::DataSource(VxSdk::IVxDataSource* vxDataSource) {
 VxSdkNet::DataSource::!DataSource() {
     _dataSource->Delete();
     _dataSource = nullptr;
+}
+
+VxSdkNet::Results::Value VxSdkNet::DataSource::AddAnalyticSession(NewAnalyticSession^ newAnalyticSession) {
+    VxSdk::VxNewAnalyticSession vxNewAnalyticSession;
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataEncodingId, Utils::ConvertCSharpString(newAnalyticSession->DataEncodingId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataSourceId, Utils::ConvertCSharpString(newAnalyticSession->DataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.deviceId, Utils::ConvertCSharpString(newAnalyticSession->DeviceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.id, Utils::ConvertCSharpString(newAnalyticSession->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.source, Utils::ConvertCSharpString(newAnalyticSession->Source).c_str());
+
+    // Attempt to add the analytic session
+    return VxSdkNet::Results::Value(_dataSource->AddAnalyticSession(vxNewAnalyticSession));
 }
 
 VxSdkNet::DataSession^ VxSdkNet::DataSource::CreateMjpegStream() {
@@ -58,6 +72,16 @@ VxSdkNet::PixelSearch^ VxSdkNet::DataSource::CreatePixelSearch(NewPixelSearch^ n
         retPixelSearch = gcnew VxSdkNet::PixelSearch(pixelSearchItem);
     }
     return retPixelSearch;
+}
+
+VxSdkNet::Results::Value VxSdkNet::DataSource::DeleteAnalyticSession(AnalyticSession^ analyticSession) {
+    // Create aa analytic session object
+    VxSdk::IVxAnalyticSession* delAnalyticSession = analyticSession->_analyticSession;
+
+    // To delete an analytic session simply make a DeleteAnalyticSession call
+    VxSdk::VxResult::Value result = delAnalyticSession->DeleteAnalyticSession();
+    // Unless there was an issue deleting the analytic session the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::Results::Value VxSdkNet::DataSource::DeletePixelSearch(PixelSearch^ pixelSearchItem) {
@@ -105,6 +129,45 @@ List<VxSdkNet::DataStorage^>^ VxSdkNet::DataSource::GetAllDataStorages(System::C
         }
         // Remove the memory we previously allocated to the collection
         delete[] dataStorages.collection;
+    }
+    return mlist;
+}
+
+List<VxSdkNet::AnalyticSession^>^ VxSdkNet::DataSource::GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed analytic sessions
+    List<AnalyticSession^>^ mlist = gcnew List<AnalyticSession^>();
+    // Create a collection of unmanaged analytic sessions
+    VxSdk::VxCollection<VxSdk::IVxAnalyticSession**> analyticSessions;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        analyticSessions.filterSize = filters->Count;
+        analyticSessions.filters = collFilters;
+    }
+
+    // Make the GetAnalyticSessions call, which will return with the total analytic session count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _dataSource->GetAnalyticSessions(analyticSessions);
+    // As long as there are analytic sessions for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxAnalyticSession collection
+        analyticSessions.collection = new VxSdk::IVxAnalyticSession*[analyticSessions.collectionSize];
+        result = _dataSource->GetAnalyticSessions(analyticSessions);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < analyticSessions.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::AnalyticSession(analyticSessions.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] analyticSessions.collection;
     }
     return mlist;
 }
@@ -476,6 +539,18 @@ bool VxSdkNet::DataSource::_CanPtz() {
     return result;
 }
 
+VxSdkNet::AnalyticConfig^ VxSdkNet::DataSource::_GetAnalyticConfig() {
+    // Get the analytic config
+    VxSdk::IVxAnalyticConfig* analyticConfig = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetAnalyticConfig(analyticConfig);
+
+    // Return the analytic config if GetAnalyticConfig was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew VxSdkNet::AnalyticConfig(analyticConfig);
+
+    return nullptr;
+}
+
 List<VxSdkNet::DataInterface^>^ VxSdkNet::DataSource::_GetDataInterfaces() {
     // Create a list of managed export objects
     List<DataInterface^>^ mlist = gcnew List<DataInterface^>();
@@ -493,6 +568,41 @@ VxSdkNet::Device^ VxSdkNet::DataSource::_GetHostDevice() {
     // Return the device if GetHostDevice was successful
     if (result == VxSdk::VxResult::kOK)
         return gcnew Device(device);
+
+    return nullptr;
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::DataSource::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
+List<VxSdkNet::LinkedPtzInfo^>^ VxSdkNet::DataSource::_GetLinkedPtzInfo() {
+    // Create a list of managed linked ptz info objects
+    List<LinkedPtzInfo^>^ mlist = gcnew List<LinkedPtzInfo^>();
+    // Add each linked ptz info to the list
+    for (int i = 0; i < _dataSource->linkedPtzInfoSize; i++) {
+        mlist->Add(gcnew LinkedPtzInfo(_dataSource->linkedPtzInfo[i]));
+    }
+
+    return mlist;
+}
+
+VxSdkNet::Member^ VxSdkNet::DataSource::_GetMember() {
+    // Get the member that this data source resides in.
+    VxSdk::IVxMember* member = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetMember(member);
+
+    // Return the member if GetMember was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew Member(member);
 
     return nullptr;
 }

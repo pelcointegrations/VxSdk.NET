@@ -5,6 +5,7 @@
 #include "VxSdk.h"
 #include "Utils.h"
 #include "TimeRange.h"
+#include "ResourceLimits.h"
 
 namespace VxSdkNet {
 
@@ -65,6 +66,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the friendly name.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -107,6 +117,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxTimeTable* _timeTable;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         System::Collections::Generic::List<TimeRange^>^ _GetWeeklyTimeRanges();
         Results::Value _SetWeeklyTimeRanges(System::Collections::Generic::List<TimeRange^>^ timeRangeList);
     };

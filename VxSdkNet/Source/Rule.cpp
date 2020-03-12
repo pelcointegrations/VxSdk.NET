@@ -62,6 +62,18 @@ VxSdkNet::Results::Value VxSdkNet::Rule::Refresh() {
     return (VxSdkNet::Results::Value)_rule->Refresh();
 }
 
+VxSdkNet::ResourceLimits^ VxSdkNet::Rule::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _rule->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
 System::String ^ VxSdkNet::Rule::_GetScript() {
     char* scriptData = nullptr;
     int size = 0;

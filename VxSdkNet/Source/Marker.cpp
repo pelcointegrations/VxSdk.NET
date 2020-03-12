@@ -76,3 +76,15 @@ VxSdkNet::Drawing^ VxSdkNet::Marker::_GetDrawing() {
 
     return nullptr;
 }
+
+VxSdkNet::ResourceLimits^ VxSdkNet::Marker::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _marker->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}

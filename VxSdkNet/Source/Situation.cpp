@@ -42,6 +42,26 @@ VxSdkNet::Notification^ VxSdkNet::Situation::AddNotification(VxSdkNet::NewNotifi
     return retNotification;
 }
 
+VxSdkNet::Results::Value VxSdkNet::Situation::DeleteAudioFile() {
+    return (Results::Value)_situation->DeleteAudioFile();
+}
+
+System::String^ VxSdkNet::Situation::GetAudioFileUri() {
+    char* audioEndpoint = nullptr;
+    int size = 0;
+
+    // If the audio file uri is not available on the situation the result will return VxSdk::VxResult::kActionUnavailable,
+    // otherwise VxSdk::VxResult::kInsufficientSize
+    VxSdk::VxResult::Value result = _situation->GetAudioFile(audioEndpoint, size);
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for audioEndpoint
+        audioEndpoint = new char[size];
+        // The result should now be kOK since we have allocated enough space
+        _situation->GetAudioFile(audioEndpoint, size);
+    }
+    return Utils::ConvertCppString(audioEndpoint);
+}
+
 System::Collections::Generic::List<VxSdkNet::DataSource^>^ VxSdkNet::Situation::GetLinkedDataSources(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed data sources
     List<VxSdkNet::DataSource^>^ mlist = gcnew List<VxSdkNet::DataSource^>();
@@ -190,6 +210,16 @@ VxSdkNet::Results::Value VxSdkNet::Situation::RemoveNotification(VxSdkNet::Notif
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::Results::Value VxSdkNet::Situation::SetAudioFile(System::String^ audioPath) {
+    // Copy the audio path to a new char
+    int len = audioPath->Length + 1;
+    char* audio = new char[len];
+    VxSdk::Utilities::StrCopySafe(audio, Utils::ConvertCSharpString(audioPath).c_str(), len);
+
+    // Set the audio path
+    return (VxSdkNet::Results::Value)_situation->SetAudioFile(audio);
+}
+
 VxSdkNet::Results::Value VxSdkNet::Situation::UnLink(VxSdkNet::DataSource^ dataSource) {
     // Unlink a data source from a situation
     VxSdk::VxResult::Value result = _situation->UnLink(*dataSource->_dataSource);
@@ -202,6 +232,18 @@ VxSdkNet::Results::Value VxSdkNet::Situation::UnLink(VxSdkNet::Device^ device) {
     VxSdk::VxResult::Value result = _situation->UnLink(*device->_device);
     // Unless there was an issue unlinking the device the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::Situation::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _situation->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
 }
 
 List<int>^ VxSdkNet::Situation::_GetSnoozeIntervals() {

@@ -169,3 +169,27 @@ bool VxSdkNet::User::_GetAccountState() {
     _user->GetAccountState(state);
     return state;
 }
+
+VxSdkNet::ResourceLimits^ VxSdkNet::User::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _user->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
+VxSdkNet::UserAccount^ VxSdkNet::User::_GetUserAccount() {
+    // Get the user account for this user
+    VxSdk::IVxUserAccount* userAccount = nullptr;
+    VxSdk::VxResult::Value result = _user->GetUserAccount(userAccount);
+
+    // Return the user account if GetUserAccount was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew UserAccount(userAccount);
+
+    return nullptr;
+}

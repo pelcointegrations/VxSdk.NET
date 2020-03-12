@@ -74,6 +74,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets any limits related to this resource.
+        /// </summary>
+        /// <value>The limits related to this resource.</value>
+        property ResourceLimits^ Limits {
+        public:
+            ResourceLimits^ get() { return _GetLimits(); }
+        }
+
+        /// <summary>
         /// Gets or sets the friendly name.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -123,6 +132,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxRule* _rule;
+        VxSdkNet::ResourceLimits^ _GetLimits();
         System::String^ _GetScript();
         System::Collections::Generic::List<RuleTrigger^>^ _GetTriggers();
         Results::Value _SetScript(System::String^ scriptData);
