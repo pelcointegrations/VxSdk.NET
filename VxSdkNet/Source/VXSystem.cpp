@@ -37,6 +37,7 @@ VxSdkNet::VXSystem::VXSystem(String^ ip, String^ licenseKey) : _loginInfo(new Vx
     // Enter the VideoXpert IP information
     VxSdk::Utilities::StrCopySafe(_loginInfo->ipAddress, Utils::ConvertCSharpString(ip).c_str());
     VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertCSharpString(licenseKey).c_str());
+    _loginInfo->useSsl = true;
 }
 
 VxSdkNet::VXSystem::VXSystem(String^ ip, int port, bool useSSL, String^ licenseKey) : _loginInfo(new VxSdk::VxLoginInfo()) {
@@ -1630,7 +1631,6 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::Login(String^ username, String^ pas
     VxSdk::Utilities::StrCopySafe(_loginInfo->password, Utils::ConvertCSharpString(password).c_str());
     const int kSslPort = 443;
     _loginInfo->port = _loginInfo->port == 0 ? kSslPort : _loginInfo->port;
-    _loginInfo->useSsl = true;
 
     // Attempt to login to the system
     VxSdk::IVxSystem* system = nullptr;
@@ -1653,7 +1653,6 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::Login(String^ authToken) {
     VxSdk::Utilities::StrCopySafe(_loginInfo->authToken, Utils::ConvertCSharpString(authToken).c_str());
     const int kSslPort = 443;
     _loginInfo->port = _loginInfo->port == 0 ? kSslPort : _loginInfo->port;
-    _loginInfo->useSsl = true;
 
     VxSdk::IVxSystem* system = nullptr;
     VxSdk::VxResult::Value result = VxSdk::VxSystemLogin(*_loginInfo, system);
