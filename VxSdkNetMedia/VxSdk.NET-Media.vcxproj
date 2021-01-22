@@ -190,6 +190,8 @@
     <ClInclude Include="..\VxSdkNet\Include\LdapValidationCredentials.h" />
     <ClInclude Include="..\VxSdkNet\Include\License.h" />
     <ClInclude Include="..\VxSdkNet\Include\LicenseFeature.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewRecording.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Recording.h" />
     <ClInclude Include="..\VxSdkNet\Include\ResourceLimits.h" />
     <ClInclude Include="..\VxSdkNet\Include\LinkedPtzInfo.h" />
     <ClInclude Include="..\VxSdkNet\Include\ManualRecording.h" />
@@ -221,8 +223,8 @@
     <ClInclude Include="..\VxSdkNet\Include\NewSituation.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewVolume.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewVolumeGroup.h" />
-    <ClInclude Include="..\VxSdkNet\Include\ObjectCounter.h" />
-    <ClInclude Include="..\VxSdkNet\Include\ObjectZone.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ObjectLineCounter.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ObjectInZone.h" />
     <ClInclude Include="..\VxSdkNet\Include\GridPoint.h" />
     <ClInclude Include="..\VxSdkNet\Include\Retention.h" />
     <ClInclude Include="..\VxSdkNet\Include\SmtpInfo.h" />
@@ -302,6 +304,7 @@
     <ClCompile Include="..\VxSdkNet\Source\ManualRecording.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Marker.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Member.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\Recording.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Volume.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\VolumeGroup.cpp" />
     <ClCompile Include="Source\MediaControl.cpp" />
@@ -344,12 +347,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk-Media.3.0.65\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.65\build\native\VideoXpertSdk-Media.targets')" />
+    <Import Project="packages\VideoXpertSdk-Media.3.0.69\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.69\build\native\VideoXpertSdk-Media.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.65\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.65\build\native\VideoXpertSdk-Media.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.69\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.69\build\native\VideoXpertSdk-Media.targets'))" />
   </Target>
 </Project>

@@ -24,6 +24,7 @@
 #include "NewMember.h"
 #include "NewMonitor.h"
 #include "NewNotification.h"
+#include "NewRecording.h"
 #include "NewRule.h"
 #include "NewSchedule.h"
 #include "NewSituation.h"
@@ -167,6 +168,13 @@ namespace VxSdkNet {
         Results::Value AddMonitorWall(System::String^ monitorWallName);
 
         /// <summary>
+        /// Add a new recording to the VideoXpert system.
+        /// </summary>
+        /// <param name="newRecording">The new recording to be added.</param>
+        /// <returns><c>nullptr</c> if it fails, else the new recording.</returns>
+        Recording^ AddRecording(NewRecording^ newRecording);
+
+        /// <summary>
         /// Add a new role on the VideoXpert system.
         /// </summary>
         /// <param name="roleName">The name of new role to be added to the system.</param>
@@ -221,7 +229,6 @@ namespace VxSdkNet {
         /// <param name="newMonitor">The new monitor to be added to the system.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of creating the monitor.</returns>
         Results::Value AddVxMonitor(NewMonitor^ newMonitor);
-
 
         /// <summary>
         /// Commissions a device for use within the VideoXpert system.
@@ -293,6 +300,13 @@ namespace VxSdkNet {
         /// <param name="monitorWallItem">The monitor wall to be deleted from the system.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of deleting the monitor wall.</returns>
         Results::Value DeleteMonitorWall(MonitorWall^ monitorWallItem);
+
+        /// <summary>
+        /// Delete a recording from the VideoXpert system.
+        /// </summary>
+        /// <param name="recordingItem">The recording to be deleted from the system.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the recording.</returns>
+        Results::Value DeleteRecording(Recording^ recordingItem);
 
         /// <summary>
         /// Delete a role from the VideoXpert system.
@@ -493,6 +507,14 @@ namespace VxSdkNet {
         System::Collections::Generic::List<MonitorWall^>^ GetMonitorWalls(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Gets the recordings residing on the system using an optional collection filter.
+        /// <para>Available filters: AdvancedQuery, DataSourceId, Id, ModifiedSince, Name, Owner, RecordType.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the recordings on the system.</returns>
+        System::Collections::Generic::List<Recording^>^ GetRecordings(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
         /// Get the relay outputs from the VideoXpert system using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, Enabled, Id, ModifiedSince, Name, State.</para>
         /// </summary>
@@ -607,6 +629,12 @@ namespace VxSdkNet {
         /// <param name="userNotification"><c>true</c> to receive user role notifications, otherwise <c>false</c>.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of subscribing.</returns>
         Results::Value SubscribeToEventsByType(EventDelegate^ eventDelegate, System::Collections::Generic::List<Situation^>^ situations, bool userNotification);
+
+        /// <summary>
+        /// Unsubscribes to system events that were subscribed to by type.
+        /// </summary>
+        /// <returns>The <see cref="Results::Value">Result</see> of unsubscribing.</returns>
+        Results::Value UnsubscribeToEvents();
 
         /// <summary>
         /// Gets a value indicating whether or not the member administrator credentials provided are valid.
@@ -850,6 +878,14 @@ namespace VxSdkNet {
                 _system->SetName(name);
             }
         }
+
+        /// <summary>
+        /// Gets the recordings from the VideoXpert system.
+        /// </summary>
+        /// <value>A <c>List</c> containing the recordings on the system.</value>
+        property System::Collections::Generic::List<Recording^>^ Recordings {
+            System::Collections::Generic::List<Recording^>^ get() { return GetRecordings(nullptr); }
+        }
         
         /// <summary>
         /// Gets the relay outputs from the VideoXpert system.
@@ -976,6 +1012,7 @@ namespace VxSdkNet {
         VxSdk::VxLoginInfo* _loginInfo;
         static EventDelegate ^ _systemEvent;
         static InternalEventDelegate ^ _sdkEvent;
+        EventDelegate^ _eventDelegate;
         static void _FireEvent(VxSdk::IVxEvent* vxEvent);
         static void _FireInternalEvent(VxSdk::VxInternalEvent* vxInternalEvent);
         Configuration::Auth^ _GetAuthConfig();

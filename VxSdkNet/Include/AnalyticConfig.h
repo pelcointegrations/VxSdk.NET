@@ -3,7 +3,7 @@
 #define AnalyticConfig_h__
 
 #include "VxSdk.h"
-#include "GridPoint.h"
+#include "Resolution.h"
 #include "Utils.h"
 #include "ResourceLimits.h"
 
@@ -50,26 +50,18 @@ namespace VxSdkNet {
         Results::Value DeleteAnalyticBehavior(AnalyticBehavior^ analyticBehavior);
 
         /// <summary>
-        /// Gets the analytic behaviors for this analytic configuration.
-        /// <para>Available filters: AdvancedQuery, Id, ModifiedSince, Name.</para>
-        /// </summary>
-        /// <param name="filters">The collection filters to be used in the request.</param>
-        /// <returns>A <c>List</c> of analytic behaviors.</returns>
-        System::Collections::Generic::List<AnalyticBehavior^>^ GetAnalyticBehaviors(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
-
-        /// <summary>
         /// Refreshes this instances properties.
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
         Results::Value Refresh();
 
-        /// <summary>
-        /// Gets all of the analytic behaviors for this analytic configuration.
-        /// </summary>
-        /// <value>A <c>List</c> of analytic behaviors.</value>
+        //<summary>
+        //Gets all of the analytic behaviors for this analytic configuration.
+        //</summary>
+        //<value>A <c>List</c> of analytic behaviors.</value>
         property System::Collections::Generic::List<AnalyticBehavior^>^ AnalyticBehaviors {
         public:
-            System::Collections::Generic::List<AnalyticBehavior^>^ get() { return GetAnalyticBehaviors(nullptr); }
+            System::Collections::Generic::List<AnalyticBehavior^>^ get() { return _GetAnalyticBehaviors(); }
         }
 
         /// <summary>
@@ -82,28 +74,42 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets any limits related to this resource.
+        /// Specifies the resolution of the grid used for all AnalyticBehavior data.
         /// </summary>
-        /// <value>The limits related to this resource.</value>
-        property ResourceLimits^ Limits {
+        /// <value>The resolution value.</value>
+        property Resolution^ Size {
         public:
-            ResourceLimits^ get() { return _GetLimits(); }
+            Resolution^ get() { return gcnew Resolution(&_analyticConfig->size); }
+            void set(Resolution^ value) { _SetResolutionSize(value); }
         }
 
         /// <summary>
-        /// Gets or sets the coordinate system used for all analytic behavior data.
+        /// Specifies the minimum confidence filtering value for detected objects in a video scene. 
         /// </summary>
-        /// <value>The coordinate system value.</value>
-        property GridPoint^ Size {
+        property float MinConfidence {
         public:
-            GridPoint^ get() { return gcnew GridPoint(&_analyticConfig->size); }
-            void set(GridPoint^ value) { _SetGridSize(value); }
+            float get() { return _analyticConfig->minConfidence; }
+            void set(float value) { _analyticConfig->SetMinConfidence(value); }
+        }
+
+        /// <summary>
+        /// Specifies the name of the PtzPreset that this configuration relates to. PTZ cameras supporting 
+        /// analytics can only be configured on PTZ presets.
+        /// </summary>
+        property System::String^ PtzPresetName {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_analyticConfig->ptzPresetName); }
+            void set(System::String^ value) { 
+                char name[64];
+                VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(value).c_str());
+                _analyticConfig->SetPtzPresetName(name);
+            }
         }
 
     internal:
         VxSdk::IVxAnalyticConfig* _analyticConfig;
-        VxSdkNet::ResourceLimits^ _GetLimits();
-        void _SetGridSize(GridPoint^ value);
+        void _SetResolutionSize(Resolution^ value);
+        System::Collections::Generic::List<AnalyticBehavior^>^ _GetAnalyticBehaviors();
     };
 }
 #endif // AnalyticConfig_h__

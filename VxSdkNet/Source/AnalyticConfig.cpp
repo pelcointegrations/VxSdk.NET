@@ -22,24 +22,22 @@ VxSdkNet::Results::Value VxSdkNet::AnalyticConfig::AddAnalyticBehavior(VxSdkNet:
     VxSdk::Utilities::StrCopySafe(vxNewAnalyticBehavior.id, Utils::ConvertCSharpString(newAnalyticBehavior->Id).c_str());
     VxSdk::Utilities::StrCopySafe(vxNewAnalyticBehavior.name, Utils::ConvertCSharpString(newAnalyticBehavior->Name).c_str());
     vxNewAnalyticBehavior.isEnabled = newAnalyticBehavior->IsEnabled;
-    vxNewAnalyticBehavior.sensitivity = newAnalyticBehavior->Sensitivity;
     vxNewAnalyticBehavior.severity = newAnalyticBehavior->Severity;
     vxNewAnalyticBehavior.behaviorType = (VxSdk::VxAnalyticBehaviorType::Value)newAnalyticBehavior->BehaviorType;
     vxNewAnalyticBehavior.objectType = (VxSdk::VxAnalyticObjectType::Value)newAnalyticBehavior->ObjectType;
-    if (newAnalyticBehavior->ObjectCounter != nullptr) {
-        vxNewAnalyticBehavior.objectCounter.intersectionArea = (VxSdk::VxIntersectionArea::Value)newAnalyticBehavior->ObjectCounter->IntersectionArea;
-        vxNewAnalyticBehavior.objectCounter.endPoint.x = newAnalyticBehavior->ObjectCounter->EndPoint->X;
-        vxNewAnalyticBehavior.objectCounter.endPoint.y = newAnalyticBehavior->ObjectCounter->EndPoint->Y;
-        vxNewAnalyticBehavior.objectCounter.startPoint.x = newAnalyticBehavior->ObjectCounter->StartPoint->X;
-        vxNewAnalyticBehavior.objectCounter.startPoint.y = newAnalyticBehavior->ObjectCounter->StartPoint->Y;
+    if (newAnalyticBehavior->ObjectLineCounter != nullptr) {
+        vxNewAnalyticBehavior.objectLineCounter.endPoint.x = newAnalyticBehavior->ObjectLineCounter->EndPoint->X;
+        vxNewAnalyticBehavior.objectLineCounter.endPoint.y = newAnalyticBehavior->ObjectLineCounter->EndPoint->Y;
+        vxNewAnalyticBehavior.objectLineCounter.startPoint.x = newAnalyticBehavior->ObjectLineCounter->StartPoint->X;
+        vxNewAnalyticBehavior.objectLineCounter.startPoint.y = newAnalyticBehavior->ObjectLineCounter->StartPoint->Y;
     }
 
-    if (newAnalyticBehavior->ObjectZone != nullptr) {
-        vxNewAnalyticBehavior.objectZone.verticesSize = newAnalyticBehavior->ObjectZone->Vertices->Count;
-        vxNewAnalyticBehavior.objectZone.vertices = new VxSdk::VxPoint[vxNewAnalyticBehavior.objectZone.verticesSize];
-        for (int i = 0; i < vxNewAnalyticBehavior.objectZone.verticesSize; i++) {
-            vxNewAnalyticBehavior.objectZone.vertices[i].x = newAnalyticBehavior->ObjectZone->Vertices[i]->X;
-            vxNewAnalyticBehavior.objectZone.vertices[i].y = newAnalyticBehavior->ObjectZone->Vertices[i]->Y;
+    if (newAnalyticBehavior->ObjectInZone != nullptr) {
+        vxNewAnalyticBehavior.objectInZone.verticesSize = newAnalyticBehavior->ObjectInZone->Vertices->Count;
+        vxNewAnalyticBehavior.objectInZone.vertices = new VxSdk::VxPoint[vxNewAnalyticBehavior.objectInZone.verticesSize];
+        for (int i = 0; i < vxNewAnalyticBehavior.objectInZone.verticesSize; i++) {
+            vxNewAnalyticBehavior.objectInZone.vertices[i].x = newAnalyticBehavior->ObjectInZone->Vertices[i]->X;
+            vxNewAnalyticBehavior.objectInZone.vertices[i].y = newAnalyticBehavior->ObjectInZone->Vertices[i]->Y;
         }
     }
 
@@ -60,63 +58,19 @@ VxSdkNet::Results::Value VxSdkNet::AnalyticConfig::Refresh() {
     return (VxSdkNet::Results::Value)_analyticConfig->Refresh();
 }
 
-List<VxSdkNet::AnalyticBehavior^>^ VxSdkNet::AnalyticConfig::GetAnalyticBehaviors(Dictionary<Filters::Value, System::String^>^ filters) {
-    // Create a list of managed analytic behavior objects
-    List<VxSdkNet::AnalyticBehavior^>^ mlist = gcnew List<VxSdkNet::AnalyticBehavior^>();
-    // Create a collection of unmanaged analytic behavior objects
-    VxSdk::VxCollection<VxSdk::IVxAnalyticBehavior**> analyticBehaviors;
-
-    if (filters != nullptr && filters->Count > 0) {
-        // Create our filter
-        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
-        int i = 0;
-        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
-        {
-            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
-            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
-        }
-
-        // Add the filters to the collection 
-        analyticBehaviors.filterSize = filters->Count;
-        analyticBehaviors.filters = collFilters;
-    }
-
-    // Make the GetAnalyticBehaviors call, which will return with the total analytic behavior count, this allows the client to allocate memory.
-    VxSdk::VxResult::Value result = _analyticConfig->GetAnalyticBehaviors(analyticBehaviors);
-    // Unless there are no analytic behaviors on the system, this should return VxSdk::VxResult::kInsufficientSize
-    if (result == VxSdk::VxResult::kInsufficientSize) {
-        // Allocate enough space for the IVxAnalyticBehavior collection
-        analyticBehaviors.collection = new VxSdk::IVxAnalyticBehavior*[analyticBehaviors.collectionSize];
-        result = _analyticConfig->GetAnalyticBehaviors(analyticBehaviors);
-        // The result should now be kOK since we have allocated enough space
-        if (result == VxSdk::VxResult::kOK) {
-            for (int i = 0; i < analyticBehaviors.collectionSize; i++)
-                mlist->Add(gcnew VxSdkNet::AnalyticBehavior(analyticBehaviors.collection[i]));
-        }
-        // Remove the memory we previously allocated to the collection
-        delete[] analyticBehaviors.collection;
-    }
-    return mlist;
-}
-
-VxSdkNet::ResourceLimits^ VxSdkNet::AnalyticConfig::_GetLimits() {
-    // Get the limits for this resource
-    VxSdk::VxLimits* limits = nullptr;
-    VxSdk::VxResult::Value result = _analyticConfig->GetLimits(limits);
-
-    // Return the limits if GetLimits was successful
-    if (result == VxSdk::VxResult::kOK)
-        return gcnew ResourceLimits(limits);
-
-    return nullptr;
-}
-
-void VxSdkNet::AnalyticConfig::_SetGridSize(GridPoint^ value) {
+void VxSdkNet::AnalyticConfig::_SetResolutionSize(Resolution^ value) {
     // Create a point object and populate its fields using the value
-    VxSdk::VxPoint vxPoint;
-    vxPoint.x = value->X;
-    vxPoint.y = value->Y;
+    VxSdk::VxResolution vxResolution;
+    vxResolution.width = value->Width;
+    vxResolution.height = value->Height;
 
     // Make the call to set the size
-    _analyticConfig->SetSize(vxPoint);
+    _analyticConfig->SetSize(vxResolution);
+}
+
+List<VxSdkNet::AnalyticBehavior^>^ VxSdkNet::AnalyticConfig::_GetAnalyticBehaviors() {
+    List<AnalyticBehavior^>^ mlist = gcnew List<AnalyticBehavior^>();
+    for (int i = 0; i < _analyticConfig->analyticBehaviorSize; i++)
+        mlist->Add(gcnew AnalyticBehavior(_analyticConfig->analyticBehaviors[i]));
+    return mlist;
 }

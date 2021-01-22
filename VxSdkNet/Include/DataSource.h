@@ -146,6 +146,14 @@ namespace VxSdkNet {
         System::Collections::Generic::List<AnalyticSession^>^ GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Gets the analytic configs for this data source.
+        /// <para>Available filters: AdvancedQuery, PtzPresetName, Id, ModifiedSince.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> of analytic configs.</returns>
+        System::Collections::Generic::List<AnalyticConfig^>^ GetAnalyticConfigs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
         /// Get all possible audio resource relations for this data source (both linked and non-linked) using an optional collection filter.
         /// Each linked resource shall be considered to be associated to this data source while non-linked resources
         /// shall not be (they are available to be associated).
@@ -239,12 +247,12 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets the analytic configuration for this data source.
+        /// Get the analytic configurations for this data source.
         /// </summary>
-        /// <value>The analytic configuration.</value>
-        property VxSdkNet::AnalyticConfig^ AnalyticConfig {
+        /// <value>A <c>List</c> of analytic configurations.</value>
+        property System::Collections::Generic::List<AnalyticConfig^>^ AnalyticConfigs {
         public:
-            VxSdkNet::AnalyticConfig^ get() { return _GetAnalyticConfig(); }
+            System::Collections::Generic::List<AnalyticConfig^>^ get() { return GetAnalyticConfigs(nullptr); }
         }
 
         /// <summary>
@@ -659,13 +667,12 @@ namespace VxSdkNet {
         VxSdk::IVxDataSource* _dataSource;
         bool _CanPixelSearch();
         bool _CanPtz();
-        VxSdkNet::AnalyticConfig^ _GetAnalyticConfig();
         System::Collections::Generic::List<DataInterface^>^ _GetDataInterfaces();
-        VxSdkNet::Device^ _GetHostDevice();
-        VxSdkNet::ResourceLimits^ _GetLimits();
-        System::Collections::Generic::List<VxSdkNet::LinkedPtzInfo^>^ _GetLinkedPtzInfo();
-        VxSdkNet::Member^ _GetMember();
-        VxSdkNet::Configuration::Motion^ _GetMotionConfig();
+        Device^ _GetHostDevice();
+        ResourceLimits^ _GetLimits();
+        System::Collections::Generic::List<LinkedPtzInfo^>^ _GetLinkedPtzInfo();
+        Member^ _GetMember();
+        Configuration::Motion^ _GetMotionConfig();
         System::Collections::Generic::List<UserInfo^>^ _GetMultiviewInfo();
         PtzController^ _GetPtzController();
         System::String^ _GetRtspEndpoint();

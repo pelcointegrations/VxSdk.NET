@@ -3,8 +3,8 @@
 #define NewAnalyticBehavior_h__
 
 #include "AnalyticBehavior.h"
-#include "ObjectCounter.h"
-#include "ObjectZone.h"
+#include "ObjectLineCounter.h"
+#include "ObjectInZone.h"
 
 namespace VxSdkNet {
 
@@ -43,7 +43,7 @@ namespace VxSdkNet {
         /// <see cref="VxAnalyticBehaviorType::kObjectCounter"/>.
         /// </summary>
         /// <value>The object counter.</value>
-        property ObjectCounter^ ObjectCounter;
+        property ObjectLineCounter^ ObjectLineCounter;
 
         /// <summary>
         /// Gets or sets the type of object this analytic pertains to.
@@ -56,7 +56,7 @@ namespace VxSdkNet {
         /// to <see cref="VxAnalyticBehaviorType::kObjectInZone"/>.
         /// </summary>
         /// <value>The object zone.</value>
-        property ObjectZone^ ObjectZone;
+        property ObjectInZone^ ObjectInZone;
 
         /// <summary>
         /// Gets or sets the sensitivity of the analysis. Higher values increase sensitivity.

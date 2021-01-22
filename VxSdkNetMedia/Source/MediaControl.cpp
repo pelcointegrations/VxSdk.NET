@@ -7,7 +7,7 @@ using namespace System::Runtime::InteropServices;
 
 VxSdkNet::MediaControl::MediaControl(DataSource^ videoSource, DataInterface^ videoInterface, DataSource^ audioSource, DataInterface^ audioInterface) {
     // Create a new MediaRequest object
-    MediaController::MediaRequest request;
+    MediaController::MediaRequest request = MediaController::MediaRequest();
     if (videoSource != nullptr) {
         request.dataSource = videoSource->_dataSource;
         request.dataInterface = *videoInterface->_dataInterface;
@@ -22,20 +22,7 @@ VxSdkNet::MediaControl::MediaControl(DataSource^ videoSource, DataInterface^ vid
     MediaController::IController* control = nullptr;
     MediaController::GetController(&request, &control);
 
-    // Set the callback for timestamp events
-    _timestampCallback = gcnew TimestampCallbackDelegate(this, &VxSdkNet::MediaControl::_FireTimestampEvent);
-    control->AddObserver(MediaController::TimestampEventCallback(Marshal::GetFunctionPointerForDelegate(_timestampCallback).ToPointer()));
-
-    // Set the callback for stream events
-    _streamCallback = gcnew StreamCallbackDelegate(this, &VxSdkNet::MediaControl::_FireStreamEvent);
-    control->AddStreamObserver(MediaController::StreamEventCallback(Marshal::GetFunctionPointerForDelegate(_streamCallback).ToPointer()));
-
-     // Set the callback for PelcoData events
-     _pelcoDataCallback = gcnew PelcoDataCallbackDelegate(this, &VxSdkNet::MediaControl::_FirePelcoDataEvent);
-     control->AddPelcoDataObserver(MediaController::PelcoDataEventCallback(Marshal::GetFunctionPointerForDelegate(_pelcoDataCallback).ToPointer()));
-
     _control = control;
-    _currentdataSource = videoSource;
 }
 
 VxSdkNet::MediaControl::!MediaControl() {
@@ -44,6 +31,36 @@ VxSdkNet::MediaControl::!MediaControl() {
         _control->ClearObservers();
         delete _control;
         _control = nullptr;
+    }
+
+    if (_timestampEvent != nullptr) {
+        delete _timestampEvent;
+        _timestampEvent = nullptr;
+    }
+
+    if (_streamEvent != nullptr) {
+        delete _streamEvent;
+        _streamEvent = nullptr;
+    }
+
+    if (_pelcoDataEvent != nullptr) {
+        delete _pelcoDataEvent;
+        _pelcoDataEvent = nullptr;
+    }
+
+    if (_timestampCallback != nullptr) {
+        delete _timestampCallback;
+        _timestampCallback = nullptr;
+    }
+
+    if (_streamCallback != nullptr) {
+        delete _streamCallback;
+        _streamCallback = nullptr;
+    }
+
+    if (_pelcoDataCallback != nullptr) {
+        delete _pelcoDataCallback;
+        _pelcoDataCallback = nullptr;
     }
 }
 
@@ -106,7 +123,6 @@ void VxSdkNet::MediaControl::SetDataSource(DataSource^ videoSource, DataInterfac
 
     // Update the stream settings for the MediaController using the MediaRequest
     _control->NewRequest(request);
-    _currentdataSource = videoSource;
 }
 
 void VxSdkNet::MediaControl::SetVideoWindow(System::IntPtr windowHandle) {
@@ -120,6 +136,12 @@ void VxSdkNet::MediaControl::Stop() {
 }
 
 void VxSdkNet::MediaControl::TimestampEvent::add(TimestampEventDelegate ^eventDelegate) {
+    if (_timestampCallback == nullptr) {
+        // Set the callback for timestamp events
+        _timestampCallback = gcnew TimestampCallbackDelegate(this, &VxSdkNet::MediaControl::_FireTimestampEvent);
+        _control->AddObserver(MediaController::TimestampEventCallback(Marshal::GetFunctionPointerForDelegate(_timestampCallback).ToPointer()));
+    }
+
     // Add a new subscription to the TimestampEventDelegate
     _timestampEvent += eventDelegate;
 };
@@ -136,6 +158,12 @@ void VxSdkNet::MediaControl::_FireTimestampEvent(MediaController::TimestampEvent
 }
 
 void VxSdkNet::MediaControl::StreamEvent::add(StreamEventDelegate ^eventDelegate) {
+    if (_streamCallback == nullptr) {
+        // Set the callback for stream events
+        _streamCallback = gcnew StreamCallbackDelegate(this, &VxSdkNet::MediaControl::_FireStreamEvent);
+        _control->AddStreamObserver(MediaController::StreamEventCallback(Marshal::GetFunctionPointerForDelegate(_streamCallback).ToPointer()));
+    }
+
     // Add a new subscription to the TimestampEventDelegate
     _streamEvent += eventDelegate;
 };
@@ -152,6 +180,12 @@ void VxSdkNet::MediaControl::_FireStreamEvent(MediaController::StreamEvent* stre
 }
 
 void VxSdkNet::MediaControl::PelcoDataEvent::add(PelcoDataEventDelegate ^eventDelegate) {
+    if (_pelcoDataCallback == nullptr) {
+        // Set the callback for PelcoData events
+        _pelcoDataCallback = gcnew PelcoDataCallbackDelegate(this, &VxSdkNet::MediaControl::_FirePelcoDataEvent);
+        _control->AddPelcoDataObserver(MediaController::PelcoDataEventCallback(Marshal::GetFunctionPointerForDelegate(_pelcoDataCallback).ToPointer()));
+    }
+
     // Add a new subscription to the PelcoDataEventDelegate
     _pelcoDataEvent += eventDelegate;
 };

@@ -4,8 +4,8 @@
 
 #include "VxSdk.h"
 #include "Utils.h"
-#include "ObjectCounter.h"
-#include "ObjectZone.h"
+#include "ObjectLineCounter.h"
+#include "ObjectInZone.h"
 #include "ResourceLimits.h"
 
 namespace VxSdkNet {
@@ -22,12 +22,12 @@ namespace VxSdkNet {
         enum class AnalyticBehaviorType {
             /// <summary>An error or unknown value was returned.</summary>
             Unknown,
-
-            /// <summary>Object counting analytic.</summary>
-            ObjectCounter,
-
+            /// <summary>Object line counting analytic.</summary>
+            ObjectLineCounter,
             /// <summary>Object detected in zone analytic.</summary>
-            ObjectInZone
+            ObjectInZone,
+            /// <summary>Object wrong-way zone AnalyticBehavior.</summary>
+            ObjectWrongWay
         };
 
         /// <summary>
@@ -36,10 +36,8 @@ namespace VxSdkNet {
         enum class AnalyticObjectType {
             /// <summary>An error or unknown value was returned.</summary>
             Unknown,
-
             /// <summary>A person object type.</summary>
             Person,
-
             /// <summary>A vehicle object type.</summary>
             Vehicle
         };
@@ -49,18 +47,6 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="vxAnalyticBehavior">The vx analyticBehavior.</param>
         AnalyticBehavior(VxSdk::IVxAnalyticBehavior* vxAnalyticBehavior);
-
-        /// <summary>
-        /// Destructor.
-        /// </summary>
-        virtual ~AnalyticBehavior() {
-            this->!AnalyticBehavior();
-        }
-
-        /// <summary>
-        /// Finaliser.
-        /// </summary>
-        !AnalyticBehavior();
 
         /// <summary>
         /// Refreshes this instances properties.
@@ -97,15 +83,6 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets any limits related to this resource.
-        /// </summary>
-        /// <value>The limits related to this resource.</value>
-        property ResourceLimits^ Limits {
-        public:
-            ResourceLimits^ get() { return _GetLimits(); }
-        }
-
-        /// <summary>
         /// Gets or sets the friendly name of the analytic behavior.
         /// </summary>
         /// <value>The friendly name.</value>
@@ -120,14 +97,14 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets or sets the object counter data used when <see cref="behaviorType"/> is set to
+        /// Gets or sets the object line counter data used when <see cref="behaviorType"/> is set to
         /// <see cref="VxAnalyticBehaviorType::kObjectCounter"/>.
         /// </summary>
         /// <value>The object counter.</value>
-        property ObjectCounter^ ObjectCounter {
+        property ObjectLineCounter^ ObjectLineCounter {
         public:
-            VxSdkNet::ObjectCounter^ get() { return gcnew VxSdkNet::ObjectCounter(&_analyticBehavior->objectCounter); }
-            void set(VxSdkNet::ObjectCounter^ value) { return _SetObjectCounter(value); }
+            VxSdkNet::ObjectLineCounter^ get() { return gcnew VxSdkNet::ObjectLineCounter(&_analyticBehavior->objectLineCounter); }
+            void set(VxSdkNet::ObjectLineCounter^ value) { return _SetObjectLineCounter(value); }
         }
 
         /// <summary>
@@ -145,20 +122,10 @@ namespace VxSdkNet {
         /// to <see cref="VxAnalyticBehaviorType::kObjectInZone"/>.
         /// </summary>
         /// <value>The object zone.</value>
-        property ObjectZone^ ObjectZone {
+        property ObjectInZone^ ObjectInZone {
         public:
-            VxSdkNet::ObjectZone^ get() { return gcnew VxSdkNet::ObjectZone(&_analyticBehavior->objectZone); }
-            void set(VxSdkNet::ObjectZone^ value) { return _SetObjectZone(value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the sensitivity of the analysis. Higher values increase sensitivity.
-        /// </summary>
-        /// <value>The sensitivity of the analysis.</value>
-        property int Sensitivity {
-        public:
-            int get() { return _analyticBehavior->sensitivity; }
-            void set(int value) { _analyticBehavior->SetSensitivity(value); }
+            VxSdkNet::ObjectInZone^ get() { return gcnew VxSdkNet::ObjectInZone(&_analyticBehavior->objectInZone); }
+            void set(VxSdkNet::ObjectInZone^ value) { return _SetObjectInZone(value); }
         }
 
         /// <summary>
@@ -174,9 +141,8 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxAnalyticBehavior* _analyticBehavior;
-        VxSdkNet::ResourceLimits^ _GetLimits();
-        void _SetObjectCounter(VxSdkNet::ObjectCounter^ objectCounter);
-        void _SetObjectZone(VxSdkNet::ObjectZone^ objectZone);     
+        void _SetObjectLineCounter(VxSdkNet::ObjectLineCounter^ objectLineCounter);
+        void _SetObjectInZone(VxSdkNet::ObjectInZone^ objectInZone);     
     };
 }
 #endif // AnalyticBehavior_h__

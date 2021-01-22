@@ -457,7 +457,10 @@ namespace VxSdkNet {
             ParentId,
 
             /// <summary>Filter by provider type.</summary>
-            Provider
+            Provider,
+
+            /// <summary>Filter by recording type.</summary>
+            RecordType
         };
     };
 

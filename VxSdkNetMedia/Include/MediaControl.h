@@ -221,14 +221,6 @@ namespace VxSdkNet {
         void Stop();
 
         /// <summary>
-        /// Gets the current data source.
-        /// </summary>
-        /// <value>The current data source.</value>
-        property DataSource^ CurrentDataSource {
-            DataSource^ get() { return _currentdataSource; }
-        }
-
-        /// <summary>
         /// Get the status of the pipeline.
         /// </summary>
         /// <returns>True if pipeline is active, otherwise false.</returns>
@@ -299,7 +291,6 @@ namespace VxSdkNet {
         PelcoDataCallbackDelegate ^_pelcoDataCallback;
         PelcoDataEventDelegate ^_pelcoDataEvent;
         void _FirePelcoDataEvent(MediaController::PelcoDataEvent* event);
-        DataSource^ _currentdataSource;
     };
 }
 #endif // MediaControl_h__

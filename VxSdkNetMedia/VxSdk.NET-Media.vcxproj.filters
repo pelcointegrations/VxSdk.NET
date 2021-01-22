@@ -323,10 +323,10 @@
     <ClInclude Include="..\VxSdkNet\Include\NewAnalyticSession.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\VxSdkNet\Include\ObjectCounter.h">
+    <ClInclude Include="..\VxSdkNet\Include\ObjectLineCounter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\VxSdkNet\Include\ObjectZone.h">
+    <ClInclude Include="..\VxSdkNet\Include\ObjectInZone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\VxSdkNet\Include\GridPoint.h">
@@ -339,6 +339,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\VxSdkNet\Include\SmtpInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewRecording.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Recording.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -509,6 +515,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\VxSdkNet\Source\AnalyticSession.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\Recording.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

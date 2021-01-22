@@ -539,16 +539,44 @@ bool VxSdkNet::DataSource::_CanPtz() {
     return result;
 }
 
-VxSdkNet::AnalyticConfig^ VxSdkNet::DataSource::_GetAnalyticConfig() {
-    // Get the analytic config
-    VxSdk::IVxAnalyticConfig* analyticConfig = nullptr;
-    VxSdk::VxResult::Value result = _dataSource->GetAnalyticConfig(analyticConfig);
+List<VxSdkNet::AnalyticConfig^>^ VxSdkNet::DataSource::GetAnalyticConfigs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed analytic configs
+    List<AnalyticConfig^>^ mlist = gcnew List<AnalyticConfig^>();
 
-    // Return the analytic config if GetAnalyticConfig was successful
-    if (result == VxSdk::VxResult::kOK)
-        return gcnew VxSdkNet::AnalyticConfig(analyticConfig);
+    // Create a collection of unmanaged analytic configs
+    VxSdk::VxCollection<VxSdk::IVxAnalyticConfig**> analyticConfigs;
 
-    return nullptr;
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^>^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        analyticConfigs.filterSize = filters->Count;
+        analyticConfigs.filters = collFilters;
+    }
+
+    // Make the GetAnalyticConfigs call, which will return with the total analytic config count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _dataSource->GetAnalyticConfigs(analyticConfigs);
+    // As long as there are analytic configs for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxAnalyticConfig collection
+        analyticConfigs.collection = new VxSdk::IVxAnalyticConfig*[analyticConfigs.collectionSize];
+        result = _dataSource->GetAnalyticConfigs(analyticConfigs);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < analyticConfigs.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::AnalyticConfig(analyticConfigs.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] analyticConfigs.collection;
+    }
+    return mlist;
 }
 
 List<VxSdkNet::DataInterface^>^ VxSdkNet::DataSource::_GetDataInterfaces() {

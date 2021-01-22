@@ -38,6 +38,7 @@ VxSdkNet::VXSystem::VXSystem(String^ ip, String^ licenseKey) : _loginInfo(new Vx
     VxSdk::Utilities::StrCopySafe(_loginInfo->ipAddress, Utils::ConvertCSharpString(ip).c_str());
     VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertCSharpString(licenseKey).c_str());
     _loginInfo->useSsl = true;
+    _eventDelegate = nullptr;
 }
 
 VxSdkNet::VXSystem::VXSystem(String^ ip, int port, bool useSSL, String^ licenseKey) : _loginInfo(new VxSdk::VxLoginInfo()) {
@@ -46,13 +47,14 @@ VxSdkNet::VXSystem::VXSystem(String^ ip, int port, bool useSSL, String^ licenseK
     VxSdk::Utilities::StrCopySafe(_loginInfo->licenseKey, Utils::ConvertCSharpString(licenseKey).c_str());
     _loginInfo->port = port;
     _loginInfo->useSsl = useSSL;
+    _eventDelegate = nullptr;
 }
 
 VxSdkNet::VXSystem::!VXSystem() {
     // Delete system object
     if (_system != nullptr) {
         // Unsubscribe to the system events
-        _system->StopNotifications();
+        UnsubscribeToEvents();
         _system->StopInternalNotifications();
         delete _callback;
         _system->Delete();
@@ -229,6 +231,38 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddMonitorWall(System::String^ moni
     VxSdk::VxResult::Value result = _system->CreateMonitorWall(Utils::ConvertCSharpString(monitorWallName).c_str());
     // Unless there was an issue creating the monitor wall the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Recording^ VxSdkNet::VXSystem::AddRecording(VxSdkNet::NewRecording^ newRecording) {
+    VxSdk::VxNewRecording vxNewRecording;
+    VxSdk::Utilities::StrCopySafe(vxNewRecording.dataSourceId, Utils::ConvertCSharpString(newRecording->DataSourceId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewRecording.endEvent, Utils::ConvertCSharpString(newRecording->EndEvent).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewRecording.id, Utils::ConvertCSharpString(newRecording->Id).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewRecording.name, Utils::ConvertCSharpString(newRecording->Name).c_str());
+    vxNewRecording.maxRecordingTime = newRecording->MaxRecordingTime;
+    vxNewRecording.postRecord = newRecording->PostRecord;
+    vxNewRecording.preRecord = newRecording->PreRecord;
+    vxNewRecording.framerate = (VxSdk::VxRecordingFramerate::Value)newRecording->Framerate;
+    vxNewRecording.recordType = (VxSdk::VxRecordingType::Value)newRecording->RecordingType;
+
+    if (newRecording->StartTime != System::DateTime::MinValue)
+        VxSdk::Utilities::StrCopySafe(vxNewRecording.startTime, Utils::ConvertCSharpDateTime(newRecording->StartTime).c_str());
+
+    if (newRecording->EndEventSource != nullptr) {
+        VxSdk::Utilities::StrCopySafe(vxNewRecording.endEventSource.id, Utils::ConvertCSharpString(newRecording->EndEventSource->Id).c_str());
+        vxNewRecording.endEventSource.type = (VxSdk::VxResourceType::Value)newRecording->EndEventSource->Type;
+    }
+
+    VxSdkNet::Recording^ retRecording = nullptr;
+    // Make the call to add the recording into VideoXpert
+    VxSdk::IVxRecording* recordingItem = nullptr;
+    VxSdk::VxResult::Value result = _system->AddRecording(vxNewRecording, recordingItem);
+
+    // Unless there was an issue adding the recording the result should be VxSdk::VxResult::kOK
+    if (result == VxSdk::VxResult::kOK) {
+        retRecording = gcnew VxSdkNet::Recording(recordingItem);
+    }
+    return retRecording;
 }
 
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRole(System::String^ roleName) {
@@ -541,6 +575,13 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteMonitorWall(VxSdkNet::Monitor
     // To delete a monitor wall simply make a DeleteMonitorWall call
     VxSdk::VxResult::Value result = monitorWallItem->_monitorWall->DeleteMonitorWall();
     // Unless there was an issue deleting the monitor wall the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteRecording(VxSdkNet::Recording^ recordingItem) {
+    // To delete a recording simply make a DeleteRecording call
+    VxSdk::VxResult::Value result = recordingItem->_recording->DeleteRecording();
+    // Unless there was an issue deleting the recording the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
 
@@ -1281,6 +1322,45 @@ VxSdkNet::License^ VxSdkNet::VXSystem::GetLicense() {
     return nullptr;
 }
 
+Collections::Generic::List<VxSdkNet::Recording^>^ VxSdkNet::VXSystem::GetRecordings(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed recording objects
+    List<VxSdkNet::Recording^>^ mlist = gcnew List<VxSdkNet::Recording^>();
+    // Create a collection of unmanaged recording objects
+    VxSdk::VxCollection<VxSdk::IVxRecording**> recordings;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^> ^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        recordings.filterSize = filters->Count;
+        recordings.filters = collFilters;
+    }
+
+    // Make the GetRecordings call, which will return with the total recording count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetRecordings(recordings);
+    // Unless there are no recordings on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxRecording collection
+        recordings.collection = new VxSdk::IVxRecording * [recordings.collectionSize];
+        result = _system->GetRecordings(recordings);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < recordings.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::Recording(recordings.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] recordings.collection;
+    }
+    return mlist;
+}
+
 List<VxSdkNet::RelayOutput^>^ VxSdkNet::VXSystem::GetRelayOutputs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed relay output objects
     List<RelayOutput^>^ mlist = gcnew List<RelayOutput^>();
@@ -1696,18 +1776,34 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::SubscribeToEventsByType(VxSdkNet::V
             situationCollection.collection[i] = situations[i]->_situation;
     }
 
+    UnsubscribeToEvents();
+
     // Subscribe to the system events using the situation types
     VxSdk::VxResult::Value result = _system->StartNotifications(
         VxSdk::VxEventCallback(Marshal::GetFunctionPointerForDelegate(_callback).ToPointer()), situationCollection, userNotification);
 
     // Add a new subscription to the EventDelegate
-    _systemEvent += eventDelegate;
+    _eventDelegate = eventDelegate;
+    _systemEvent += _eventDelegate;
 
     delete[] situationCollection.collection;
 
     // Unless there was an issue subscribing the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::UnsubscribeToEvents() {
+    // Unsubscribe to the system events
+    VxSdk::VxResult::Value result = _system->StopNotifications();
+
+    if (_eventDelegate != nullptr) {
+        // Remove the EventDelegate subscription
+        _systemEvent -= _eventDelegate;
+        _eventDelegate = nullptr;
+    }
+
+    return VxSdkNet::Results::Value(result);
+};
 
 bool VxSdkNet::VXSystem::ValidateMember(System::String^ host, int port, System::String^ username, System::String^ password) {
     bool result;
