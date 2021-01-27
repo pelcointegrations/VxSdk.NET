@@ -20,7 +20,13 @@ namespace VxSdkNet {
             Unknown,
 
             /// <summary>The connection to the stream was lost.</summary>
-            ConnectionLost
+            ConnectionLost,
+
+            /// <summary>Stored a file</summary>
+            FileStoredComplete,
+
+            /// <summary>The connection to the stream was restored.</summary>
+            ConnectionRestored
         };
 
         /// <summary>

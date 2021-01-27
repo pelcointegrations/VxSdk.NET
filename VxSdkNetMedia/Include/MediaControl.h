@@ -129,6 +129,13 @@ namespace VxSdkNet {
         MediaControl(DataSource^ videoSource, DataInterface^ videoInterface, DataSource^ audioSource, DataInterface^ audioInterface);
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="rtspVideoEndpoint">The RTSP endpoint of the video stream.</param>
+        /// <param name="rtspAudioEndpoint">The RTSP endpoint of the audio stream.</param>
+        MediaControl(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint);
+
+        /// <summary>
         /// Virtual destructor.
         /// </summary>
         virtual ~MediaControl() {
@@ -208,6 +215,13 @@ namespace VxSdkNet {
         /// <param name="audioDataSource">The data source to use to create the audio stream.</param>
         /// <param name="audioDataInterface">The data interface to use to create the audio stream.</param>
         void SetDataSource(DataSource^ videoDataSource, DataInterface^ videoDataInterface, DataSource^ audioDataSource, DataInterface^ audioDataInterface);
+
+        /// <summary>
+        /// Set the stream to a new data source.
+        /// </summary>
+        /// <param name="rtspVideoEndpoint">The RTSP endpoint of the video stream.</param>
+        /// <param name="rtspAudioEndpoint">The RTSP endpoint of the audio stream.</param>
+        void SetDataSource(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint);
 
         /// <summary>
         /// Set the display window using the given window handle.

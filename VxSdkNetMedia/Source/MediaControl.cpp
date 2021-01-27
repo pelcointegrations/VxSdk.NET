@@ -25,6 +25,22 @@ VxSdkNet::MediaControl::MediaControl(DataSource^ videoSource, DataInterface^ vid
     _control = control;
 }
 
+VxSdkNet::MediaControl::MediaControl(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint) {
+    // Create a new MediaRequest object
+    MediaController::MediaRequest request = MediaController::MediaRequest();
+
+    std::string videoEndpoint = Utils::ConvertCSharpString(rtspVideoEndpoint);
+    std::string audioEndpoint = Utils::ConvertCSharpString(rtspAudioEndpoint);
+    request.rtspVideoEndpoint = _strdup((char*)videoEndpoint.c_str());
+    request.rtspAudioEndpoint = _strdup((char*)audioEndpoint.c_str());
+
+    // Get the MediaController which allows the client to control streams
+    MediaController::IController* control = nullptr;
+    MediaController::GetController(&request, &control);
+
+    _control = control;
+}
+
 VxSdkNet::MediaControl::!MediaControl() {
     // Clear all subscriptions to the timestamp events
     if (_control != nullptr) {
@@ -120,6 +136,19 @@ void VxSdkNet::MediaControl::SetDataSource(DataSource^ videoSource, DataInterfac
         request.audioDataSource = audioSource->_dataSource;
         request.audioDataInterface = *audioInterface->_dataInterface;
     }
+
+    // Update the stream settings for the MediaController using the MediaRequest
+    _control->NewRequest(request);
+}
+
+void VxSdkNet::MediaControl::SetDataSource(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint) {
+    // Create a new MediaRequest object
+    MediaController::MediaRequest request;
+
+    std::string videoEndpoint = Utils::ConvertCSharpString(rtspVideoEndpoint);
+    std::string audioEndpoint = Utils::ConvertCSharpString(rtspAudioEndpoint);
+    request.rtspVideoEndpoint = _strdup((char*)videoEndpoint.c_str());
+    request.rtspAudioEndpoint = _strdup((char*)audioEndpoint.c_str());
 
     // Update the stream settings for the MediaController using the MediaRequest
     _control->NewRequest(request);
