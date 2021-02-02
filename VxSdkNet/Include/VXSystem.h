@@ -955,6 +955,19 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the current system time (UTC).
+        /// </summary>
+        /// <value>The current system time (UTC).</value>
+        property System::DateTime SystemTime {
+        public:
+            System::DateTime get() {
+                char time[64];
+                _system->GetSystemTime(time);
+                return Utils::ConvertCppDateTime(time);
+            }
+        }
+
+        /// <summary>
         /// Gets the tags from the VideoXpert system.
         /// </summary>
         /// <value>A <c>List</c> containing the tags on the system.</value>
