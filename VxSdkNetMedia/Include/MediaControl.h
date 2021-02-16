@@ -136,6 +136,15 @@ namespace VxSdkNet {
         MediaControl(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint);
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="rtspVideoEndpoint">The RTSP endpoint of the video stream.</param>
+        /// <param name="rtspAudioEndpoint">The RTSP endpoint of the audio stream.</param>
+        /// <param name="username">The username for RTSP authentication.</param>
+        /// <param name="password">The password for RTSP authentication.</param>
+        MediaControl(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint, System::String^ username, System::String^ password);
+
+        /// <summary>
         /// Virtual destructor.
         /// </summary>
         virtual ~MediaControl() {

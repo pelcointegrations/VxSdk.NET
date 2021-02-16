@@ -41,6 +41,26 @@ VxSdkNet::MediaControl::MediaControl(System::String^ rtspVideoEndpoint, System::
     _control = control;
 }
 
+VxSdkNet::MediaControl::MediaControl(System::String^ rtspVideoEndpoint, System::String^ rtspAudioEndpoint, System::String^ username, System::String^ password) {
+    // Create a new MediaRequest object
+    MediaController::MediaRequest request = MediaController::MediaRequest();
+
+    std::string videoEndpoint = Utils::ConvertCSharpString(rtspVideoEndpoint);
+    std::string audioEndpoint = Utils::ConvertCSharpString(rtspAudioEndpoint);
+    std::string rtspUsername = Utils::ConvertCSharpString(username);
+    std::string rtspPassword = Utils::ConvertCSharpString(password);
+    request.rtspVideoEndpoint = _strdup((char*)videoEndpoint.c_str());
+    request.rtspAudioEndpoint = _strdup((char*)audioEndpoint.c_str());
+    request.username = _strdup((char*)rtspUsername.c_str());
+    request.password = _strdup((char*)rtspPassword.c_str());
+
+    // Get the MediaController which allows the client to control streams
+    MediaController::IController* control = nullptr;
+    MediaController::GetController(&request, &control);
+
+    _control = control;
+}
+
 VxSdkNet::MediaControl::!MediaControl() {
     // Clear all subscriptions to the timestamp events
     if (_control != nullptr) {
