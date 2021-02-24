@@ -21,6 +21,17 @@ VxSdkNet::DataSource::!DataSource() {
     _dataSource = nullptr;
 }
 
+VxSdkNet::Results::Value VxSdkNet::DataSource::AddAnalyticConfig(VxSdkNet::NewAnalyticConfig^ newAnalyticConfig) {
+    VxSdk::VxNewAnalyticConfig vxNewAnalyticConfig;
+    vxNewAnalyticConfig.minConfidence = newAnalyticConfig->MinConfidence;
+    VxSdk::Utilities::StrCopySafe(vxNewAnalyticConfig.ptzPresetName, Utils::ConvertCSharpString(newAnalyticConfig->PtzPresetName).c_str());
+    vxNewAnalyticConfig.size.width = newAnalyticConfig->Size->Width;
+    vxNewAnalyticConfig.size.height = newAnalyticConfig->Size->Height;
+
+    // Attempt to add the analytic config
+    return VxSdkNet::Results::Value(_dataSource->AddAnalyticConfig(vxNewAnalyticConfig));
+}
+
 VxSdkNet::Results::Value VxSdkNet::DataSource::AddAnalyticSession(NewAnalyticSession^ newAnalyticSession) {
     VxSdk::VxNewAnalyticSession vxNewAnalyticSession;
     VxSdk::Utilities::StrCopySafe(vxNewAnalyticSession.dataEncodingId, Utils::ConvertCSharpString(newAnalyticSession->DataEncodingId).c_str());
@@ -72,6 +83,16 @@ VxSdkNet::PixelSearch^ VxSdkNet::DataSource::CreatePixelSearch(NewPixelSearch^ n
         retPixelSearch = gcnew VxSdkNet::PixelSearch(pixelSearchItem);
     }
     return retPixelSearch;
+}
+
+VxSdkNet::Results::Value VxSdkNet::DataSource::DeleteAnalyticConfig(AnalyticConfig^ analyticConfig) {
+    // Create aa analytic config object
+    VxSdk::IVxAnalyticConfig* delAnalyticConfig = analyticConfig->_analyticConfig;
+
+    // To delete an analytic config simply make a DeleteAnalyticConfig call
+    VxSdk::VxResult::Value result = delAnalyticConfig->DeleteAnalyticConfig();
+    // Unless there was an issue deleting the analytic config the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::Results::Value VxSdkNet::DataSource::DeleteAnalyticSession(AnalyticSession^ analyticSession) {
@@ -576,6 +597,60 @@ List<VxSdkNet::AnalyticConfig^>^ VxSdkNet::DataSource::GetAnalyticConfigs(System
         // Remove the memory we previously allocated to the collection
         delete[] analyticConfigs.collection;
     }
+    return mlist;
+}
+
+System::Collections::Generic::List<VxSdkNet::DataSource::AnalyticCapability>^ VxSdkNet::DataSource::_GetAnalyticCapabilities() {
+    // Create a list of managed analytic capabilities
+    List<AnalyticCapability>^ mlist = gcnew List<AnalyticCapability>();
+
+    // Create an array of unmanaged analytic capabilities
+    VxSdk::VxAnalyticCapability::Value* vxAnalyticCapabilities = nullptr;
+    int size = 0;
+
+    // Make the GetAnalyticCapabilities call, which will return with the total analytic capabilities count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _dataSource->GetAnalyticCapabilities(vxAnalyticCapabilities, size);
+    // As long as there are analytic capabilities for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the VxAnalyticCapability array
+        vxAnalyticCapabilities = new VxSdk::VxAnalyticCapability::Value[size];
+        // The result should now be kOK since we have allocated enough space
+        result = _dataSource->GetAnalyticCapabilities(vxAnalyticCapabilities, size);
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < size; i++)
+                mlist->Add((AnalyticCapability)vxAnalyticCapabilities[i]);
+        }
+        // Remove the memory we previously allocated to the array
+        delete[] vxAnalyticCapabilities;
+    }
+
+    return mlist;
+}
+
+System::Collections::Generic::List<VxSdkNet::DataSource::AnalyticBehaviorType>^ VxSdkNet::DataSource::_GetAvailableAnalyticBehaviorTypes() {
+    // Create a list of managed analytic behavior types
+    List<AnalyticBehaviorType>^ mlist = gcnew List<AnalyticBehaviorType>();
+
+    // Create an array of unmanaged analytic behavior types
+    VxSdk::VxAnalyticBehaviorType::Value* vxAnalyticBehaviorTypes = nullptr;
+    int size = 0;
+
+    // Make the GetAvailableAnalyticBehaviorTypes call, which will return with the total analytic behavior types count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _dataSource->GetAvailableAnalyticBehaviorTypes(vxAnalyticBehaviorTypes, size);
+    // As long as there are analytic behavior types for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the VxAnalyticBehaviorType array
+        vxAnalyticBehaviorTypes = new VxSdk::VxAnalyticBehaviorType::Value[size];
+        // The result should now be kOK since we have allocated enough space
+        result = _dataSource->GetAvailableAnalyticBehaviorTypes(vxAnalyticBehaviorTypes, size);
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < size; i++)
+                mlist->Add((AnalyticBehaviorType)vxAnalyticBehaviorTypes[i]);
+        }
+        // Remove the memory we previously allocated to the array
+        delete[] vxAnalyticBehaviorTypes;
+    }
+
     return mlist;
 }
 

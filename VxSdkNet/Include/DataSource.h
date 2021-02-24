@@ -2,14 +2,15 @@
 #ifndef DataSource_h__
 #define DataSource_h__
 
-#include "Configuration.h"
+#include "AnalyticConfig.h"
 #include "Clip.h"
+#include "Configuration.h"
 #include "DataSession.h"
-#include "NewPixelSearch.h"
-#include "PtzController.h"
 #include "LinkedPtzInfo.h"
 #include "Member.h"
-#include "AnalyticConfig.h"
+#include "NewAnalyticConfig.h"
+#include "NewPixelSearch.h"
+#include "PtzController.h"
 
 namespace VxSdkNet {
     ref class AnalyticSession;
@@ -29,6 +30,32 @@ namespace VxSdkNet {
     /// </summary>
     public ref class DataSource {
     public:
+
+        /// <summary>
+        /// Values that represent the type of analytic behavior being performed.
+        /// </summary>
+        enum class AnalyticBehaviorType {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+            /// <summary>Object line counting analytic.</summary>
+            ObjectLineCounter,
+            /// <summary>Object detected in zone analytic.</summary>
+            ObjectInZone,
+            /// <summary>Object wrong-way zone AnalyticBehavior.</summary>
+            ObjectWrongWay
+        };
+
+        /// <summary>
+        /// Values that represent analytic capabilities that are supported for analytic configs.
+        /// </summary>
+        enum class AnalyticCapability {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+            /// <summary>Line-based object counting events related to the object line counter behavior.</summary>
+            ObjectLineCounterEvents,
+            /// <summary>Capable of resetting the count values of an object line counter behavior.</summary>
+            ObjectLineCounterReset
+        };
 
         /// <summary>
         /// Values that represent a capability supported by a data source.
@@ -96,6 +123,13 @@ namespace VxSdkNet {
         !DataSource();
 
         /// <summary>
+        /// Adds a new analytic config for this data source.
+        /// </summary>
+        /// <param name="newAnalyticConfig">The new analytic config to be added.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the analytic config.</returns>
+        Results::Value AddAnalyticConfig(NewAnalyticConfig^ newAnalyticConfig);
+
+        /// <summary>
         /// Adds a new analytic session for this data source.
         /// </summary>
         /// <param name="newAnalyticSession">The new analytic session to be added.</param>
@@ -114,6 +148,13 @@ namespace VxSdkNet {
         /// <param name="newPixelSearch">The new pixel search to be created.</param>
         /// <returns><c>nullptr</c> if it fails, else the new pixel search result.</returns>
         VxSdkNet::PixelSearch^ CreatePixelSearch(VxSdkNet::NewPixelSearch^ newPixelSearch);
+
+        /// <summary>
+        /// Delete an analytic config from this data source.
+        /// </summary>
+        /// <param name="analyticConfig">The analytic config to be deleted from the data source.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the analytic config.</returns>
+        Results::Value DeleteAnalyticConfig(AnalyticConfig^ analyticConfig);
 
         /// <summary>
         /// Delete an analytic session from this data source.
@@ -247,6 +288,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the list of analytic capabilities supported by this data source, if any.
+        /// </summary>
+        /// <value>A <c>List</c> of supported analytic capabilities.</value>
+        property System::Collections::Generic::List<AnalyticCapability>^ AnalyticCapabilities {
+        public:
+            System::Collections::Generic::List<AnalyticCapability>^ get() { return _GetAnalyticCapabilities(); }
+        }
+
+        /// <summary>
         /// Get the analytic configurations for this data source.
         /// </summary>
         /// <value>A <c>List</c> of analytic configurations.</value>
@@ -273,6 +323,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<ResourceRel^>^ AudioRelations {
         public:
             System::Collections::Generic::List<ResourceRel^>^ get() { return GetAudioRelations(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the list of analytic behavior types available for this data source, if any.
+        /// </summary>
+        /// <value>A <c>List</c> of available analytic behavior types.</value>
+        property System::Collections::Generic::List<AnalyticBehaviorType>^ AvailableAnalyticBehaviorTypes {
+        public:
+            System::Collections::Generic::List<AnalyticBehaviorType>^ get() { return _GetAvailableAnalyticBehaviorTypes(); }
         }
 
         /// <summary>
@@ -667,6 +726,8 @@ namespace VxSdkNet {
         VxSdk::IVxDataSource* _dataSource;
         bool _CanPixelSearch();
         bool _CanPtz();
+        System::Collections::Generic::List<AnalyticCapability>^ _GetAnalyticCapabilities();
+        System::Collections::Generic::List<AnalyticBehaviorType>^ _GetAvailableAnalyticBehaviorTypes();
         System::Collections::Generic::List<DataInterface^>^ _GetDataInterfaces();
         Device^ _GetHostDevice();
         ResourceLimits^ _GetLimits();

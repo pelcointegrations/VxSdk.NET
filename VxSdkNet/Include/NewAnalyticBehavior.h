@@ -5,6 +5,7 @@
 #include "AnalyticBehavior.h"
 #include "ObjectLineCounter.h"
 #include "ObjectInZone.h"
+#include "ObjectWrongWayZone.h"
 
 namespace VxSdkNet {
 
@@ -39,10 +40,10 @@ namespace VxSdkNet {
         property System::String^ Name;
 
         /// <summary>
-        /// Gets or sets the object counter data used when <see cref="behaviorType"/> is set to
-        /// <see cref="VxAnalyticBehaviorType::kObjectCounter"/>.
+        /// Gets or sets the object line counter data used when <see cref="BehaviorType"/> is set to
+        /// <see cref="AnalyticBehavior::AnalyticBehaviorType::ObjectLineCounter"/>.
         /// </summary>
-        /// <value>The object counter.</value>
+        /// <value>The object line counter.</value>
         property ObjectLineCounter^ ObjectLineCounter;
 
         /// <summary>
@@ -52,17 +53,18 @@ namespace VxSdkNet {
         property AnalyticBehavior::AnalyticObjectType ObjectType;
 
         /// <summary>
-        /// Gets or sets the object zone data used to configure analytics of <see cref="behaviorType"/> is set
-        /// to <see cref="VxAnalyticBehaviorType::kObjectInZone"/>.
+        /// Gets or sets the object in zone data used to configure analytics of <see cref="BehaviorType"/> is set
+        /// to <see cref="AnalyticBehavior::AnalyticBehaviorType::ObjectInZone"/>.
         /// </summary>
-        /// <value>The object zone.</value>
+        /// <value>The object in zone.</value>
         property ObjectInZone^ ObjectInZone;
 
         /// <summary>
-        /// Gets or sets the sensitivity of the analysis. Higher values increase sensitivity.
+        /// Gets or sets the object wrong way zone data used to configure analytics of <see cref="BehaviorType"/> is set
+        /// to <see cref="AnalyticBehavior::AnalyticBehaviorType::ObjectWrongWay"/>.
         /// </summary>
-        /// <value>The sensitivity of the analysis.</value>
-        property int Sensitivity;
+        /// <value>The object wrong way zone.</value>
+        property ObjectWrongWayZone^ ObjectWrongWayZone;
 
         /// <summary>
         /// Gets or sets the severity value for events generated from this analytic behavior, from 1 (highest) to 10 (lowest).

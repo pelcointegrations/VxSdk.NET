@@ -41,3 +41,20 @@ void VxSdkNet::AnalyticBehavior::_SetObjectInZone(VxSdkNet::ObjectInZone^ object
 
     _analyticBehavior->SetObjectInZone(vxObjectZone); 
 }
+
+void VxSdkNet::AnalyticBehavior::_SetObjectWrongWayZone(VxSdkNet::ObjectWrongWayZone^ objectWrongWayZone) {
+    VxSdk::VxObjectWrongWayZone vxObjectWrongWayZone;
+    vxObjectWrongWayZone.minTriggerAngle = objectWrongWayZone->MinTriggerAngle;
+    vxObjectWrongWayZone.vector.angle = objectWrongWayZone->Vector->Angle;
+    vxObjectWrongWayZone.vector.x = objectWrongWayZone->Vector->X;
+    vxObjectWrongWayZone.vector.y = objectWrongWayZone->Vector->Y;
+    vxObjectWrongWayZone.zoneSize = objectWrongWayZone->Zone->Count;
+    vxObjectWrongWayZone.zone = new VxSdk::VxPoint[vxObjectWrongWayZone.zoneSize];
+    for (int i = 0; i < vxObjectWrongWayZone.zoneSize; i++) {
+        vxObjectWrongWayZone.zone[i].x = objectWrongWayZone->Zone[i]->X;
+        vxObjectWrongWayZone.zone[i].y = objectWrongWayZone->Zone[i]->Y;
+    }
+
+    _analyticBehavior->SetObjectWrongWayZone(vxObjectWrongWayZone);
+}
+

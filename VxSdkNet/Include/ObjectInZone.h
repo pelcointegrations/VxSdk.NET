@@ -1,4 +1,4 @@
-// Declares the object zone class.
+// Declares the object in zone class.
 #ifndef ObjectInZone_h__
 #define ObjectInZone_h__
 
@@ -9,7 +9,7 @@
 namespace VxSdkNet {
 
     /// <summary>
-    /// The ObjectInZone class represents the data for an analytic object zone.
+    /// The ObjectInZone class represents the data for an analytic object in zone.
     /// </summary>
     public ref class ObjectInZone {
     public:
@@ -24,7 +24,7 @@ namespace VxSdkNet {
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="vxObjectZone">The vx object zone.</param>
+        /// <param name="vxObjectInZone">The vx object in zone.</param>
         ObjectInZone(VxSdk::VxObjectInZone* vxObjectInZone) {
             Vertices = gcnew System::Collections::Generic::List<GridPoint^>();
             for (int i = 0; i < vxObjectInZone->verticesSize; i++) {

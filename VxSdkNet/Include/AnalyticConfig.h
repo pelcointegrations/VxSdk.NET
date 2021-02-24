@@ -5,14 +5,13 @@
 #include "VxSdk.h"
 #include "Resolution.h"
 #include "Utils.h"
-#include "ResourceLimits.h"
 
 namespace VxSdkNet {
     ref class AnalyticBehavior;
     ref class NewAnalyticBehavior;
 
     /// <summary>
-    /// The AnalyticConfig class represents a point in time of interest with reference to a particular data source.
+    /// The AnalyticConfig class represents a specific analytic configuration for a data source.
     /// </summary>
     public ref class AnalyticConfig {
     public:
@@ -55,10 +54,10 @@ namespace VxSdkNet {
         /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
         Results::Value Refresh();
 
-        //<summary>
-        //Gets all of the analytic behaviors for this analytic configuration.
-        //</summary>
-        //<value>A <c>List</c> of analytic behaviors.</value>
+        ///<summary>
+        /// Gets all of the analytic behaviors for this analytic configuration.
+        ///</summary>
+        ///<value>A <c>List</c> of analytic behaviors.</value>
         property System::Collections::Generic::List<AnalyticBehavior^>^ AnalyticBehaviors {
         public:
             System::Collections::Generic::List<AnalyticBehavior^>^ get() { return _GetAnalyticBehaviors(); }
@@ -74,7 +73,7 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Specifies the resolution of the grid used for all AnalyticBehavior data.
+        /// Specifies the resolution of the grid used for all analytic behavior data.
         /// </summary>
         /// <value>The resolution value.</value>
         property Resolution^ Size {
@@ -93,7 +92,7 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Specifies the name of the PtzPreset that this configuration relates to. PTZ cameras supporting 
+        /// Specifies the name of the PTZ preset that this configuration relates to. PTZ cameras supporting 
         /// analytics can only be configured on PTZ presets.
         /// </summary>
         property System::String^ PtzPresetName {
@@ -108,8 +107,8 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxAnalyticConfig* _analyticConfig;
-        void _SetResolutionSize(Resolution^ value);
         System::Collections::Generic::List<AnalyticBehavior^>^ _GetAnalyticBehaviors();
+        void _SetResolutionSize(Resolution^ value);
     };
 }
 #endif // AnalyticConfig_h__

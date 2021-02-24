@@ -190,6 +190,10 @@
     <ClInclude Include="Include\LdapValidationCredentials.h" />
     <ClInclude Include="Include\License.h" />
     <ClInclude Include="Include\LicenseFeature.h" />
+    <ClInclude Include="Include\NewAnalyticConfig.h" />
+    <ClInclude Include="Include\NewRecording.h" />
+    <ClInclude Include="Include\ObjectWrongWayZone.h" />
+    <ClInclude Include="Include\Recording.h" />
     <ClInclude Include="Include\Resolution.h" />
     <ClInclude Include="Include\ResourceLimits.h" />
     <ClInclude Include="Include\LinkedPtzInfo.h" />
@@ -227,6 +231,7 @@
     <ClInclude Include="Include\GridPoint.h" />
     <ClInclude Include="Include\Retention.h" />
     <ClInclude Include="Include\SmtpInfo.h" />
+    <ClInclude Include="Include\ZoneVector.h" />
     <ClInclude Include="Include\Volume.h" />
     <ClInclude Include="Include\VolumeGroup.h" />
     <ClInclude Include="Include\NewTag.h" />
@@ -299,6 +304,7 @@
     <ClCompile Include="Source\ManualRecording.cpp" />
     <ClCompile Include="Source\Marker.cpp" />
     <ClCompile Include="Source\Member.cpp" />
+    <ClCompile Include="Source\Recording.cpp" />
     <ClCompile Include="Source\Volume.cpp" />
     <ClCompile Include="Source\VolumeGroup.cpp" />
     <ClCompile Include="Source\Clip.cpp" />
@@ -337,12 +343,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk.3.0.34\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.34\build\native\VideoXpertSdk.targets')" />
+    <Import Project="packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.34\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.34\build\native\VideoXpertSdk.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets'))" />
   </Target>
 </Project>

@@ -31,13 +31,13 @@ namespace VxSdkNet {
         /// Gets or sets the X-axis coordinate value.
         /// </summary>
         /// <value>The X-axis coordinate value.</value>
-        property int X;
+        property float X;
 
         /// <summary>
         /// Gets or sets the Y-axis coordinate value.
         /// </summary>
         /// <value>The Y-axis coordinate value.</value>
-        property int Y;
+        property float Y;
     };
 }
 #endif // Point_h__

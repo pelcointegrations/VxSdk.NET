@@ -347,6 +347,18 @@
     <ClInclude Include="..\VxSdkNet\Include\Recording.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewAnalyticConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Resolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ObjectWrongWayZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ZoneVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MediaControl.cpp">

@@ -6,6 +6,7 @@
 #include "Utils.h"
 #include "ObjectLineCounter.h"
 #include "ObjectInZone.h"
+#include "ObjectWrongWayZone.h"
 #include "ResourceLimits.h"
 
 namespace VxSdkNet {
@@ -97,10 +98,10 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets or sets the object line counter data used when <see cref="behaviorType"/> is set to
-        /// <see cref="VxAnalyticBehaviorType::kObjectCounter"/>.
+        /// Gets or sets the object line counter data used when <see cref="BehaviorType"/> is set to
+        /// <see cref="AnalyticBehaviorType::ObjectLineCounter"/>.
         /// </summary>
-        /// <value>The object counter.</value>
+        /// <value>The object line counter.</value>
         property ObjectLineCounter^ ObjectLineCounter {
         public:
             VxSdkNet::ObjectLineCounter^ get() { return gcnew VxSdkNet::ObjectLineCounter(&_analyticBehavior->objectLineCounter); }
@@ -118,14 +119,25 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets or sets the object zone data used to configure analytics of <see cref="behaviorType"/> is set
-        /// to <see cref="VxAnalyticBehaviorType::kObjectInZone"/>.
+        /// Gets or sets the object in zone data used to configure analytics of <see cref="BehaviorType"/> is set
+        /// to <see cref="AnalyticBehaviorType::ObjectInZone"/>.
         /// </summary>
-        /// <value>The object zone.</value>
+        /// <value>The object in zone.</value>
         property ObjectInZone^ ObjectInZone {
         public:
             VxSdkNet::ObjectInZone^ get() { return gcnew VxSdkNet::ObjectInZone(&_analyticBehavior->objectInZone); }
             void set(VxSdkNet::ObjectInZone^ value) { return _SetObjectInZone(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the object wrong way zone data used to configure analytics of <see cref="BehaviorType"/> is set
+        /// to <see cref="AnalyticBehaviorType::ObjectWrongWay"/>.
+        /// </summary>
+        /// <value>The object wrong way zone.</value>
+        property ObjectWrongWayZone^ ObjectWrongWayZone {
+        public:
+            VxSdkNet::ObjectWrongWayZone^ get() { return gcnew VxSdkNet::ObjectWrongWayZone(&_analyticBehavior->objectWrongWayZone); }
+            void set(VxSdkNet::ObjectWrongWayZone^ value) { return _SetObjectWrongWayZone(value); }
         }
 
         /// <summary>
@@ -142,7 +154,8 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxAnalyticBehavior* _analyticBehavior;
         void _SetObjectLineCounter(VxSdkNet::ObjectLineCounter^ objectLineCounter);
-        void _SetObjectInZone(VxSdkNet::ObjectInZone^ objectInZone);     
+        void _SetObjectInZone(VxSdkNet::ObjectInZone^ objectInZone);
+        void _SetObjectWrongWayZone(VxSdkNet::ObjectWrongWayZone^ objectWrongWayZone);
     };
 }
 #endif // AnalyticBehavior_h__
