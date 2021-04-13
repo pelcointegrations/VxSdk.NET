@@ -146,7 +146,64 @@ namespace VxSdkNet {
             ManageSystemServers,
 
             /// <summary>Manage member systems.</summary>
-            ManageMemberSystems
+            ManageMemberSystems,
+
+            /// <summary>View Full Camera Details.</summary>
+            ViewFullCameraDetails,
+
+            /// <summary>Send Video.</summary>
+            SendVideo,
+
+            /// <summary>Access On-Camera Storage.</summary>
+            AccessOnCameraStorage,
+
+            /// <summary>Manage Private Exports.</summary>
+            ManagePrivateExports,
+
+            /// <summary>Download Private Exports.</summary>
+            DownloadPrivateExports,
+
+            /// <summary>Stream Private Exports.</summary>
+            StreamPrivateExports,
+
+            /// <summary>Create Private Exports To.</summary>
+            CreatePrivateExportsTo,
+
+            /// <summary>View Exports.</summary>
+            ViewExports,
+
+            /// <summary>Download Exports.</summary>
+            DownloadExports,
+
+            /// <summary>Stream Exports.</summary>
+            StreamExports,
+
+            /// <summary>Manage My Reports.</summary>
+            ManageMyReports,
+
+            /// <summary>[Group] Standard surveillance activities such as viewing live media, PTZ controls, initiating recording, etc.</summary>
+            Surveillance,
+
+            /// <summary>[Group] Investigative activities such as viewing/managing recorded media, initiating and retrieving exports, etc.</summary>
+            Investigation,
+
+            /// <summary>[Group] Permissions related to plug-in capabilities such as mapping and external events.</summary>
+            PlugIns,
+
+            /// <summary>[Group] Supervisory activities aimed at “shift leaders”.</summary>
+            SupervisionAndReports,
+
+            /// <summary>[Group] Access and management of system events.</summary>
+            EventManagement,
+
+            /// <summary>[Group] Management of user accounts, roles, and authorizations.</summary>
+            UserManagement,
+
+            /// <summary>[Group] Access, licensing, and management of edge devices in the system (e.g. cameras and recorders).</summary>
+            DeviceManagement,
+
+            /// <summary>[Group] Access, licensing, and management of entire systems.</summary>
+            SystemManagement
         };
 
         /// <summary>
@@ -175,7 +232,10 @@ namespace VxSdkNet {
             Tag,
 
             /// <summary>A relay output resource.</summary>
-            RelayOutput
+            RelayOutput,
+
+            /// <summary>A monitor resource.</summary>
+            Monitor
         };
 
         /// <summary>

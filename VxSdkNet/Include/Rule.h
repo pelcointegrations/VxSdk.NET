@@ -2,6 +2,7 @@
 #ifndef Rule_h__
 #define Rule_h__
 
+#include "RuleResponse.h"
 #include "VxSdk.h"
 #include "TimeTable.h"
 #include "RuleTrigger.h"
@@ -97,7 +98,18 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets or sets the script to run when the rule is triggered.
+        /// Gets or sets the responses that will be executed when this rule is triggered. The order of this list is the
+        /// order in which the responses will execute.
+        /// </summary>
+        /// <value>A <c>List</c> of responses to be executed by this rule.</value>
+        property System::Collections::Generic::List<RuleResponse^>^ Responses {
+        public:
+            System::Collections::Generic::List<RuleResponse^>^ get() { return _GetResponses(); }
+            void set(System::Collections::Generic::List<RuleResponse^>^ value) { _SetResponses(value); }
+        }
+
+        /// <summary>
+        /// [DEPRECATED] Gets or sets the script to run when the rule is triggered.
         /// </summary>
         /// <value>The script.</value>
         property System::String^ Script {
@@ -133,8 +145,10 @@ namespace VxSdkNet {
     internal:
         VxSdk::IVxRule* _rule;
         VxSdkNet::ResourceLimits^ _GetLimits();
+        System::Collections::Generic::List<RuleResponse^>^ _GetResponses();
         System::String^ _GetScript();
         System::Collections::Generic::List<RuleTrigger^>^ _GetTriggers();
+        Results::Value _SetResponses(System::Collections::Generic::List<RuleResponse^>^ responseList);
         Results::Value _SetScript(System::String^ scriptData);
         Results::Value _SetTimeTables(System::Collections::Generic::List<TimeTable^>^ timeTableList);
         Results::Value _SetTriggers(System::Collections::Generic::List<RuleTrigger^>^ triggerList);

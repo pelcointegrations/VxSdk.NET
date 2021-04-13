@@ -4,6 +4,7 @@
 
 #include "VxSdk.h"
 #include "Role.h"
+#include "User.h"
 #include "Utils.h"
 
 namespace VxSdkNet {
@@ -40,12 +41,27 @@ namespace VxSdkNet {
         VxSdkNet::Results::Value AddRole(Role^ role);
 
         /// <summary>
+        /// Add a user to the list of users that this notification serves.
+        /// </summary>
+        /// <param name="user">The user to add to this notification.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the user.</returns>
+        VxSdkNet::Results::Value AddUser(User^ user);
+
+        /// <summary>
         /// Get the roles that this notification serves using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, Id, Internal, ModifiedSince, Name.</para>
         /// </summary>
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the roles on the system.</returns>
         System::Collections::Generic::List<Role^>^ GetRoles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Get the users that this notification serves using an optional collection filter.
+        /// <para>Available filters: AdvancedQuery, Id, Internal, ModifiedSince, Name.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the users on the system.</returns>
+        System::Collections::Generic::List<User^>^ GetUsers(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Refreshes this instances properties.
@@ -59,6 +75,13 @@ namespace VxSdkNet {
         /// <param name="role">The role to remove from this notification.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of removing the role.</returns>
         VxSdkNet::Results::Value RemoveRole(Role^ role);
+
+        /// <summary>
+        /// Remove a user from the list of users that this notification serves.
+        /// </summary>
+        /// <param name="user">The user to remove from this notification.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of removing the user.</returns>
+        VxSdkNet::Results::Value RemoveUser(User^ user);
 
         /// <summary>
         /// Gets the unique notification identifier.
@@ -87,9 +110,28 @@ namespace VxSdkNet {
             System::Collections::Generic::List<Role^>^ get() { return GetRoles(nullptr); }
         }
 
+        /// <summary>
+        /// Gets the user ids that this notification serves.
+        /// </summary>
+        /// <value>A <c>List</c> of user ids.</value>
+        property System::Collections::Generic::List<System::String^>^ UserIds {
+    public:
+        System::Collections::Generic::List<System::String^>^ get() { return _GetUserIds(); }
+        }
+
+        /// <summary>
+        /// Gets the users that this notification serves.
+        /// </summary>
+        /// <value>A <c>List</c> of users.</value>
+        property System::Collections::Generic::List<User^>^ Users {
+    public:
+        System::Collections::Generic::List<User^>^ get() { return GetUsers(nullptr); }
+        }
+
     internal:
         VxSdk::IVxNotification* _notification;
         System::Collections::Generic::List<System::String^>^ _GetRoleIds();
+        System::Collections::Generic::List<System::String^>^ _GetUserIds();
     };
 }
 #endif // Notification_h__

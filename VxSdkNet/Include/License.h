@@ -29,7 +29,10 @@ namespace VxSdkNet {
             Professional,
 
             /// <summary>Unlicensed system.</summary>
-            Unlicensed
+            Unlicensed,
+
+            /// <summary>Camera system license.</summary>
+            Camera
         };
 
         /// <summary>
@@ -49,6 +52,13 @@ namespace VxSdkNet {
         /// Finaliser.
         /// </summary>
         !License();
+
+        /// <summary>
+        /// Delete a pending license feature. Available only if it's a pending license feature.
+        /// </summary>
+        /// <param name="licenseFeatureItem">The license feature to be deleted.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the license feature.</returns>
+        Results::Value DeleteLicenseFeature(LicenseFeature^ licenseFeatureItem);
 
         /// <summary>
         /// Gets the friendly name of the owning company/organization.

@@ -343,6 +343,15 @@ namespace VxSdkNet {
             System::String^ get() { return Utils::ConvertCppString(_situation->type); }
         }
 
+        /// <summary>
+        /// Gets the situation type opposite of this situation, if any.
+        /// </summary>
+        /// <value>The opposite situation type.</value>
+        property System::String^ TypeOpposite {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_situation->typeOpposite); }
+        }
+
     internal:
         VxSdk::IVxSituation* _situation;
         VxSdkNet::ResourceLimits^ _GetLimits();

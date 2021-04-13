@@ -6,6 +6,9 @@
 #include "Clip.h"
 #include "Configuration.h"
 #include "DataSession.h"
+#include "DataSourceConfig.h"
+#include "LineCount.h"
+#include "LineCountingRequest.h"
 #include "LinkedPtzInfo.h"
 #include "Member.h"
 #include "NewAnalyticConfig.h"
@@ -245,6 +248,13 @@ namespace VxSdkNet {
         System::Collections::Generic::List<Gap^>^ GetGaps(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Gets the requested line counts for this data source.
+        /// </summary>
+        /// <param name="lineCountingRequest">The requested line counts.</param>
+        /// <returns>A <c>List</c> of line counts for this data source, if any.</returns>
+        System::Collections::Generic::List<LineCount^>^ GetLineCounts(LineCountingRequest^ lineCountingRequest);
+
+        /// <summary>
         /// Get all possible metadata resource relations for this data source (both linked and non-linked) using an optional collection filter.
         /// Each linked resource shall be considered to be associated to this data source while non-linked resources
         /// shall not be (they are available to be associated).
@@ -253,6 +263,13 @@ namespace VxSdkNet {
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> of related audio resources.</returns>
         System::Collections::Generic::List<ResourceRel^>^ GetMetadataRelations(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Gets the URI to the download location of a metadata "snapshot" from this data source. 
+        /// </summary>
+        /// <param name="time">The point in time of the metadata to return (defaults to the current time if <c>null</c>).</param>
+        /// <returns>The metadata snapshot endpoint (when present).</returns>
+        System::String^ GetMetadataSnapshotEndpoint(System::DateTime^ time);
 
         /// <summary>
         /// Get the tags associated with this data source using an optional collection filter.
@@ -584,12 +601,21 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets the motion detection configuration for this data source, if supported.
+        /// [DEPRECATED] Gets the motion detection configuration for this data source, if supported.
         /// </summary>
         /// <value>The motion configuration if supported by this data source, otherwise <c>nullptr</c>.</value>
         property VxSdkNet::Configuration::Motion^ MotionConfiguration {
         public:
-            VxSdkNet::Configuration::Motion^ get() { return _GetMotionConfig(); }
+            VxSdkNet::Configuration::Motion^ get() { return _GetMotionConfiguration(); }
+        }
+
+        /// <summary>
+        /// Gets the motion detection configuration for this data source, if supported.
+        /// </summary>
+        /// <value>The motion configuration if supported by this data source, otherwise <c>nullptr</c>.</value>
+        property VxSdkNet::DataSourceConfig::Motion^ MotionConfig {
+        public:
+            VxSdkNet::DataSourceConfig::Motion^ get() { return _GetMotionConfig(); }
         }
 
         /// <summary>
@@ -627,6 +653,28 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets or sets the threshold, in hours, after which recordings older than this are eligible for pruning.
+        /// Any recorded media retained longer than the threshold will be pruned as needed to free space on disk
+        /// for recording. If set, this value overrides the threshold in Configuration::Storage. This is only
+        /// applicable when the data source type is video. A value of 0 will disable pruning.
+        /// </summary>
+        /// <value>The threshold, in hours.</value>
+        property int PruningThreshold {
+        public:
+            int get() { return _dataSource->pruningThreshold; }
+            void set(int value) { _dataSource->SetPruningThreshold(value); }
+        }
+
+        /// <summary>
+        /// Gets the PTZ configuration for this data source, if supported.
+        /// </summary>
+        /// <value>The PTZ if supported by this data source, otherwise <c>nullptr</c>.</value>
+        property VxSdkNet::DataSourceConfig::Ptz^ PtzConfiguration {
+        public:
+            VxSdkNet::DataSourceConfig::Ptz^ get() { return _GetPtzConfig(); }
+        }
+
+        /// <summary>
         /// Gets the <see cref="PtzController"/> associated with this data source.
         /// </summary>
         /// <value><c>nullptr</c> if PTZ is not supported on the device, else the <see cref="PtzController"/>.</value>
@@ -654,6 +702,15 @@ namespace VxSdkNet {
         property System::String^ RtspEndpoint {
         public:
             System::String^ get() { return _GetRtspEndpoint(); }
+        }
+
+        /// <summary>
+        /// Gets the smart compression configuration for this data source, if supported.
+        /// </summary>
+        /// <value>The smart compression if supported by this data source, otherwise <c>nullptr</c>.</value>
+        property VxSdkNet::DataSourceConfig::SmartCompression^ SmartCompressionConfiguration {
+        public:
+            VxSdkNet::DataSourceConfig::SmartCompression^ get() { return _GetSmartCompressionConfig(); }
         }
 
         /// <summary>
@@ -702,6 +759,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the video encoding configurations for this data source, if supported.
+        /// </summary>
+        /// <value>A <c>List</c> of the video encoding configurations for this data source.</value>
+        property System::Collections::Generic::List<DataSourceConfig::VideoEncoding^>^ VideoEncodingConfigurations {
+        public:
+            System::Collections::Generic::List<DataSourceConfig::VideoEncoding^>^ get() { return _GetVideoEncodingConfigs(); }
+        }
+
+        /// <summary>
         /// Gets all possible video resource relations for this data source (both linked and non-linked).
         /// Each linked resource shall be considered to be associated to this data source while non-linked resources
         /// shall not be (they are available to be associated).
@@ -733,10 +799,14 @@ namespace VxSdkNet {
         ResourceLimits^ _GetLimits();
         System::Collections::Generic::List<LinkedPtzInfo^>^ _GetLinkedPtzInfo();
         Member^ _GetMember();
-        Configuration::Motion^ _GetMotionConfig();
+        DataSourceConfig::Motion^ _GetMotionConfig();
+        Configuration::Motion^ _GetMotionConfiguration();
         System::Collections::Generic::List<UserInfo^>^ _GetMultiviewInfo();
+        DataSourceConfig::Ptz^ _GetPtzConfig();
         PtzController^ _GetPtzController();
         System::String^ _GetRtspEndpoint();
+        DataSourceConfig::SmartCompression^ _GetSmartCompressionConfig();
+        System::Collections::Generic::List<DataSourceConfig::VideoEncoding^>^ _GetVideoEncodingConfigs();
     };
 }
 #endif // DataSource_h__

@@ -85,6 +85,11 @@ namespace VxSdkNet {
                 HasMinValue = floatLimit.hasMin;
                 MaxValue = floatLimit.max;
                 MinValue = floatLimit.min;
+                Options = gcnew System::Collections::Generic::List<float>();
+                for (int i = 0; i < floatLimit.optionsSize; ++i)
+                {
+                    Options->Add(floatLimit.options[i]);
+                }
             }
 
             /// <summary>
@@ -128,6 +133,15 @@ namespace VxSdkNet {
             /// </summary>
             /// <value>The field’s minimum valid value.</value>
             property float MinValue;
+
+            /// <summary>
+            /// Gets a list of valid values that may be applied to the field.
+            /// <remarks>
+            /// If no values are present, this indicates that the field is currently read-only.
+            /// </remarks>
+            /// </summary>
+            /// <value>A list of valid values.</value>
+            property System::Collections::Generic::List<float>^ Options;
         };
 
         /// <summary>
@@ -257,6 +271,11 @@ namespace VxSdkNet {
             ObjectLimit(VxSdk::VxLimits::Object objectLimit)
             {
                 FieldName = Utils::ConvertCppString(objectLimit.fieldName);
+                Options = gcnew System::Collections::Generic::List<System::String^>();
+                for (int i = 0; i < objectLimit.optionsSize; ++i)
+                {
+                    Options->Add(Utils::ConvertCppString(objectLimit.options[i]));
+                }
             }
 
             /// <summary>
@@ -264,6 +283,15 @@ namespace VxSdkNet {
             /// </summary>
             /// <value>The field name.</value>
             property System::String^ FieldName;
+
+            /// <summary>
+            /// Gets a list of valid values that may be applied to the field.
+            /// <remarks>
+            /// If no values are present, this indicates that the field is currently read-only.
+            /// </remarks>
+            /// </summary>
+            /// <value>A list of valid values.</value>
+            property System::Collections::Generic::List<System::String^>^ Options;
         };
 
         /// <summary>

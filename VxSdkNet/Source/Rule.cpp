@@ -74,6 +74,17 @@ VxSdkNet::ResourceLimits^ VxSdkNet::Rule::_GetLimits() {
     return nullptr;
 }
 
+System::Collections::Generic::List<VxSdkNet::RuleResponse^>^ VxSdkNet::Rule::_GetResponses() {
+    // Create a list of managed rule response objects
+    List<VxSdkNet::RuleResponse^>^ mlist = gcnew List<VxSdkNet::RuleResponse^>();
+    // Add each rule response to the list
+    for (int i = 0; i < _rule->responseSize; i++) {
+        mlist->Add(gcnew VxSdkNet::RuleResponse(_rule->responses[i]));
+    }
+
+    return mlist;
+}
+
 System::String ^ VxSdkNet::Rule::_GetScript() {
     char* scriptData = nullptr;
     int size = 0;
@@ -104,6 +115,43 @@ System::Collections::Generic::List<VxSdkNet::RuleTrigger^>^ VxSdkNet::Rule::_Get
     }
 
     return mlist;
+}
+
+VxSdkNet::Results::Value VxSdkNet::Rule::_SetResponses(System::Collections::Generic::List<RuleResponse^>^ responseList) {
+    // Create a new array of VxRuleResponse objects using the info contained in responseList
+    const int responseListSize = responseList->Count;
+    VxSdk::VxRuleResponse** responses = nullptr;
+    if (responseListSize > 0) {
+        responses = new VxSdk::VxRuleResponse*[responseListSize];
+        for (int i = 0; i < responseListSize; i++) {
+            responses[i] = new VxSdk::VxRuleResponse();
+            responses[i]->isCustomScript = responseList[i]->IsCustomScript;
+            std::string val = Utils::ConvertCSharpString(responseList[i]->Script);
+            responses[i]->script = _strdup(val.c_str());
+            VxSdk::Utilities::StrCopySafe(responses[i]->situationType, Utils::ConvertCSharpString(responseList[i]->SituationType).c_str());
+            responses[i]->usedSourceEventFieldsSize = responseList[i]->UsedSourceEventFields->Count;
+            responses[i]->usedSourceEventFields = nullptr;
+            if (responses[i]->usedSourceEventFieldsSize > 0) {
+                responses[i]->usedSourceEventFields = new char*[responses[i]->usedSourceEventFieldsSize];
+                for (int ii = 0; ii < responses[i]->usedSourceEventFieldsSize; ii++) {
+                    int idSize = responseList[i]->UsedSourceEventFields[ii]->Length + 1;
+                    responses[i]->usedSourceEventFields[ii] = new char[idSize];
+                    VxSdk::Utilities::StrCopySafe(responses[i]->usedSourceEventFields[ii], Utils::ConvertCSharpString(responseList[i]->UsedSourceEventFields[ii]).c_str(), idSize);
+                }
+            }
+        }
+    }
+
+    // Attempt to set the responses and return the result
+    VxSdkNet::Results::Value result = (VxSdkNet::Results::Value)_rule->SetResponses(responses, responseListSize);
+    for (int i = 0; i < responseListSize; i++) {
+        delete responses[i];
+    }
+
+    delete[] responses;
+    responses = nullptr;
+
+    return result;
 }
 
 VxSdkNet::Results::Value VxSdkNet::Rule::_SetScript(System::String ^ scriptData) {

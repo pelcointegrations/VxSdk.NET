@@ -20,6 +20,10 @@ VxSdkNet::Results::Value VxSdkNet::Monitor::Refresh() {
     return (VxSdkNet::Results::Value)_monitor->Refresh();
 }
 
+VxSdkNet::Results::Value VxSdkNet::Monitor::SetResolution(int resolutionX, int resolutionY) {
+    return (VxSdkNet::Results::Value)_monitor->SetResolution(resolutionX, resolutionY);
+}
+
 VxSdkNet::Device^ VxSdkNet::Monitor::_GetHostDevice() {
     // Get the device which hosts this monitor
     VxSdk::IVxDevice* device = nullptr;

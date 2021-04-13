@@ -8,6 +8,7 @@
 #include "PtzLock.h"
 
 namespace VxSdkNet {
+    ref class NewDigitalPtzPreset;
 
     /// <summary>
     /// The PtzController class can be created for a device that has pan, tilt, and/or zoom functionality.
@@ -84,6 +85,9 @@ namespace VxSdkNet {
         /// <summary>
         /// Move to the absolute position of the given coordinates.
         /// </summary>
+        /// <remarks>
+        /// The minimum/maximum X and Y coordinate values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
         /// <param name="positionX">The X coordinate absolute position (pan).</param>
         /// <param name="positionY">The Y coordinate absolute position (tilt).</param>
         /// <returns>The <see cref="Results::Value">Result</see> of the absolute move.</returns>
@@ -92,6 +96,9 @@ namespace VxSdkNet {
         /// <summary>
         /// Move to the absolute position of the given coordinates.
         /// </summary>
+        /// <remarks>
+        /// The minimum/maximum X, Y, and Z coordinate values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
         /// <param name="positionX">The X coordinate absolute position (pan).</param>
         /// <param name="positionY">The Y coordinate absolute position (tilt).</param>
         /// <param name="positionZ">The Z coordinate absolute position (zoom).</param>
@@ -101,6 +108,9 @@ namespace VxSdkNet {
         /// <summary>
         /// Pan to the absolute position of the given coordinate.
         /// </summary>
+        /// <remarks>
+        /// The minimum/maximum X coordinate values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
         /// <param name="positionX">The X coordinate absolute position (pan).</param>
         /// <returns>The <see cref="Results::Value">Result</see> of the absolute pan.</returns>
         Results::Value AbsolutePan(int positionX);
@@ -108,6 +118,9 @@ namespace VxSdkNet {
         /// <summary>
         /// Tilt to the absolute position of the given coordinate.
         /// </summary>
+        /// <remarks>
+        /// The minimum/maximum Y coordinate values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
         /// <param name="positionY">The Y coordinate absolute position (tilt).</param>
         /// <returns>The <see cref="Results::Value">Result</see> of the absolute tilt.</returns>
         Results::Value AbsoluteTilt(int positionY);
@@ -115,9 +128,19 @@ namespace VxSdkNet {
         /// <summary>
         /// Zoom to the absolute position of the given coordinates.
         /// </summary>
+        /// <remarks>
+        /// The minimum/maximum Z coordinate values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
         /// <param name="positionZ">The Z coordinate absolute position (zoom).</param>
         /// <returns>The <see cref="Results::Value">Result</see> of the absolute zoom.</returns>
         Results::Value AbsoluteZoom(int positionZ);
+
+        /// <summary>
+        /// Creates a new digital PTZ preset. This preset will represent the given spatial coordinates.
+        /// </summary>
+        /// <param name="newDigitalPtzPreset">The new digital PTZ preset.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the adding the digital PTZ preset.</returns>
+        Results::Value AddDigitalPreset(NewDigitalPtzPreset^ newDigitalPtzPreset);
 
         /// <summary>
         /// Creates a new preset using the current PTZ spatial coordinates.
@@ -134,6 +157,16 @@ namespace VxSdkNet {
         Results::Value ContinuousFocus(FocusDirections nearFar);
 
         /// <summary>
+        /// Continuously focuses near or far at the given speed.
+        /// </summary>
+        /// <remarks>
+        /// The minimum/maximum focus speed values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
+        /// <param name="focusSpeed">Focus speed. Negative values focus near, positive values focus far.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the focus call.</returns>
+        Results::Value ContinuousFocusAtSpeed(int focusSpeed);
+
+        /// <summary>
         /// Open or close the iris until the user wants to stop.
         /// </summary>
         /// <param name="openClose">The direction to change the iris.</param>
@@ -141,13 +174,35 @@ namespace VxSdkNet {
         Results::Value ContinuousIris(IrisDirections openClose);
 
         /// <summary>
-        /// Continuously move the field of view at the given speed until stopped.
+        /// Continuously opens or closes the iris at the given speed.
+        /// </summary>
+        /// <remarks>
+        /// The minimum/maximum iris speed values may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
+        /// <param name="irisSpeed">Iris speed. Negative values close the iris, positive values open the iris.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the iris call.</returns>
+        Results::Value ContinuousIrisAtSpeed(int irisSpeed);
+
+        /// <summary>
+        /// Continuously move the field of view at the given speed percentage until stopped.
         /// </summary>
         /// <param name="speedX">Pan speed. Negative values pan left, positive values pan right.</param>
         /// <param name="speedY">Tilt speed. Negative values tilt downward, positive values tilt upward.</param>
         /// <param name="inOut">The direction to zoom.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of the continuous move.</returns>
         Results::Value ContinuousMove(int speedX, int speedY, ZoomDirections inOut);
+
+        /// <summary>
+        /// Continuously move the field of view at the given speed until stopped.
+        /// </summary>
+        /// <remarks>
+        /// The minimum/maximum speed values for each parameter may be retrieved from <c>PtzLimits</c>.
+        /// </remarks>
+        /// <param name="speedX">Pan speed. Negative values pan left, positive values pan right.</param>
+        /// <param name="speedY">Tilt speed. Negative values tilt downward, positive values tilt upward.</param>
+        /// <param name="speedZ">Zoom speed. Negative values zoom out, positive values zoom in.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the continuous move.</returns>
+        Results::Value ContinuousMoveAtSpeed(int speedX, int speedY, int speedZ);
 
         /// <summary>
         /// Deletes a preset from the system.
@@ -205,6 +260,30 @@ namespace VxSdkNet {
         /// up, negative values are down. Range: -100 to 100.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of the relative percentage move.</returns>
         Results::Value RelativePercentageMove(int percentageX, int percentageY);
+
+        /// Moves the camera position within a percentage relative to the device’s current field of view.
+        /// </summary>
+        /// <remarks>
+        /// The rotational x and y parameters are used to move within a percentage of the current field of view of the
+        /// camera. For instance, if the x parameter were 50 and the y parameter were -50, the pan/tilt would move
+        /// halfway to the edge of the field of view along the x axis and halfway to the field of view along the
+        /// negative y axis from its present position.
+        /// </remarks>
+        /// <param name="percentageX">
+        /// Percentage of the current field of view of the camera (X axis). Positive values are to the right, negative
+        /// values are to the left. Range: -100 to 100.
+        /// </param>
+        /// <param name="percentageY">
+        /// Percentage of the current field of view of the camera (Y axis). Positive values are up, negative values are
+        /// down. Range: -100 to 100.
+        /// </param>
+        /// <param name="percentageZ">
+        /// Zoom relative to the current position. It is expressed in terms of magnification * 100, such that if a user
+        /// wished to zoom in 2X the current magnification, the value would be 200, 2.5X the current magnification
+        /// would be 250. A negative number may not be valid if it is outside the bounds of the field of view.
+        /// </param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the relative percentage move.</returns>
+        Results::Value RelativePercentageMove(int percentageX, int percentageY, int percentageZ);
 
         /// <summary>
         /// Repositions a preset to the current PTZ spatial coordinates.

@@ -6,10 +6,12 @@
 #include "Utils.h"
 #include "FileRecovery.h"
 #include "ResourceLimits.h"
+#include "NetworkStorageInfo.h"
 
 namespace VxSdkNet {
     ref class SmtpInfo;
     ref class LdapValidationCredentials;
+    ref class NewUser;
     ref class NewVolume;
     ref class NewVolumeGroup;
     ref class VolumeGroup;
@@ -51,6 +53,18 @@ namespace VxSdkNet {
             DeleteAfterRecording,
             /// <summary>Unlocked bookmarks are not automatically deleted.</summary>
             NeverDelete
+        };
+
+        /// <summary>
+        /// Values that represent how the nodes in the cluster are balanced and failover.
+        /// </summary>
+        enum class ClusterAvailabilityMode {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+            /// <summary>Utilize an external load balancer; may be used on 2..n node clusters.</summary>
+            ExternalLoadBalancer,
+            /// <summary>Utilize the internal VX load balancing algorithm; may be used on 2..3 node clusters.</summary>
+            VxLoadBalancing
         };
 
         /// <summary>
@@ -172,6 +186,20 @@ namespace VxSdkNet {
         };
 
         /// <summary>
+        /// Values that represent where the time server information is obtained.
+        /// </summary>
+        enum class TimeServerSource {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+            /// <summary>Time server information is determined automatically, for example, from DHCP.</summary>
+            Auto,
+            /// <summary>Time server information is provided by the user.</summary>
+            Manual,
+            /// <summary>Time server information is not provided; the time itself is set manually.</summary>
+            None
+        };
+
+        /// <summary>
         /// Values that represent network communication transmission types.
         /// </summary>
         enum class TransmissionTypes {
@@ -214,6 +242,21 @@ namespace VxSdkNet {
             Results::Value Refresh();
 
             /// <summary>
+            /// Sets the password on the physical host device (for the current username). If successful, device password will be set to match.
+            /// </summary>
+            /// <param name="newPassword">New password being requested. Must contain more than 7 characters.</param>
+            /// <param name="mustChangePassword">If <c>true</c>, the password will immediately be expired the first time it is used to login.</param>
+            /// <returns>The <see cref="Results::Value">Result</see> of setting the password.</returns>
+            Results::Value SetPassword(System::String^ newPassword, bool mustChangePassword);
+
+            /// <summary>
+            /// Sets the user on the physical host device (creating/replacing as necessary). If successful, device username will be set to match.
+            /// </summary>
+            /// <param name="user">The user to set on the device.</param>
+            /// <returns>The <see cref="Results::Value">Result</see> of setting the user.</returns>
+            Results::Value SetUser(NewUser^ user);
+
+            /// <summary>
             /// Gets or sets whether or not password expiration is enabled for all users.
             /// </summary>
             /// <value><c>true</c> to enable password expiration, otherwise <c>false</c>.</value>
@@ -230,6 +273,15 @@ namespace VxSdkNet {
             property ResourceLimits^ Limits {
             public:
                 ResourceLimits^ get() { return _GetLimits(); }
+            }
+
+            /// <summary>
+            /// Gets the minimum length allowed for a new user password.
+            /// </summary>
+            /// <value>The minimum password length.</value>
+            property int MinPasswordLength {
+            public:
+                int get() { return _configAuth->minPasswordLength; }
             }
 
             /// <summary>
@@ -358,6 +410,13 @@ namespace VxSdkNet {
             Results::Value Refresh();
 
             /// <summary>
+            /// Validates a network storage path for availability as export storage.
+            /// </summary>
+            /// <param name="exportStorageInfo">The export storage path to validate.</param>
+            /// <returns><c>true</c> if the path is valid, otherwise <c>false</c>.</returns>
+            bool ValidateExportPath(NetworkStorageInfo^ exportStorageInfo);
+
+            /// <summary>
             /// Gets or sets the retention limit, in days, on logged events from aggregated sources. Any aggregated
             /// events that exceed this limit shall be deleted.
             /// </summary>
@@ -366,6 +425,17 @@ namespace VxSdkNet {
             public:
                 int get() { return _configCluster->aggregatedEventLimit; }
                 void set(int value) { _configCluster->SetAggregatedEventLimit(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the availability mode for the cluster, which determines how the nodes in the cluster
+            /// are balanced and failover.
+            /// </summary>
+            /// <value>The cluster availability mode.</value>
+            property ClusterAvailabilityMode AvailabilityMode {
+            public:
+                ClusterAvailabilityMode get() { return (ClusterAvailabilityMode)_configCluster->availabilityMode; }
+                void set(ClusterAvailabilityMode value) { _configCluster->SetAvailabilityMode((VxSdk::VxClusterAvailabilityMode::Value)value); }
             }
 
             /// <summary>
@@ -580,6 +650,144 @@ namespace VxSdkNet {
             VxSdkNet::ResourceLimits^ _GetLimits();
             System::Collections::Generic::List<Node^>^ _GetNodeConfigurations();
             Time^ _GetTimeConfig();
+        };
+
+        /// <summary>
+        /// The Event class represents event configuration.
+        /// </summary>
+        ref class Event {
+        public:
+
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="vxConfigEvent">The vx event configuration.</param>
+            Event(VxSdk::IVxConfiguration::Event* vxConfigEvent);
+
+            /// <summary>
+            /// Destructor.
+            /// </summary>
+            virtual ~Event() {
+                this->!Event();
+            }
+
+            /// <summary>
+            /// Finaliser.
+            /// </summary>
+            !Event();
+
+            /// <summary>
+            /// Refreshes this instances properties.
+            /// </summary>
+            /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
+            Results::Value Refresh();
+
+            /// <summary>
+            /// Gets or sets the retention limit, in days, on logged events from aggregated sources. Any aggregated events that
+            /// exceed this limit shall be deleted.
+            /// </summary>
+            /// <value>The retention limit, in days.</value>
+            property int AggregatedEventLimit {
+            public:
+                int get() { return _configEvent->aggregatedEventLimit; }
+                void set(int value) { _configEvent->SetAggregatedEventLimit(value); }
+            }
+
+            /// <summary>
+            /// Gets any limits related to this resource.
+            /// </summary>
+            /// <value>The limits related to this resource.</value>
+            property ResourceLimits^ Limits {
+            public:
+                ResourceLimits^ get() { return _GetLimits(); }
+            }
+
+            /// <summary>
+            /// Gets or sets the retention limit, in days, on logged events. Any events that exceed this limit shall be deleted.
+            /// </summary>
+            /// <value>The retention limit, in days.</value>
+            property int LocalEventLimit {
+            public:
+                int get() { return _configEvent->localEventLimit; }
+                void set(int value) { _configEvent->SetLocalEventLimit(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the retention limit, in number of events, on logged events from any sources. Any events that exceed
+            /// this limit shall be deleted, starting with the oldest events and giving priority to retaining high
+            /// severity events.
+            /// </summary>
+            /// <value>The retention limit, in number of events.</value>
+            property int MaxEvents {
+            public:
+                int get() { return _configEvent->maxEvents; }
+                void set(int value) { _configEvent->SetMaxEvents(value); }
+            }
+
+        internal:
+            VxSdk::IVxConfiguration::Event* _configEvent;
+            VxSdkNet::ResourceLimits^ _GetLimits();
+        };
+
+        /// <summary>
+        /// The Export class represents export configuration.
+        /// </summary>
+        ref class Export {
+        public:
+
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="vxConfigExport">The vx export configuration.</param>
+            Export(VxSdk::IVxConfiguration::Export* vxConfigExport);
+
+            /// <summary>
+            /// Destructor.
+            /// </summary>
+            virtual ~Export() {
+                this->!Export();
+            }
+
+            /// <summary>
+            /// Finaliser.
+            /// </summary>
+            !Export();
+
+            /// <summary>
+            /// Refreshes this instances properties.
+            /// </summary>
+            /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
+            Results::Value Refresh();
+
+            /// <summary>
+            /// Sets a global password for all new exports. Ignored if ForceProtect is <c>false</c>.
+            /// </summary>
+            /// <param name="globalPassword">The new global password for exports.</param>
+            /// <returns>The <see cref="Results::Value">Result</see> of setting the password.</returns>
+            VxSdkNet::Results::Value SetProtectPassword(System::String^ globalPassword);
+
+            /// <summary>
+            /// Gets or sets whether every new export will be created with password protection.
+            /// </summary>
+            /// <value><c>true</c> to force every new export to be created with password protection, otherwise <c>false</c>.</value>
+            property bool ForceProtect {
+            public:
+                bool get() { return _configExport->forceProtect; }
+                void set(bool value) { _configExport->SetForceProtect(value); }
+            }
+
+            /// <summary>
+            /// Gets any limits related to this resource.
+            /// </summary>
+            /// <value>The limits related to this resource.</value>
+            property ResourceLimits^ Limits {
+            public:
+                ResourceLimits^ get() { return _GetLimits(); }
+            }
+
+        internal:
+            VxSdk::IVxConfiguration::Export* _configExport;
+            VxSdkNet::ResourceLimits^ _GetLimits();
         };
 
         /// <summary>
@@ -983,6 +1191,62 @@ namespace VxSdkNet {
 
         internal:
             VxSdk::IVxConfiguration::Node* _configNode;
+        };
+
+        /// <summary>
+        /// The Report class represents report configuration.
+        /// </summary>
+        ref class Report {
+        public:
+
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="vxConfigReport">The vx report configuration.</param>
+            Report(VxSdk::IVxConfiguration::Report* vxConfigReport);
+
+            /// <summary>
+            /// Destructor.
+            /// </summary>
+            virtual ~Report() {
+                this->!Report();
+            }
+
+            /// <summary>
+            /// Finaliser.
+            /// </summary>
+            !Report();
+
+            /// <summary>
+            /// Refreshes this instances properties.
+            /// </summary>
+            /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
+            Results::Value Refresh();
+
+            /// <summary>
+            /// Gets or sets the retention limit, in days, for reports; a value of 0 will disable the limit.
+            /// Any report that exceeds this limit will be deleted.
+            /// </summary>
+            /// <value>The retention limit, in days.</value>
+            property int MaxAge {
+            public:
+                int get() { return _configReport->maxAge; }
+                void set(int value) { _configReport->SetMaxAge(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the network storage location to save report data to (used instead of local cluster storage).
+            /// </summary>
+            /// <value>The network storage location.</value>
+            property NetworkStorageInfo^ StorageLocation {
+            public:
+                NetworkStorageInfo^ get() { return gcnew NetworkStorageInfo(_configReport->storageLocation); }
+                void set(NetworkStorageInfo^ value) { _SetStorageLocation(value); }
+            }
+
+        internal:
+            VxSdk::IVxConfiguration::Report* _configReport;
+            void _SetStorageLocation(NetworkStorageInfo^ storageInfo);
         };
 
         /// <summary>
@@ -1557,6 +1821,19 @@ namespace VxSdkNet {
             }
 
             /// <summary>
+            /// Gets or sets the threshold, in hours, after which recordings older than this are eligible for pruning.
+            /// Any recorded media retained longer than the threshold will be pruned as needed to free space on disk for
+            /// recording. This only applies to data source having type video. A value of 0 will disable pruning (pruning
+            /// may be enabled on a per data source basis still, see: DataSource::PruningThreshold).
+            /// </summary>
+            /// <value>The threshold, in hours.</value>
+            property int PruningThreshold {
+            public:
+                int get() { return _configStorage->pruningThreshold; }
+                void set(int value) { _configStorage->SetPruningThreshold(value); }
+            }
+
+            /// <summary>
             /// Gets or sets the retention limit, in hours, on recorded data.
             /// </summary>
             /// <value>The retention limit.</value>
@@ -1564,6 +1841,16 @@ namespace VxSdkNet {
             public:
                 int get() { return _configStorage->retentionLimit; }
                 void set(int value) { _configStorage->SetRetentionLimit(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the second stream to record from for all assigned data sources (when scheduled to record).
+            /// </summary>
+            /// <value>The second stream to record.</value>
+            property StreamSource SecondaryVideoStreamRecordingSource {
+            public:
+                StreamSource get() { return (StreamSource)_configStorage->secondaryVideoStreamRecordingSource; }
+                void set(StreamSource value) { _configStorage->SetSecondaryVideoStreamRecordingSource((VxSdk::VxStreamSource::Value)value); }
             }
 
             /// <summary>
@@ -1627,6 +1914,82 @@ namespace VxSdkNet {
         };
 
         /// <summary>
+        /// The ThermalEtd class represents a thermal elevated temperature detection configuration.
+        /// </summary>
+        ref class ThermalEtd {
+        public:
+
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="vxConfigThermalEtd">The vx thermal etd configuration.</param>
+            ThermalEtd(VxSdk::IVxConfiguration::ThermalEtd* vxConfigThermalEtd);
+
+            /// <summary>
+            /// Destructor.
+            /// </summary>
+            virtual ~ThermalEtd() {
+                this->!ThermalEtd();
+            }
+
+            /// <summary>
+            /// Finaliser.
+            /// </summary>
+            !ThermalEtd();
+
+            /// <summary>
+            /// Refreshes this instances properties.
+            /// </summary>
+            /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
+            Results::Value Refresh();
+
+            /// <summary>
+            /// Gets or sets whether or not elevated temperature detection events and overlays are enabled.
+            /// </summary>
+            /// <value><c>true</c> to enable elevated temperature detection events and overlays, otherwise <c>false</c>.</value>
+            property bool IsEnabled {
+            public:
+                bool get() { return _configThermalEtd->isEnabled; }
+                void set(bool value) { value ? _configThermalEtd->Enable() : _configThermalEtd->Disable(); }
+            }
+
+            /// <summary>
+            /// Gets or sets the lower bound of the normal temperature range, in degrees Celsius; lower temperatures will be
+            /// considered abnormally low.
+            /// </summary>
+            /// <value>The lower bound of the normal temperature range, in degrees Celsius.</value>
+            property float NormalRangeLowerBound {
+            public:
+                float get() { return _configThermalEtd->normalRangeLowerBound; }
+                void set(float value) { _configThermalEtd->SetNormalRangeLowerBound(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the upper bound of the normal temperature range, in degrees Celsius; higher temperatures will be
+            /// considered elevated.
+            /// </summary>
+            /// <value>The upper bound of the normal temperature range, in degrees Celsius.</value>
+            property float NormalRangeUpperBound {
+            public:
+                float get() { return _configThermalEtd->normalRangeUpperBound; }
+                void set(float value) { _configThermalEtd->SetNormalRangeUpperBound(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the number of seconds before a new event is emitted for the same person in view.
+            /// </summary>
+            /// <value>The new event timeout, in seconds.</value>
+            property int Timeout {
+            public:
+                int get() { return _configThermalEtd->timeout; }
+                void set(int value) { _configThermalEtd->SetTimeout(value); }
+            }
+
+        internal:
+            VxSdk::IVxConfiguration::ThermalEtd* _configThermalEtd;
+        };
+
+        /// <summary>
         /// The Time class represents a time configuration.
         /// </summary>
         ref class Time {
@@ -1657,6 +2020,7 @@ namespace VxSdkNet {
             Results::Value Refresh();
 
             /// <summary>
+            /// [DEPRECATED] Refreshes this instances properties.
             /// Gets a value indicating whether or not the external time server is enabled.
             /// </summary>
             /// <value><c>true</c> if the external time server is enabled, <c>false</c> if disabled.</value>
@@ -1679,7 +2043,7 @@ namespace VxSdkNet {
             }
 
             /// <summary>
-            /// Gets the host address of the external time server.
+            /// [DEPRECATED] Gets the host address of the external time server.
             /// </summary>
             /// <value>The external time server host address.</value>
             property System::String^ TimeServerAddress {
@@ -1687,8 +2051,44 @@ namespace VxSdkNet {
                 System::String^ get() { return Utils::ConvertCppString(_configTime->timeServerAddress); }
             }
 
+            /// <summary>
+            /// Gets or sets the external time servers for time synchronization, typically using the NTP protocol.
+            /// </summary>
+            /// <value>The external time servers.</value>
+            property System::Collections::Generic::List<System::String^>^ ExternalTimeServers {
+            public:
+                System::Collections::Generic::List<System::String^>^ get() { return _GetExternalTimeServers(); }
+                void set(System::Collections::Generic::List<System::String^>^ value) { _SetExternalTimeServers(value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the source where the time server information comes from.
+            /// </summary>
+            /// <value>The time server source type.</value>
+            property TimeServerSource TimeServerSourceType {
+            public:
+                TimeServerSource get() { return (TimeServerSource)_configTime->timeServerSource; }
+                void set(TimeServerSource value) { _configTime->SetTimeServerSource((VxSdk::VxTimeServerSource::Value)value); }
+            }
+
+            /// <summary>
+            /// Gets or sets the time zone of the device, for localization purposes.
+            /// </summary>
+            /// <value>The time zone.</value>
+            property System::String^ TimeZone {
+            public:
+                System::String^ get() { return Utils::ConvertCppString(_configTime->timeZone); }
+                void set(System::String^ value) {
+                    char timeZone[64];
+                    VxSdk::Utilities::StrCopySafe(timeZone, Utils::ConvertCSharpString(value).c_str());
+                    _configTime->SetTimeZone(timeZone);
+                }
+            }
+
         internal:
             VxSdk::IVxConfiguration::Time* _configTime;
+            System::Collections::Generic::List<System::String^>^ _GetExternalTimeServers();
+            void _SetExternalTimeServers(System::Collections::Generic::List<System::String^>^ timeServers);
         };
 
         /// <summary>

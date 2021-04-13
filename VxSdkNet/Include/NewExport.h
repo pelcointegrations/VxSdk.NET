@@ -16,8 +16,15 @@ namespace VxSdkNet {
         /// Default constructor.
         /// </summary>
         NewExport() {
+            AlternateLocation = gcnew NetworkStorageInfo();
             Clips = gcnew System::Collections::Generic::List<NewExportClip^>();
         }
+
+        /// <summary>
+        /// Gets or sets the alternate network location to export the file to, if any.
+        /// </summary>
+        /// <value>The alternate export location, if any.</value>
+        property NetworkStorageInfo^ AlternateLocation;
 
         /// <summary>
         /// Gets the clips that shall be included in this export when triggered.

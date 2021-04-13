@@ -53,6 +53,36 @@ List<VxSdkNet::Device^>^ VxSdkNet::LicenseFeature::GetCommissionedDevices(System
     return mlist;
 }
 
+VxSdkNet::Results::Value VxSdkNet::LicenseFeature::Link(VxSdkNet::Device^ device) {
+    // Link a device to this license feature
+    VxSdk::VxResult::Value result = _licenseFeature->Link(*device->_device);
+    // Unless there was an issue linking the device the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::LicenseFeature::Refresh() {
     return (VxSdkNet::Results::Value)_licenseFeature->Refresh();
+}
+
+VxSdkNet::Results::Value VxSdkNet::LicenseFeature::UnLink(VxSdkNet::Device^ device) {
+    // Unlink a device from this license feature
+    VxSdk::VxResult::Value result = _licenseFeature->UnLink(*device->_device);
+    // Unless there was an issue unlinking the device the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
+System::String^ VxSdkNet::LicenseFeature::_GetCapabilityRequest() {
+    char* capRequestEndpoint = nullptr;
+    int size = 0;
+
+    // If the capability request uri is not available the result will return VxSdk::VxResult::kActionUnavailable,
+    // otherwise VxSdk::VxResult::kInsufficientSize
+    VxSdk::VxResult::Value result = _licenseFeature->GetCapabilityRequest(capRequestEndpoint, size);
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for capRequestEndpoint
+        capRequestEndpoint = new char[size];
+        // The result should now be kOK since we have allocated enough space
+        _licenseFeature->GetCapabilityRequest(capRequestEndpoint, size);
+    }
+    return Utils::ConvertCppString(capRequestEndpoint);
 }

@@ -37,6 +37,18 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The monitor number.</value>
         property int Number;
+
+        /// <summary>
+        /// Gets or sets the horizontal resolution.
+        /// </summary>
+        /// <value>The horizontal resolution.</value>
+        property int ResolutionX;
+
+        /// <summary>
+        /// Gets or sets the vertical resolution.
+        /// </summary>
+        /// <value>The vertical resolution.</value>
+        property int ResolutionY;
     };
 }
 #endif // NewMonitor_h__

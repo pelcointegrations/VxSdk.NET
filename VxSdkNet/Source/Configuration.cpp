@@ -3,6 +3,7 @@
 /// </summary>
 #include "Configuration.h"
 #include "LdapValidationCredentials.h"
+#include "NewUser.h"
 #include "NewVolume.h"
 #include "NewVolumeGroup.h"
 #include "SmtpInfo.h"
@@ -26,6 +27,43 @@ VxSdkNet::Configuration::Auth::!Auth() {
 
 VxSdkNet::Results::Value VxSdkNet::Configuration::Auth::Refresh() {
     return (VxSdkNet::Results::Value)_configAuth->Refresh();
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::Auth::SetPassword(System::String^ newPassword, bool mustChangePassword) {
+    char password[1024];
+    VxSdk::Utilities::StrCopySafe(password, Utils::ConvertCSharpString(newPassword).c_str());
+    VxSdk::VxResult::Value result = _configAuth->SetPassword(password, mustChangePassword);
+
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::Auth::SetUser(NewUser^ user) {
+    // Create a new user object and populate its fields using user
+    VxSdk::VxNewUser vxNewUser;
+    VxSdk::Utilities::StrCopySafe(vxNewUser.domain, Utils::ConvertCSharpString(user->Domain).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.email, Utils::ConvertCSharpString(user->Email).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.employeeId, Utils::ConvertCSharpString(user->EmployeeId).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.firstName, Utils::ConvertCSharpString(user->FirstName).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.lastName, Utils::ConvertCSharpString(user->LastName).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.name, Utils::ConvertCSharpString(user->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.note, Utils::ConvertCSharpString(user->Note).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewUser.password, Utils::ConvertCSharpString(user->Password).c_str());
+    vxNewUser.mustChangePassword = user->MustChangePassword;
+    vxNewUser.canBypassLdap = user->CanBypassLdap;
+    vxNewUser.isPasswordExpirationDisabled = user->IsPasswordExpirationDisabled;
+    vxNewUser.phoneNumberSize = user->PhoneNumbers->Count;
+    if (vxNewUser.phoneNumberSize > 0) {
+        vxNewUser.phoneNumbers = new VxSdk::VxPhoneNumber[vxNewUser.phoneNumberSize];
+        for (int i = 0; i < vxNewUser.phoneNumberSize; i++) {
+            vxNewUser.phoneNumbers[i].type = (VxSdk::VxPhoneType::Value)user->PhoneNumbers[i].Key;
+            VxSdk::Utilities::StrCopySafe(vxNewUser.phoneNumbers[i].number, Utils::ConvertCSharpString(user->PhoneNumbers[i].Value).c_str());
+        }
+    }
+
+    // Make the call to set the user
+    VxSdk::VxResult::Value result = _configAuth->SetUser(vxNewUser);
+
+    return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::ResourceLimits^ VxSdkNet::Configuration::Auth::_GetLimits() {
@@ -86,6 +124,20 @@ VxSdkNet::Results::Value VxSdkNet::Configuration::Cluster::Refresh() {
     return (VxSdkNet::Results::Value)_configCluster->Refresh();
 }
 
+bool VxSdkNet::Configuration::Cluster::ValidateExportPath(NetworkStorageInfo^ exportStorageInfo) {   
+    // Create a new network storage info object and populate its fields using exportStorageInfo
+    VxSdk::VxNetworkStorageInfo vxNetworkStorageInfo;
+    VxSdk::Utilities::StrCopySafe(vxNetworkStorageInfo.password, Utils::ConvertCSharpString(exportStorageInfo->Password).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNetworkStorageInfo.path, Utils::ConvertCSharpString(exportStorageInfo->Path).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNetworkStorageInfo.username, Utils::ConvertCSharpString(exportStorageInfo->Username).c_str());
+
+    bool result;
+    // Make the call to validate the export path
+    _configCluster->ValidateExportPath(result, vxNetworkStorageInfo);
+
+    return result;
+}
+
 VxSdkNet::ResourceLimits^ VxSdkNet::Configuration::Cluster::_GetLimits() {
     // Get the limits for this resource
     VxSdk::VxLimits* limits = nullptr;
@@ -130,6 +182,71 @@ VxSdkNet::Configuration::Time^ VxSdkNet::Configuration::Cluster::_GetTimeConfig(
     // Return the time config if GetTimeConfig was successful
     if (result == VxSdk::VxResult::kOK)
         return gcnew VxSdkNet::Configuration::Time(time);
+
+    return nullptr;
+}
+
+// ====================================================================================================================
+// VxSdkNet::Configuration::Event
+// ====================================================================================================================
+
+VxSdkNet::Configuration::Event::Event(VxSdk::IVxConfiguration::Event* vxConfigEvent) {
+    _configEvent = vxConfigEvent;
+}
+
+VxSdkNet::Configuration::Event::!Event() {
+    _configEvent->Delete();
+    _configEvent = nullptr;
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::Event::Refresh() {
+    return (VxSdkNet::Results::Value)_configEvent->Refresh();
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::Configuration::Event::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _configEvent->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
+// ====================================================================================================================
+// VxSdkNet::Configuration::Export
+// ====================================================================================================================
+
+VxSdkNet::Configuration::Export::Export(VxSdk::IVxConfiguration::Export* vxConfigExport) {
+    _configExport = vxConfigExport;
+}
+
+VxSdkNet::Configuration::Export::!Export() {
+    _configExport->Delete();
+    _configExport = nullptr;
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::Export::Refresh() {
+    return (VxSdkNet::Results::Value)_configExport->Refresh();
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::Export::SetProtectPassword(System::String^ globalPassword) {
+    char password[1024];
+    VxSdk::Utilities::StrCopySafe(password, Utils::ConvertCSharpString(globalPassword).c_str());
+
+    return (VxSdkNet::Results::Value)_configExport->SetProtectPassword(password);
+}
+
+VxSdkNet::ResourceLimits^ VxSdkNet::Configuration::Export::_GetLimits() {
+    // Get the limits for this resource
+    VxSdk::VxLimits* limits = nullptr;
+    VxSdk::VxResult::Value result = _configExport->GetLimits(limits);
+
+    // Return the limits if GetLimits was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew ResourceLimits(limits);
 
     return nullptr;
 }
@@ -231,6 +348,31 @@ VxSdkNet::Configuration::Node::!Node() {
 
 VxSdkNet::Results::Value VxSdkNet::Configuration::Node::Refresh() {
     return (VxSdkNet::Results::Value)_configNode->Refresh();
+}
+
+// ====================================================================================================================
+// VxSdkNet::Configuration::Report
+// ====================================================================================================================
+
+VxSdkNet::Configuration::Report::Report(VxSdk::IVxConfiguration::Report* vxConfigReport) {
+    _configReport = vxConfigReport;
+}
+
+VxSdkNet::Configuration::Report::!Report() {
+    _configReport->Delete();
+    _configReport = nullptr;
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::Report::Refresh() {
+    return (VxSdkNet::Results::Value)_configReport->Refresh();
+}
+
+void VxSdkNet::Configuration::Report::_SetStorageLocation(VxSdkNet::NetworkStorageInfo^ storageInfo) {
+    VxSdk::VxNetworkStorageInfo vxNetworkStorageInfo;
+    VxSdk::Utilities::StrCopySafe(vxNetworkStorageInfo.password, Utils::ConvertCSharpString(storageInfo->Password).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNetworkStorageInfo.path, Utils::ConvertCSharpString(storageInfo->Path).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNetworkStorageInfo.username, Utils::ConvertCSharpString(storageInfo->Username).c_str());
+    _configReport->SetStorageLocation(vxNetworkStorageInfo);
 }
 
 // ====================================================================================================================
@@ -545,6 +687,23 @@ void VxSdkNet::Configuration::Storage::_SetMonitoredDeviceIds(List<System::Strin
 }
 
 // ====================================================================================================================
+// VxSdkNet::Configuration::ThermalEtd
+// ====================================================================================================================
+
+VxSdkNet::Configuration::ThermalEtd::ThermalEtd(VxSdk::IVxConfiguration::ThermalEtd* vxConfigThermalEtd) {
+    _configThermalEtd = vxConfigThermalEtd;
+}
+
+VxSdkNet::Configuration::ThermalEtd::!ThermalEtd() {
+    _configThermalEtd->Delete();
+    _configThermalEtd = nullptr;
+}
+
+VxSdkNet::Results::Value VxSdkNet::Configuration::ThermalEtd::Refresh() {
+    return (VxSdkNet::Results::Value)_configThermalEtd->Refresh();
+}
+
+// ====================================================================================================================
 // VxSdkNet::Configuration::Time
 // ====================================================================================================================
 
@@ -559,6 +718,35 @@ VxSdkNet::Configuration::Time::!Time() {
 
 VxSdkNet::Results::Value VxSdkNet::Configuration::Time::Refresh() {
     return (VxSdkNet::Results::Value)_configTime->Refresh();
+}
+
+System::Collections::Generic::List<System::String^>^ VxSdkNet::Configuration::Time::_GetExternalTimeServers() {
+    // Create a list of strings
+    List<System::String^>^ mlist = gcnew List<System::String^>();
+    // Add each external time server to the string list
+    for (int i = 0; i < _configTime->externalTimeServersSize; i++)
+        mlist->Add(Utils::ConvertCppString(_configTime->externalTimeServers[i]));
+
+    return mlist;
+}
+
+void VxSdkNet::Configuration::Time::_SetExternalTimeServers(List<System::String^>^ timeServers) {
+    int size = timeServers->Count;
+    char** externalTimeServers = new char* [size];
+    for (int i = 0; i < size; i++) {
+        int serversLength = timeServers[i]->Length + 1;
+        externalTimeServers[i] = new char[serversLength];
+        VxSdk::Utilities::StrCopySafe(externalTimeServers[i], Utils::ConvertCSharpString(timeServers[i]).c_str(), serversLength);
+    }
+
+    _configTime->SetExternalTimeServers(externalTimeServers, size);
+    for (int i = 0; i < size; i++) {
+        delete externalTimeServers[i];
+        externalTimeServers[i] = nullptr;
+    }
+
+    delete[] externalTimeServers;
+    externalTimeServers = nullptr;
 }
 
 // ====================================================================================================================

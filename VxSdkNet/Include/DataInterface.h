@@ -44,7 +44,10 @@ namespace VxSdkNet {
             Optera360,
 
             /// <summary>Standard renderer.</summary>
-            Standard
+            Standard,
+
+            /// <summary>Fisheye renderer.</summary>
+            Fisheye
         };
 
         /// <summary>

@@ -10,7 +10,10 @@
 #include "AlarmInput.h"
 #include "Device.h"
 #include "DataStorage.h"
+#include "Discovery.h"
 #include "Drawing.h"
+#include "ExportEstimate.h"
+#include "File.h"
 #include "InternalEvent.h"
 #include "License.h"
 #include "Monitor.h"
@@ -25,13 +28,17 @@
 #include "NewMonitor.h"
 #include "NewNotification.h"
 #include "NewRecording.h"
+#include "NewReport.h"
+#include "NewReportTemplate.h"
 #include "NewRule.h"
 #include "NewSchedule.h"
 #include "NewSituation.h"
 #include "NewTag.h"
 #include "NewTimeTable.h"
 #include "NewUser.h"
+#include "PermissionSchema.h"
 #include "RelayOutput.h"
+#include "Report.h"
 
 namespace VxSdkNet {
 
@@ -147,6 +154,14 @@ namespace VxSdkNet {
         Export^ AddExport(NewExport^ newExport);
 
         /// <summary>
+        /// Add a new file to the VideoXpert system.
+        /// </summary>
+        /// <param name="filePath">The local path to the file.</param>
+        /// <param name="filename">The filename of the associated file data.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the file.</returns>
+        Results::Value AddFile(System::String^ filePath, System::String^ filename);
+
+        /// <summary>
         /// Add a new manual recording to the VideoXpert system.
         /// </summary>
         /// <param name="newManualRecording">The new manual recording to be added.</param>
@@ -173,6 +188,20 @@ namespace VxSdkNet {
         /// <param name="newRecording">The new recording to be added.</param>
         /// <returns><c>nullptr</c> if it fails, else the new recording.</returns>
         Recording^ AddRecording(NewRecording^ newRecording);
+
+        /// <summary>
+        /// Requests a new report to be generated on the VideoXpert system.
+        /// </summary>
+        /// <param name="newReport">The new report to be generated to the system.</param>
+        /// <returns><c>nullptr</c> if it fails, else the new report template.</returns>
+        Report^ AddReport(NewReport^ newReport);
+
+        /// <summary>
+        /// Add a new report template to the VideoXpert system.
+        /// </summary>
+        /// <param name="newReportTemplate">The new report template to be added to the system.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of adding the report template.</returns>
+        Results::Value AddReportTemplate(NewReportTemplate^ newReportTemplate);
 
         /// <summary>
         /// Add a new role on the VideoXpert system.
@@ -288,6 +317,13 @@ namespace VxSdkNet {
         Results::Value DeleteExport(Export^ exportItem);
 
         /// <summary>
+        /// Delete a file from the VideoXpert system.
+        /// </summary>
+        /// <param name="fileItem">The file to be deleted from the system.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the file.</returns>
+        Results::Value DeleteFile(File^ fileItem);
+
+        /// <summary>
         /// Delete a manual recording from the VideoXpert system.
         /// </summary>
         /// <param name="manualRecordingItem">The manual recording to be deleted from the system.</param>
@@ -307,6 +343,20 @@ namespace VxSdkNet {
         /// <param name="recordingItem">The recording to be deleted from the system.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of deleting the recording.</returns>
         Results::Value DeleteRecording(Recording^ recordingItem);
+
+        /// <summary>
+        /// Delete a report from the VideoXpert system.
+        /// </summary>
+        /// <param name="reportItem">The report to be deleted from the system.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the report.</returns>
+        Results::Value DeleteReport(Report^ reportItem);
+
+        /// <summary>
+        /// Delete a report template from the VideoXpert system.
+        /// </summary>
+        /// <param name="reportTemplate">The report template to be deleted from the system.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of deleting the report template.</returns>
+        Results::Value DeleteReportTemplate(ReportTemplate^ reportTemplate);
 
         /// <summary>
         /// Delete a role from the VideoXpert system.
@@ -430,7 +480,7 @@ namespace VxSdkNet {
 
         /// <summary>
         /// Get the devices from the VideoXpert system using an optional collection filter.
-        /// <para>Available filters: AdvancedQuery, Commissioned, DriverType, HasStatus, Id, Ip, Model, ModifiedSince, Name, Serial, State, Type, Vendor, Version.</para>
+        /// <para>Available filters: AdvancedQuery, Commissioned, Discovered, DriverType, HasStatus, Id, Ip, Model, ModifiedSince, Name, Serial, State, Type, Vendor, Version.</para>
         /// </summary>
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the devices on the system.</returns>
@@ -461,12 +511,27 @@ namespace VxSdkNet {
         System::Collections::Generic::List<Event^>^ GetEvents(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Gets the estimate information for a given set of export criteria. This does not perform an actual export operation.
+        /// </summary>
+        /// <param name="newExport">The new export to request an estimate for.</param>
+        /// <returns><c>nullptr</c> if it fails, else the export estimate.</returns>
+        ExportEstimate^ GetExportEstimate(NewExport^ newExport);
+
+        /// <summary>
         /// Get the exports residing on the system using an optional collection filter.
         /// <para>Available filters: DataSourceAllTags, DataSourceAllPrivateTags, DataSourceName, DataSourceNumber, ModifiedSince, Name, Owner, PercentComplete, Size, Status, Trashed.</para>
         /// </summary>
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the exports on the system.</returns>
         System::Collections::Generic::List<Export^>^ GetExports(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Get the files residing on the system using an optional collection filter.
+        /// <para>Available filters: Id, FileName.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the files on the system.</returns>
+        System::Collections::Generic::List<File^>^ GetFiles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get the license from the system.
@@ -521,6 +586,22 @@ namespace VxSdkNet {
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the relay outputs on the system.</returns>
         System::Collections::Generic::List<RelayOutput^>^ GetRelayOutputs(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Get the reports from the VideoXpert system using an optional collection filter.
+        /// <para>Available filters: AdvancedQuery, Id, ModifiedSince, Name, Owner.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the reports on the system.</returns>
+        System::Collections::Generic::List<Report^>^ GetReports(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+
+        /// <summary>
+        /// Get the report templates from the VideoXpert system using an optional collection filter.
+        /// <para>Available filters: AdvancedQuery, Id, ModifiedSince, Name, Owner.</para>
+        /// </summary>
+        /// <param name="filters">The collection filters to be used in the request.</param>
+        /// <returns>A <c>List</c> containing the report templates on the system.</returns>
+        System::Collections::Generic::List<ReportTemplate^>^ GetReportTemplates(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get the roles from the VideoXpert system using an optional collection filter.
@@ -682,6 +763,26 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the available report templates representing the default template for each report type. These defaults
+        /// act as a schema for each report type, providing all available fields and filters that may be used in the
+        /// report template for that report type.
+        /// </summary>
+        /// <value>A <c>List</c> of the available default report templates.</value>
+        property System::Collections::Generic::List<NewReportTemplate^>^ AvailableReportTemplates {
+        public:
+            System::Collections::Generic::List<NewReportTemplate^>^ get() { return _GetAvailableReportTemplates(); }
+        }
+
+        /// <summary>
+        /// Gets the list of available event types that may be used within a schedule trigger.
+        /// </summary>
+        /// <value>A <c>List</c> of the available situation types.</value>
+        property System::Collections::Generic::List<System::String^>^ AvailableScheduleTriggerEvents {
+        public:
+            System::Collections::Generic::List<System::String^>^ get() { return _GetAvailableScheduleTriggerEvents(); }
+        }
+
+        /// <summary>
         /// Gets or sets the current bookmark automatic unlock time value.
         /// </summary>
         /// <value>The bookmark auto-unlock time (in days).</value>
@@ -766,6 +867,14 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Device^>^ Devices {
             System::Collections::Generic::List<Device^>^ get() { return GetDevices(nullptr); }
         }
+
+        /// <summary>
+        /// Gets the current discovery status.
+        /// </summary>
+        /// <value>The current discovery status.</value>
+        property Discovery^ DiscoveryStatus {
+            Discovery^ get() { return _GetDiscoveryStatus(); }
+        }
         
         /// <summary>
         /// Gets the drawings from the VideoXpert system.
@@ -782,6 +891,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Driver^>^ Drivers {
             System::Collections::Generic::List<Driver^>^ get() { return GetDrivers(nullptr); }
         }
+
+        /// <summary>
+        /// Gets the event configuration.
+        /// </summary>
+        /// <value>The event configuration.</value>
+        property VxSdkNet::Configuration::Event^ EventConfig {
+        public:
+            VxSdkNet::Configuration::Event^ get() { return _GetEventConfig(); }
+        }
         
         /// <summary>
         /// Gets the events from the VideoXpert system.
@@ -790,6 +908,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Event^>^ Events {
             System::Collections::Generic::List<Event^>^ get() { return GetEvents(nullptr); }
         }
+
+        /// <summary>
+        /// Gets the export configuration.
+        /// </summary>
+        /// <value>The export configuration.</value>
+        property VxSdkNet::Configuration::Export^ ExportConfig {
+        public:
+            VxSdkNet::Configuration::Export^ get() { return _GetExportConfig(); }
+        }
         
         /// <summary>
         /// Gets the exports from the VideoXpert system.
@@ -797,6 +924,14 @@ namespace VxSdkNet {
         /// <value>A <c>List</c> containing the exports on the system.</value>
         property System::Collections::Generic::List<Export^>^ Exports {
             System::Collections::Generic::List<Export^>^ get() { return GetExports(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the files from the VideoXpert system.
+        /// </summary>
+        /// <value>A <c>List</c> containing the files on the system.</value>
+        property System::Collections::Generic::List<File^>^ Files {
+            System::Collections::Generic::List<File^>^ get() { return GetFiles(nullptr); }
         }
 
         /// <summary>
@@ -894,13 +1029,46 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<RelayOutput^>^ RelayOutputs {
             System::Collections::Generic::List<RelayOutput^>^ get() { return GetRelayOutputs(nullptr); }
         }
-        
+
+        /// <summary>
+        /// Gets the report configuration.
+        /// </summary>
+        /// <value>The report configuration.</value>
+        property VxSdkNet::Configuration::Report^ ReportConfig {
+        public:
+            VxSdkNet::Configuration::Report^ get() { return _GetReportConfig(); }
+        }
+
+        /// <summary>
+        /// Gets the reports from the VideoXpert system.
+        /// </summary>
+        /// <value>A <c>List</c> containing the reports on the system.</value>
+        property System::Collections::Generic::List<Report^>^ Reports {
+            System::Collections::Generic::List<Report^>^ get() { return GetReports(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the report templates from the VideoXpert system.
+        /// </summary>
+        /// <value>A <c>List</c> containing the report templates on the system.</value>
+        property System::Collections::Generic::List<ReportTemplate^>^ ReportTemplates {
+            System::Collections::Generic::List<ReportTemplate^>^ get() { return GetReportTemplates(nullptr); }
+        }
+
         /// <summary>
         /// Gets the roles from the VideoXpert system.
         /// </summary>
         /// <value>A <c>List</c> containing the roles on the system.</value>
         property System::Collections::Generic::List<Role^>^ Roles {
             System::Collections::Generic::List<Role^>^ get() { return GetRoles(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the ordered permission schema information for roles.
+        /// </summary>
+        /// <value>The permission schema.</value>
+        property PermissionSchema^ RolePermissionSchema {
+            PermissionSchema^ get() { return _GetPermissionSchema(); }
         }
         
         /// <summary>
@@ -974,6 +1142,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Tag^>^ Tags {
             System::Collections::Generic::List<Tag^>^ get() { return GetTags(nullptr); }
         }
+
+        /// <summary>
+        /// Gets the time configuration.
+        /// </summary>
+        /// <value>The time configuration.</value>
+        property VxSdkNet::Configuration::Time^ TimeConfig {
+        public:
+            VxSdkNet::Configuration::Time^ get() { return _GetTimeConfig(); }
+        }
         
         /// <summary>
         /// Gets the time tables from the VideoXpert system.
@@ -1029,14 +1206,22 @@ namespace VxSdkNet {
         static void _FireEvent(VxSdk::IVxEvent* vxEvent);
         static void _FireInternalEvent(VxSdk::VxInternalEvent* vxInternalEvent);
         Configuration::Auth^ _GetAuthConfig();
+        System::Collections::Generic::List<NewReportTemplate^>^ _GetAvailableReportTemplates();
+        System::Collections::Generic::List<System::String^>^ _GetAvailableScheduleTriggerEvents();
         Configuration::Bookmark^ _GetBookmarkConfig();
         Configuration::Cluster^ _GetClusterConfig();
         VxSdkNet::User^ _GetCurrentUser();
+        Discovery^ _GetDiscoveryStatus();
+        Configuration::Event^ _GetEventConfig();
+        Configuration::Export^ _GetExportConfig();
         VxSdkNet::Device^ _GetHostDevice();
         Configuration::Ldap^ _GetLdapConfig();
+        PermissionSchema^ _GetPermissionSchema();
+        Configuration::Report^ _GetReportConfig();
         Configuration::Server^ _GetServerConfig();
         Configuration::Smtp^ _GetSmtpConfig();
         Configuration::Snmp^ _GetSnmpConfig();
+        Configuration::Time^ _GetTimeConfig();
         Configuration::Twilio^ _GetTwilioConfig();
     };
 }

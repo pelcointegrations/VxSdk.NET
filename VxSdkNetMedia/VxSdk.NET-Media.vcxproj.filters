@@ -359,6 +359,63 @@
     <ClInclude Include="..\VxSdkNet\Include\ZoneVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ExportEstimate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\DataSourceConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\VideoEncodingOption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NetworkStorageInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\RuleResponse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\LineCount.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\LineCountingRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewReport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewReportTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ReportField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ReportFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Report.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\ReportTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\DeviceSearch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\Discovery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\DiscoveryRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\File.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\PermissionSchema.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\VxSdkNet\Include\NewDigitalPtzPreset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\MediaControl.cpp">
@@ -530,6 +587,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\VxSdkNet\Source\Recording.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\DataSourceConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\Report.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\ReportTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\Discovery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\VxSdkNet\Source\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

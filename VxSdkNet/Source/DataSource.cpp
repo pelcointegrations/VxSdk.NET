@@ -427,6 +427,59 @@ List<VxSdkNet::Gap^>^ VxSdkNet::DataSource::GetGaps(System::Collections::Generic
     return mlist;
 }
 
+System::Collections::Generic::List<VxSdkNet::LineCount^>^ VxSdkNet::DataSource::GetLineCounts(VxSdkNet::LineCountingRequest^ lineCountingRequest) {
+    // Create a list of managed line counts
+    List<LineCount^>^ mlist = gcnew List<LineCount^>();
+
+    // Create the line counting request
+    VxSdk::VxLineCountingRequest vxLineCountingRequest;
+    VxSdk::Utilities::StrCopySafe(vxLineCountingRequest.endTime, Utils::ConvertCSharpDateTime(lineCountingRequest->EndTime).c_str());
+    VxSdk::Utilities::StrCopySafe(vxLineCountingRequest.startTime, Utils::ConvertCSharpDateTime(lineCountingRequest->StartTime).c_str());
+    vxLineCountingRequest.interval = (VxSdk::VxTimeInterval::Value)lineCountingRequest->Interval;
+    vxLineCountingRequest.analyticBehaviorIdSize = lineCountingRequest->AnalyticBehaviorIds->Count;
+    vxLineCountingRequest.analyticBehaviorIds = nullptr;
+    if (vxLineCountingRequest.analyticBehaviorIdSize > 0) {
+        vxLineCountingRequest.analyticBehaviorIds = new char*[vxLineCountingRequest.analyticBehaviorIdSize];
+        for (int i = 0; i < vxLineCountingRequest.analyticBehaviorIdSize; i++) {
+            int idSize = lineCountingRequest->AnalyticBehaviorIds[i]->Length + 1;
+            vxLineCountingRequest.analyticBehaviorIds[i] = new char[idSize];
+            VxSdk::Utilities::StrCopySafe(vxLineCountingRequest.analyticBehaviorIds[i], Utils::ConvertCSharpString(lineCountingRequest->AnalyticBehaviorIds[i]).c_str(), idSize);
+        }
+    }
+
+    // Attempt to get the line counts
+    VxSdk::VxLineCounts* lineCounts = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetLineCounts(vxLineCountingRequest, lineCounts);
+
+    // Unless there was an issue getting the line counts the result should be VxSdk::VxResult::kOK
+    if (result == VxSdk::VxResult::kOK && lineCounts->lineCountSize > 0) {
+        for (int i = 0; i < lineCounts->lineCountSize; i++) {
+            mlist->Add(gcnew VxSdkNet::LineCount(&lineCounts->lineCounts[i]));
+        }
+    }
+
+    return mlist;
+}
+
+System::String^ VxSdkNet::DataSource::GetMetadataSnapshotEndpoint(System::DateTime^ time) {
+    char* snapshotEndpoint = nullptr;
+    int size = 0;
+    char snapshotTime[64];
+    if (time != nullptr)
+        VxSdk::Utilities::StrCopySafe(snapshotTime, Utils::ConvertCSharpDateTime(*time).c_str());
+
+    // If the snapshot endpoint is not available on the system the result will return VxSdk::VxResult::kActionUnavailable,
+    // otherwise VxSdk::VxResult::kInsufficientSize
+    VxSdk::VxResult::Value result = _dataSource->GetMetadataSnapshotEndpoint(snapshotEndpoint, size, snapshotTime);
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for snapshotEndpoint
+        snapshotEndpoint = new char[size];
+        // The result should now be kOK since we have allocated enough space
+        _dataSource->GetMetadataSnapshotEndpoint(snapshotEndpoint, size, snapshotTime);
+    }
+    return Utils::ConvertCppString(snapshotEndpoint);
+}
+
 System::Collections::Generic::List<VxSdkNet::ResourceRel^>^ VxSdkNet::DataSource::GetMetadataRelations(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed related resources
     List<ResourceRel^>^ mlist = gcnew List<ResourceRel^>();
@@ -710,7 +763,21 @@ VxSdkNet::Member^ VxSdkNet::DataSource::_GetMember() {
     return nullptr;
 }
 
-VxSdkNet::Configuration::Motion^ VxSdkNet::DataSource::_GetMotionConfig() {
+
+
+VxSdkNet::DataSourceConfig::Motion^ VxSdkNet::DataSource::_GetMotionConfig() {
+    // Get the motion config
+    VxSdk::IVxDataSourceConfig::Motion* motionConfig = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetMotionConfiguration(motionConfig);
+
+    // Return the motion config if GetMotionConfiguration was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew VxSdkNet::DataSourceConfig::Motion(motionConfig);
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Motion^ VxSdkNet::DataSource::_GetMotionConfiguration() {
     // Get the motion config
     VxSdk::IVxConfiguration::Motion* motionConfig = nullptr;
     VxSdk::VxResult::Value result = _dataSource->GetMotionConfiguration(motionConfig);
@@ -746,6 +813,18 @@ System::Collections::Generic::List<VxSdkNet::UserInfo^>^ VxSdkNet::DataSource::_
     return mlist;
 }
 
+VxSdkNet::DataSourceConfig::Ptz^ VxSdkNet::DataSource::_GetPtzConfig() {
+    // Get the ptz config
+    VxSdk::IVxDataSourceConfig::Ptz* ptzConfig = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetPtzConfiguration(ptzConfig);
+
+    // Return the ptz config if GetPtzConfiguration was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew VxSdkNet::DataSourceConfig::Ptz(ptzConfig);
+
+    return nullptr;
+}
+
 VxSdkNet::PtzController^ VxSdkNet::DataSource::_GetPtzController() {
     // Check to ensure this datasource is a ptz camera
     bool isPtz;
@@ -777,4 +856,40 @@ System::String^ VxSdkNet::DataSource::_GetRtspEndpoint() {
         _dataSource->GetRtspEndpoint(rtspEndpoint, size);
     }
     return Utils::ConvertCppString(rtspEndpoint);
+}
+
+VxSdkNet::DataSourceConfig::SmartCompression^ VxSdkNet::DataSource::_GetSmartCompressionConfig() {
+    // Get the smart compression config
+    VxSdk::IVxDataSourceConfig::SmartCompression* smartCompressionConfig = nullptr;
+    VxSdk::VxResult::Value result = _dataSource->GetSmartCompressionConfiguration(smartCompressionConfig);
+
+    // Return the smart compression config if GetSmartCompressionConfiguration was successful
+    if (result == VxSdk::VxResult::kOK)
+        return gcnew VxSdkNet::DataSourceConfig::SmartCompression(smartCompressionConfig);
+
+    return nullptr;
+}
+
+List<VxSdkNet::DataSourceConfig::VideoEncoding^>^ VxSdkNet::DataSource::_GetVideoEncodingConfigs() {
+    // Create a list of managed video encodings
+    List<DataSourceConfig::VideoEncoding^>^ mlist = gcnew List<DataSourceConfig::VideoEncoding^>();
+    // Create a collection of unmanaged video encodings
+    VxSdk::VxCollection<VxSdk::IVxDataSourceConfig::VideoEncoding**> videoEncodings;
+
+    // Make the GetVideoEncodingsConfiguration call, which will return with the total video encodings count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _dataSource->GetVideoEncodingsConfiguration(videoEncodings);
+    // As long as there are video encodings for this datasource the result should be VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxDataSourceConfig::VideoEncoding collection
+        videoEncodings.collection = new VxSdk::IVxDataSourceConfig::VideoEncoding*[videoEncodings.collectionSize];
+        result = _dataSource->GetVideoEncodingsConfiguration(videoEncodings);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < videoEncodings.collectionSize; i++)
+                mlist->Add(gcnew DataSourceConfig::VideoEncoding(videoEncodings.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] videoEncodings.collection;
+    }
+    return mlist;
 }

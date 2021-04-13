@@ -16,6 +16,7 @@ namespace VxSdkNet {
         /// Default constructor.
         /// </summary>
         NewRule() {
+            RuleResponses = gcnew System::Collections::Generic::List<RuleResponse^>();
             RuleTriggers = gcnew System::Collections::Generic::List<RuleTrigger^>();
             TimeTables = gcnew System::Collections::Generic::List<TimeTable^>();
         }
@@ -31,6 +32,13 @@ namespace VxSdkNet {
         /// </summary>
         /// <value>The friendly name.</value>
         property System::String^ Name;
+
+        /// <summary>
+        /// Gets or sets the responses that will be executed when this rule is triggered. The order of this list is the
+        /// order in which the responses will execute.
+        /// </summary>
+        /// <value>A <c>List</c> of responses to be used by this rule.</value>
+        property System::Collections::Generic::List<RuleResponse^>^ RuleResponses;
 
         /// <summary>
         /// Gets the triggers that, when any activate, cause the rule to run its script. If empty or null, this rule

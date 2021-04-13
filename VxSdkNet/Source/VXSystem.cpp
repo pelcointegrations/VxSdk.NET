@@ -168,6 +168,9 @@ VxSdkNet::Export^ VxSdkNet::VXSystem::AddExport(VxSdkNet::NewExport^ newExport) 
         }
     }
 
+    VxSdk::Utilities::StrCopySafe(vxExport.alternateLocation.password, Utils::ConvertCSharpString(newExport->AlternateLocation->Password).c_str());
+    VxSdk::Utilities::StrCopySafe(vxExport.alternateLocation.path, Utils::ConvertCSharpString(newExport->AlternateLocation->Path).c_str());
+    VxSdk::Utilities::StrCopySafe(vxExport.alternateLocation.username, Utils::ConvertCSharpString(newExport->AlternateLocation->Username).c_str());
     vxExport.format = (VxSdk::VxExportFormat::Value)newExport->Format;
     VxSdk::Utilities::StrCopySafe(vxExport.name, Utils::ConvertCSharpString(newExport->Name).c_str());
     // If the password field has a password set then the export will be password protected, if the password is not
@@ -190,6 +193,16 @@ VxSdkNet::Export^ VxSdkNet::VXSystem::AddExport(VxSdkNet::NewExport^ newExport) 
     vxExport.clips = nullptr;
 
     return retExport;
+}
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::AddFile(System::String^ filePath, System::String^ filename) {
+    char name[256];
+    VxSdk::Utilities::StrCopySafe(name, Utils::ConvertCSharpString(filename).c_str());
+
+    // Make the call to add the drawing into VideoXpert
+    VxSdk::VxResult::Value result = _system->AddFile((char*)Utils::ConvertCSharpString(filePath).c_str(), name);
+    // Unless there was an issue creating the drawing the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
 }
 
 VxSdkNet::ManualRecording^ VxSdkNet::VXSystem::AddManualRecording(VxSdkNet::NewManualRecording^ newManualRecording) {
@@ -265,6 +278,102 @@ VxSdkNet::Recording^ VxSdkNet::VXSystem::AddRecording(VxSdkNet::NewRecording^ ne
     return retRecording;
 }
 
+VxSdkNet::Report^ VxSdkNet::VXSystem::AddReport(NewReport^ newReport) {
+    VxSdk::VxNewReport vxNewReport;
+    VxSdk::Utilities::StrCopySafe(vxNewReport.name, Utils::ConvertCSharpString(newReport->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewReport.templateId, Utils::ConvertCSharpString(newReport->TemplateId).c_str());
+
+    VxSdkNet::Report^ retReport = nullptr;
+    // Make the call to add the report into VideoXpert
+    VxSdk::IVxReport* reportItem = nullptr;
+    VxSdk::VxResult::Value result = _system->CreateReport(vxNewReport, reportItem);
+
+    // Unless there was an issue adding the report the result should be VxSdk::VxResult::kOK
+    if (result == VxSdk::VxResult::kOK) {
+        retReport = gcnew VxSdkNet::Report(reportItem);
+    }
+    return retReport;
+}
+
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::AddReportTemplate(NewReportTemplate^ newReportTemplate) {
+    // Create a new report template and populate its fields using newReportTemplate
+    VxSdk::VxNewReportTemplate vxNewReportTemplate;
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.name, Utils::ConvertCSharpString(newReportTemplate->Name).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.format, Utils::ConvertCSharpString(newReportTemplate->Format).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.endTime, Utils::ConvertCSharpDateTime(newReportTemplate->EndTime).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.recurrenceTime, Utils::ConvertCSharpTime(newReportTemplate->RecurrenceTime).c_str());
+    vxNewReportTemplate.duration = newReportTemplate->Duration;
+    vxNewReportTemplate.language = (VxSdk::VxLanguage::Value)newReportTemplate->Language;
+    vxNewReportTemplate.type = (VxSdk::VxReportType::Value)newReportTemplate->Type;
+    vxNewReportTemplate.interval = (VxSdk::VxTimeInterval::Value)newReportTemplate->Interval;
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.storageLocation.password, Utils::ConvertCSharpString(newReportTemplate->StorageLocation->Password).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.storageLocation.path, Utils::ConvertCSharpString(newReportTemplate->StorageLocation->Path).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.storageLocation.username, Utils::ConvertCSharpString(newReportTemplate->StorageLocation->Username).c_str());
+
+    vxNewReportTemplate.fields = nullptr;
+    vxNewReportTemplate.fieldsSize = newReportTemplate->Fields->Count;
+    if (vxNewReportTemplate.fieldsSize > 0) {
+        vxNewReportTemplate.fields = new VxSdk::VxReportField * [vxNewReportTemplate.fieldsSize];
+        for (int i = 0; i < vxNewReportTemplate.fieldsSize; i++) {
+            vxNewReportTemplate.fields[i] = new VxSdk::VxReportField();
+            vxNewReportTemplate.fields[i]->isEnabled = newReportTemplate->Fields[i]->IsEnabled;
+            VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.fields[i]->name, Utils::ConvertCSharpString(newReportTemplate->Fields[i]->Name).c_str());
+            vxNewReportTemplate.fields[i]->type = (VxSdk::VxReportFieldType::Value)newReportTemplate->Fields[i]->Type;
+            vxNewReportTemplate.fields[i]->subfieldSize = newReportTemplate->Fields[i]->Subfields->Count;
+            vxNewReportTemplate.fields[i]->subfields = nullptr;
+            if (vxNewReportTemplate.fields[i]->subfieldSize > 0) {
+                vxNewReportTemplate.fields[i]->subfields = new VxSdk::VxReportField[vxNewReportTemplate.fields[i]->subfieldSize];
+                for (int ii = 0; ii < vxNewReportTemplate.fields[i]->subfieldSize; ii++) {
+                    vxNewReportTemplate.fields[i]->subfields[ii] = VxSdk::VxReportField();
+                    vxNewReportTemplate.fields[i]->subfields[ii].isEnabled = newReportTemplate->Fields[i]->Subfields[ii]->IsEnabled;
+                    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.fields[i]->subfields[ii].name, Utils::ConvertCSharpString(newReportTemplate->Fields[i]->Subfields[ii]->Name).c_str());
+                    vxNewReportTemplate.fields[i]->subfields[ii].type = (VxSdk::VxReportFieldType::Value)newReportTemplate->Fields[i]->Subfields[ii]->Type;
+                }
+            }
+        }
+    }
+
+    vxNewReportTemplate.filters = nullptr;
+    vxNewReportTemplate.filtersSize = newReportTemplate->Filters->Count;
+    if (vxNewReportTemplate.filtersSize > 0) {
+        vxNewReportTemplate.filters = new VxSdk::VxReportFilter * [vxNewReportTemplate.filtersSize];
+        for (int i = 0; i < vxNewReportTemplate.filtersSize; i++) {
+            vxNewReportTemplate.filters[i] = new VxSdk::VxReportFilter();
+            vxNewReportTemplate.filters[i]->type = (VxSdk::VxReportFilterType::Value)newReportTemplate->Filters[i]->Type;
+            vxNewReportTemplate.filters[i]->filterIdSize = newReportTemplate->Filters[i]->FilterIds->Count;
+            vxNewReportTemplate.filters[i]->filterIds = nullptr;
+            if (vxNewReportTemplate.filters[i]->filterIdSize > 0) {
+                vxNewReportTemplate.filters[i]->filterIds = new char* [vxNewReportTemplate.filters[i]->filterIdSize];
+                for (int ii = 0; ii < vxNewReportTemplate.filters[i]->filterIdSize; ii++) {
+                    int idLength = newReportTemplate->Filters[i]->FilterIds[ii]->Length + 1;
+                    vxNewReportTemplate.filters[i]->filterIds[ii] = new char[idLength];
+                    VxSdk::Utilities::StrCopySafe(vxNewReportTemplate.filters[i]->filterIds[ii], Utils::ConvertCSharpString(newReportTemplate->Filters[i]->FilterIds[ii]).c_str(), idLength);
+                }
+            }
+        }
+    }
+
+    vxNewReportTemplate.recurrence = nullptr;
+    vxNewReportTemplate.recurrenceSize = newReportTemplate->Recurrence->Count;
+    if (vxNewReportTemplate.recurrenceSize > 0) {
+        vxNewReportTemplate.recurrence = new VxSdk::VxDayOfWeek::Value[vxNewReportTemplate.recurrenceSize];
+        for (int i = 0; i < vxNewReportTemplate.recurrenceSize; i++) {
+            vxNewReportTemplate.recurrence[i] = (VxSdk::VxDayOfWeek::Value)newReportTemplate->Recurrence[i];
+        }
+    }
+
+    // Make the call to add the report template into VideoXpert
+    VxSdk::VxResult::Value result = _system->AddReportTemplate(vxNewReportTemplate);
+
+    delete[] vxNewReportTemplate.fields;
+    delete[] vxNewReportTemplate.filters;
+    delete[] vxNewReportTemplate.recurrence;
+
+    // Unless there was an issue creating the report template the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRole(System::String^ roleName) {
     // Make the call to add the role into VideoXpert
     VxSdk::VxResult::Value result = _system->AddRole(Utils::ConvertCSharpString(roleName).c_str());
@@ -279,6 +388,27 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddRule(VxSdkNet::NewRule^ newRule)
     std::string val = Utils::ConvertCSharpString(newRule->Script);
     vxNewRule.script = (char*)val.c_str();
     vxNewRule.isEnabled = newRule->IsEnabled;
+    vxNewRule.responseSize = newRule->RuleResponses->Count;
+    if (vxNewRule.responseSize > 0) {
+        vxNewRule.responses = new VxSdk::VxRuleResponse[vxNewRule.responseSize];
+        for (int i = 0; i < vxNewRule.responseSize; i++) {
+            vxNewRule.responses[i].isCustomScript = newRule->RuleResponses[i]->IsCustomScript;
+            std::string val = Utils::ConvertCSharpString(newRule->RuleResponses[i]->Script);
+            vxNewRule.responses[i].script = _strdup(val.c_str());
+            VxSdk::Utilities::StrCopySafe(vxNewRule.responses[i].situationType, Utils::ConvertCSharpString(newRule->RuleResponses[i]->SituationType).c_str());
+            vxNewRule.responses[i].usedSourceEventFieldsSize = newRule->RuleResponses[i]->UsedSourceEventFields->Count;
+            vxNewRule.responses[i].usedSourceEventFields = nullptr;
+            if (vxNewRule.responses[i].usedSourceEventFieldsSize > 0) {
+                vxNewRule.responses[i].usedSourceEventFields = new char*[vxNewRule.responses[i].usedSourceEventFieldsSize];
+                for (int ii = 0; ii < vxNewRule.responses[i].usedSourceEventFieldsSize; ii++) {
+                    int idSize = newRule->RuleResponses[i]->UsedSourceEventFields[ii]->Length + 1;
+                    vxNewRule.responses[i].usedSourceEventFields[ii] = new char[idSize];
+                    VxSdk::Utilities::StrCopySafe(vxNewRule.responses[i].usedSourceEventFields[ii], Utils::ConvertCSharpString(newRule->RuleResponses[i]->UsedSourceEventFields[ii]).c_str(), idSize);
+                }
+            }
+        }
+    }
+
     vxNewRule.triggerSize = newRule->RuleTriggers->Count;
     if (vxNewRule.triggerSize > 0)  {
         vxNewRule.triggers = new VxSdk::VxRuleTrigger[vxNewRule.triggerSize];
@@ -480,6 +610,8 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::AddVxMonitor(NewMonitor^ newMonitor
     VxSdk::Utilities::StrCopySafe(vxNewMonitor.name, Utils::ConvertCSharpString(newMonitor->Name).c_str());
     vxNewMonitor.layout = (VxSdk::VxCellLayout::Value)newMonitor->Layout;
     vxNewMonitor.number = newMonitor->Number;
+    vxNewMonitor.xResolution = newMonitor->ResolutionX;
+    vxNewMonitor.yResolution = newMonitor->ResolutionY;
 
     // Make the call to add the monitor into VideoXpert
     VxSdk::VxResult::Value result = _system->CreateMonitor(vxNewMonitor);
@@ -564,6 +696,13 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteExport(VxSdkNet::Export^ expo
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteFile(VxSdkNet::File^ fileItem) {
+    // To delete an export simply make a DeleteExport call
+    VxSdk::VxResult::Value result = fileItem->_file ->DeleteFile();
+    // Unless there was an issue deleting the export the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteManualRecording(VxSdkNet::ManualRecording^ manualRecordingItem) {
     // To delete a manual recording simply make a DeleteManualRecording call
     VxSdk::VxResult::Value result = manualRecordingItem->_manualRecording->DeleteManualRecording();
@@ -582,6 +721,20 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteRecording(VxSdkNet::Recording
     // To delete a recording simply make a DeleteRecording call
     VxSdk::VxResult::Value result = recordingItem->_recording->DeleteRecording();
     // Unless there was an issue deleting the recording the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteReport(Report^ reportItem) {
+    // To delete a report simply make a DeleteReport call
+    VxSdk::VxResult::Value result = reportItem->_report->DeleteReport();
+    // Unless there was an issue deleting the report the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteReportTemplate(ReportTemplate^ reportTemplate) {
+    // To delete a report template simply make a DeleteReportTemplate call
+    VxSdk::VxResult::Value result = reportTemplate->_reportTemplate->DeleteReportTemplate();
+    // Unless there was an issue deleting the report template the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
 
@@ -1271,6 +1424,45 @@ List<VxSdkNet::Event^>^ VxSdkNet::VXSystem::GetEvents(System::Collections::Gener
     return mlist;
 }
 
+VxSdkNet::ExportEstimate^ VxSdkNet::VXSystem::GetExportEstimate(NewExport^ newExport) {
+    // Create a VxNewExport object using the settings contained in newExport and the VxNewExportClip that
+    // was just created.
+    VxSdk::VxNewExport vxNewExport;
+    vxNewExport.clipSize = newExport->Clips->Count;
+    if (vxNewExport.clipSize > 0) {
+        // Create new VxNewExportClip objects using the clip info contained in newExport
+        vxNewExport.clips = new VxSdk::VxNewExportClip[vxNewExport.clipSize];
+        for (int i = 0; i < vxNewExport.clipSize; i++) {
+            VxSdk::Utilities::StrCopySafe(vxNewExport.clips[i].dataSourceId, Utils::ConvertCSharpString(newExport->Clips[i]->DataSourceId).c_str());
+            VxSdk::Utilities::StrCopySafe(vxNewExport.clips[i].startTime, Utils::ConvertCSharpDateTime(newExport->Clips[i]->StartTime).c_str());
+            VxSdk::Utilities::StrCopySafe(vxNewExport.clips[i].endTime, Utils::ConvertCSharpDateTime(newExport->Clips[i]->EndTime).c_str());
+        }
+    }
+
+    vxNewExport.format = (VxSdk::VxExportFormat::Value)newExport->Format;
+    VxSdk::Utilities::StrCopySafe(vxNewExport.name, Utils::ConvertCSharpString(newExport->Name).c_str());
+    // If the password field has a password set then the export will be password protected, if the password is not
+    // set, the export will be public
+    VxSdk::Utilities::StrCopySafe(vxNewExport.password, Utils::ConvertCSharpString(newExport->Password).c_str());
+
+    VxSdkNet::ExportEstimate^ retExportEstimate = nullptr;
+    // Attempt to create the export estimate
+    VxSdk::VxExportEstimate* exportEstimate = nullptr;
+    VxSdk::VxResult::Value result = _system->GetExportEstimate(vxNewExport, exportEstimate);
+
+    // Unless there was an issue estimating the export the result should be VxSdk::VxResult::kOK
+    if (result == VxSdk::VxResult::kOK) {
+        retExportEstimate = gcnew VxSdkNet::ExportEstimate();
+        retExportEstimate->IsTooLarge = exportEstimate->isTooLarge;
+        retExportEstimate->Size = exportEstimate->size;
+    }
+
+    delete[] vxNewExport.clips;
+    vxNewExport.clips = nullptr;
+
+    return retExportEstimate;
+}
+
 List<VxSdkNet::Export^>^ VxSdkNet::VXSystem::GetExports(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed export objects
     List<VxSdkNet::Export^>^ mlist = gcnew List<VxSdkNet::Export^>();
@@ -1306,6 +1498,45 @@ List<VxSdkNet::Export^>^ VxSdkNet::VXSystem::GetExports(System::Collections::Gen
         }
         // Remove the memory we previously allocated to the collection
         delete[] exports.collection;
+    }
+    return mlist;
+}
+
+List<VxSdkNet::File^>^ VxSdkNet::VXSystem::GetFiles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed file objects
+    List<VxSdkNet::File^>^ mlist = gcnew List<VxSdkNet::File^>();
+    // Create a collection of unmanaged file objects
+    VxSdk::VxCollection<VxSdk::IVxFile**> files;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^> ^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        files.filterSize = filters->Count;
+        files.filters = collFilters;
+    }
+
+    // Make the GetFiles call, which will return with the total file count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetFiles(files);
+    // Unless there are no files on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxFile collection
+        files.collection = new VxSdk::IVxFile * [files.collectionSize];
+        result = _system->GetFiles(files);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < files.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::File(files.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] files.collection;
     }
     return mlist;
 }
@@ -1396,6 +1627,87 @@ List<VxSdkNet::RelayOutput^>^ VxSdkNet::VXSystem::GetRelayOutputs(System::Collec
         }
         // Remove the memory we previously allocated to the collection
         delete[] relayOutputs.collection;
+    }
+    return mlist;
+}
+
+System::Collections::Generic::List<VxSdkNet::Report^>^ VxSdkNet::VXSystem::GetReports(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed report objects
+    List<VxSdkNet::Report^>^ mlist = gcnew List<VxSdkNet::Report^>();
+    // Create a collection of unmanaged report objects
+    VxSdk::VxCollection<VxSdk::IVxReport**> reports;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^> ^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        reports.filterSize = filters->Count;
+        reports.filters = collFilters;
+    }
+
+    // Make the GetReports call, which will return with the total report count, this allows the client to allocate memory
+    VxSdk::VxResult::Value result = _system->GetReports(reports);
+    // The result should be kInsufficientSize if the number of reports on the system are greater than 0
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxReport collection
+        reports.collection = new VxSdk::IVxReport*[reports.collectionSize];
+        result = _system->GetReports(reports);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < reports.collectionSize; i++) {
+                mlist->Add(gcnew VxSdkNet::Report(reports.collection[i]));
+            }
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] reports.collection;
+    }
+    return mlist;
+}
+
+
+System::Collections::Generic::List<VxSdkNet::ReportTemplate^>^ VxSdkNet::VXSystem::GetReportTemplates(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+    // Create a list of managed report template objects
+    List<VxSdkNet::ReportTemplate^>^ mlist = gcnew List<VxSdkNet::ReportTemplate^>();
+    // Create a collection of unmanaged report template objects
+    VxSdk::VxCollection<VxSdk::IVxReportTemplate**> reportTemplates;
+
+    if (filters != nullptr && filters->Count > 0) {
+        // Create our filter
+        VxSdk::VxCollectionFilter* collFilters = new VxSdk::VxCollectionFilter[filters->Count];
+        int i = 0;
+        for each (KeyValuePair<Filters::Value, System::String^> ^ kvp in filters)
+        {
+            collFilters[i].key = static_cast<VxSdk::VxCollectionFilterItem::Value>(kvp->Key);
+            VxSdk::Utilities::StrCopySafe(collFilters[i++].value, Utils::ConvertCSharpString(kvp->Value).c_str());
+        }
+
+        // Add the filters to the collection 
+        reportTemplates.filterSize = filters->Count;
+        reportTemplates.filters = collFilters;
+    }
+
+    // Make the GetReportTemplates call, which will return with the total report template count, this allows the client to allocate memory
+    VxSdk::VxResult::Value result = _system->GetReportTemplates(reportTemplates);
+    // The result should be kInsufficientSize if the number of report templates on the system are greater than 0
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the IVxReportTemplate collection
+        reportTemplates.collection = new VxSdk::IVxReportTemplate*[reportTemplates.collectionSize];
+        result = _system->GetReportTemplates(reportTemplates);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < reportTemplates.collectionSize; i++) {
+                mlist->Add(gcnew VxSdkNet::ReportTemplate(reportTemplates.collection[i]));
+            }
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] reportTemplates.collection;
     }
     return mlist;
 }
@@ -1840,6 +2152,54 @@ VxSdkNet::Configuration::Auth^ VxSdkNet::VXSystem::_GetAuthConfig() {
     return nullptr;
 }
 
+System::Collections::Generic::List<VxSdkNet::NewReportTemplate^>^ VxSdkNet::VXSystem::_GetAvailableReportTemplates() {
+    // Create a list of managed new report template objects
+    List<VxSdkNet::NewReportTemplate^>^ mlist = gcnew List<VxSdkNet::NewReportTemplate^>();
+    // Create a collection of unmanaged new report template objects
+    VxSdk::VxCollection<VxSdk::VxNewReportTemplate**> newReportTemplates;
+
+    // Make the GetAvailableReportTemplates call, which will return with the total template count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetAvailableReportTemplates(newReportTemplates);
+    // Unless there are no templates on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the VxNewReportTemplate collection
+        newReportTemplates.collection = new VxSdk::VxNewReportTemplate*[newReportTemplates.collectionSize];
+        result = _system->GetAvailableReportTemplates(newReportTemplates);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < newReportTemplates.collectionSize; i++)
+                mlist->Add(gcnew VxSdkNet::NewReportTemplate(newReportTemplates.collection[i]));
+        }
+        // Remove the memory we previously allocated to the collection
+        delete[] newReportTemplates.collection;
+    }
+    return mlist;
+}
+
+System::Collections::Generic::List<System::String^>^ VxSdkNet::VXSystem::_GetAvailableScheduleTriggerEvents() {
+    List<System::String^>^ mlist = gcnew List<System::String^>();
+    char** situationTypes = nullptr;
+    int size = 0;
+
+    // Make the GetAvailableScheduleTriggerEvents call, which will return with the total situation type count, this allows the client to allocate memory.
+    VxSdk::VxResult::Value result = _system->GetAvailableScheduleTriggerEvents(situationTypes, size);
+    // Unless there are no situation types on the system, this should return VxSdk::VxResult::kInsufficientSize
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for the situation types
+        situationTypes = new char*[size];
+        result = _system->GetAvailableScheduleTriggerEvents(situationTypes, size);
+        // The result should now be kOK since we have allocated enough space
+        if (result == VxSdk::VxResult::kOK) {
+            for (int i = 0; i < size; i++)
+                mlist->Add(Utils::ConvertCppString(situationTypes[i]));
+        }
+
+        // Remove the memory we previously allocated to the collection
+        delete[] situationTypes;
+    }
+    return mlist;
+}
+
 VxSdkNet::Configuration::Bookmark^ VxSdkNet::VXSystem::_GetBookmarkConfig() {
     // Get the bookmark configuration
     VxSdk::IVxConfiguration::Bookmark* bookmarkConfig = nullptr;
@@ -1891,6 +2251,57 @@ VxSdkNet::User^ VxSdkNet::VXSystem::_GetCurrentUser() {
     return nullptr;
 }
 
+VxSdkNet::Discovery^ VxSdkNet::VXSystem::_GetDiscoveryStatus() {
+    // Get the discovery object
+    VxSdk::IVxDiscovery* discovery = nullptr;
+    VxSdk::VxResult::Value result = _system->GetDiscoveryStatus(discovery);
+
+    // Return the discovery status if GetDiscoveryStatus was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew VxSdkNet::Discovery(discovery);
+    }
+    else if (discovery != nullptr) {
+        discovery->Delete();
+        discovery = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Event^ VxSdkNet::VXSystem::_GetEventConfig() {
+    // Get the event configuration
+    VxSdk::IVxConfiguration::Event* eventConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetEventConfiguration(eventConfig);
+
+    // Return the event configuration if GetEventConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Event(eventConfig);
+    }
+    else if (eventConfig != nullptr) {
+        eventConfig->Delete();
+        eventConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Export^ VxSdkNet::VXSystem::_GetExportConfig() {
+    // Get the export configuration
+    VxSdk::IVxConfiguration::Export* exportConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetExportConfiguration(exportConfig);
+
+    // Return the export configuration if GetExportConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Export(exportConfig);
+    }
+    else if (exportConfig != nullptr) {
+        exportConfig->Delete();
+        exportConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
 VxSdkNet::Device^ VxSdkNet::VXSystem::_GetHostDevice() {
     // Get the device which hosts this system
     VxSdk::IVxDevice* device = nullptr;
@@ -1920,6 +2331,40 @@ VxSdkNet::Configuration::Ldap^ VxSdkNet::VXSystem::_GetLdapConfig() {
     else if (ldapConfig != nullptr) {
         ldapConfig->Delete();
         ldapConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::PermissionSchema^ VxSdkNet::VXSystem::_GetPermissionSchema() {
+    // Get the permission schema
+    VxSdk::VxPermissionSchema* permissionSchema = nullptr;
+    VxSdk::VxResult::Value result = _system->GetRolePermissionSchema(permissionSchema);
+
+    // Return the permission schema if GetRolePermissionSchema was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew PermissionSchema(permissionSchema);
+    }
+    else if (permissionSchema != nullptr) {
+        permissionSchema->Clear();
+        permissionSchema = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Report^ VxSdkNet::VXSystem::_GetReportConfig() {
+    // Get the report configuration
+    VxSdk::IVxConfiguration::Report* reportConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetReportConfiguration(reportConfig);
+
+    // Return the report configuration if GetReportConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Report(reportConfig);
+    }
+    else if (reportConfig != nullptr) {
+        reportConfig->Delete();
+        reportConfig = nullptr;
     }
 
     return nullptr;
@@ -1971,6 +2416,23 @@ VxSdkNet::Configuration::Snmp^ VxSdkNet::VXSystem::_GetSnmpConfig() {
     else if (snmpConfig != nullptr) {
         snmpConfig->Delete();
         snmpConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Time^ VxSdkNet::VXSystem::_GetTimeConfig() {
+    // Get the time configuration
+    VxSdk::IVxConfiguration::Time* timeConfig = nullptr;
+    VxSdk::VxResult::Value result = _system->GetTimeConfiguration(timeConfig);
+
+    // Return the time configuration if GetTimeConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Time(timeConfig);
+    }
+    else if (timeConfig != nullptr) {
+        timeConfig->Delete();
+        timeConfig = nullptr;
     }
 
     return nullptr;

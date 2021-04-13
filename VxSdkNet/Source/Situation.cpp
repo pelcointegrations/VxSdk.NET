@@ -17,6 +17,7 @@ VxSdkNet::Situation::!Situation() {
 
 VxSdkNet::Notification^ VxSdkNet::Situation::AddNotification(VxSdkNet::NewNotification^ newNotification) {
     auto roles = newNotification->Roles;
+    auto users = newNotification->Users;
 
     // Create a notification object and populate its fields using newNotification
     VxSdk::VxNewNotification vxNotification;
@@ -27,6 +28,16 @@ VxSdkNet::Notification^ VxSdkNet::Situation::AddNotification(VxSdkNet::NewNotifi
             int idLength = roles[i]->Id->Length + 1;
             vxNotification.roleIds[i] = new char[idLength];
             VxSdk::Utilities::StrCopySafe(vxNotification.roleIds[i], Utils::ConvertCSharpString(roles[i]->Id).c_str(), idLength);
+        }
+    }
+
+    vxNotification.userIdSize = static_cast<int>(users->Count);
+    if (vxNotification.userIdSize > 0) {
+        vxNotification.userIds = new char* [vxNotification.userIdSize];
+        for (int i = 0; i < vxNotification.userIdSize; i++) {
+            int idLength = users[i]->Id->Length + 1;
+            vxNotification.userIds[i] = new char[idLength];
+            VxSdk::Utilities::StrCopySafe(vxNotification.userIds[i], Utils::ConvertCSharpString(users[i]->Id).c_str(), idLength);
         }
     }
 

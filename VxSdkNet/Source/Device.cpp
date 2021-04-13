@@ -174,6 +174,22 @@ List<VxSdkNet::AnalyticSession^>^ VxSdkNet::Device::GetAnalyticSessions(System::
     return mlist;
 }
 
+System::String^ VxSdkNet::Device::GetBackupUri() {
+    char* backupEndpoint = nullptr;
+    int size = 0;
+
+    // If the backup uri is not available on the device the result will return VxSdk::VxResult::kActionUnavailable,
+    // otherwise VxSdk::VxResult::kInsufficientSize
+    VxSdk::VxResult::Value result = _device->GetBackup(backupEndpoint, size);
+    if (result == VxSdk::VxResult::kInsufficientSize) {
+        // Allocate enough space for backupEndpoint
+        backupEndpoint = new char[size];
+        // The result should now be kOK since we have allocated enough space
+        _device->GetBackup(backupEndpoint, size);
+    }
+    return Utils::ConvertCppString(backupEndpoint);
+}
+
 List<VxSdkNet::DataSource^>^ VxSdkNet::Device::GetDataSources(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed data source objects
     List<DataSource^>^ mlist = gcnew List<DataSource^>();
@@ -380,6 +396,16 @@ VxSdkNet::Results::Value VxSdkNet::Device::Replace(System::String^ replacementDe
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::Results::Value VxSdkNet::Device::RestoreBackup(System::String^ backupPath) {
+    // Copy the backup file path to a new char
+    int len = backupPath->Length + 1;
+    char* backupFile = new char[len];
+    VxSdk::Utilities::StrCopySafe(backupFile, Utils::ConvertCSharpString(backupPath).c_str(), len);
+
+    // Restore the backup
+    return (VxSdkNet::Results::Value)_device->RestoreBackup(backupFile);
+}
+
 VxSdkNet::Results::Value VxSdkNet::Device::Silence() {
     return (VxSdkNet::Results::Value)_device->Silence();
 }
@@ -388,10 +414,31 @@ VxSdkNet::Results::Value VxSdkNet::Device::TriggerRefresh() {
     return (VxSdkNet::Results::Value)_device->TriggerRefresh();
 }
 
+VxSdkNet::Results::Value VxSdkNet::Device::UpdateSoftware(VxSdkNet::File^ updateFile) {
+    return (VxSdkNet::Results::Value)_device->UpdateSoftware(*updateFile->_file);
+}
+
 bool VxSdkNet::Device::_CanCreateLogs() {
     bool result;
     _device->CanCreateLogs(result);
     return result;
+}
+
+VxSdkNet::Configuration::Auth^ VxSdkNet::Device::_GetAuthConfig() {
+    // Get the auth configuration
+    VxSdk::IVxConfiguration::Auth* authConfig = nullptr;
+    VxSdk::VxResult::Value result = _device->GetAuthenticationConfiguration(authConfig);
+
+    // Return the auth configuration if GetAuthenticationConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Auth(authConfig);
+    }
+    else if (authConfig != nullptr) {
+        authConfig->Delete();
+        authConfig = nullptr;
+    }
+
+    return nullptr;
 }
 
 VxSdkNet::DataStorage^ VxSdkNet::Device::_GetDataStorage() {
@@ -468,6 +515,40 @@ VxSdkNet::ResourceLimits^ VxSdkNet::Device::_GetLimits() {
     // Return the limits if GetLimits was successful
     if (result == VxSdk::VxResult::kOK)
         return gcnew ResourceLimits(limits);
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::ThermalEtd^ VxSdkNet::Device::_GetThermalEtdConfig() {
+    // Get the thermal etd configuration
+    VxSdk::IVxConfiguration::ThermalEtd* thermalEtdConfig = nullptr;
+    VxSdk::VxResult::Value result = _device->GetThermalEtdConfiguration(thermalEtdConfig);
+
+    // Return the thermal etd configuration if GetThermalEtdConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::ThermalEtd(thermalEtdConfig);
+    }
+    else if (thermalEtdConfig != nullptr) {
+        thermalEtdConfig->Delete();
+        thermalEtdConfig = nullptr;
+    }
+
+    return nullptr;
+}
+
+VxSdkNet::Configuration::Time^ VxSdkNet::Device::_GetTimeConfig() {
+    // Get the time configuration
+    VxSdk::IVxConfiguration::Time* timeConfig = nullptr;
+    VxSdk::VxResult::Value result = _device->GetTimeConfiguration(timeConfig);
+
+    // Return the time configuration if GetTimeConfiguration was successful
+    if (result == VxSdk::VxResult::kOK) {
+        return gcnew Configuration::Time(timeConfig);
+    }
+    else if (timeConfig != nullptr) {
+        timeConfig->Delete();
+        timeConfig = nullptr;
+    }
 
     return nullptr;
 }

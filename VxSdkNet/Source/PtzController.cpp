@@ -2,6 +2,7 @@
 /// Implements the ptz controller class.
 /// </summary>
 #include "PtzController.h"
+#include "NewDigitalPtzPreset.h"
 
 using namespace System::Collections::Generic;
 
@@ -44,6 +45,20 @@ VxSdkNet::Results::Value VxSdkNet::PtzController::AbsoluteZoom(int positionZ) {
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::Results::Value VxSdkNet::PtzController::AddDigitalPreset(VxSdkNet::NewDigitalPtzPreset^ newDigitalPtzPreset) {
+    VxSdk::VxNewDigitalPtzPreset vxNewDigitalPtzPreset;
+    VxSdk::Utilities::StrCopySafe(vxNewDigitalPtzPreset.description, Utils::ConvertCSharpString(newDigitalPtzPreset->Description).c_str());
+    VxSdk::Utilities::StrCopySafe(vxNewDigitalPtzPreset.name, Utils::ConvertCSharpString(newDigitalPtzPreset->Name).c_str());
+    vxNewDigitalPtzPreset.x = newDigitalPtzPreset->X;
+    vxNewDigitalPtzPreset.y = newDigitalPtzPreset->Y;
+    vxNewDigitalPtzPreset.z = newDigitalPtzPreset->Z;
+
+    // Make the call to add the digital PTZ preset
+    VxSdk::VxResult::Value result = _ptzController->AddDigitalPreset(vxNewDigitalPtzPreset);
+    // Unless there was an issue creating the digital PTZ preset the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::PtzController::AddPreset(int index) {
     // Call AddPreset and return the result
     VxSdk::VxResult::Value result = _ptzController->AddPreset(index);
@@ -56,15 +71,33 @@ VxSdkNet::Results::Value VxSdkNet::PtzController::ContinuousFocus(VxSdkNet::PtzC
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::Results::Value VxSdkNet::PtzController::ContinuousFocusAtSpeed(int focusSpeed) {
+    // Call ContinuousFocusAtSpeed and return the result
+    VxSdk::VxResult::Value result = _ptzController->ContinuousFocusAtSpeed(focusSpeed);
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::PtzController::ContinuousIris(VxSdkNet::PtzController::IrisDirections openClose) {
     // Call ContinuousIris and return the result
     VxSdk::VxResult::Value result = _ptzController->ContinuousIris((VxSdk::VxIrisDirection::Value)openClose);
     return VxSdkNet::Results::Value(result);
 }
 
+VxSdkNet::Results::Value VxSdkNet::PtzController::ContinuousIrisAtSpeed(int irisSpeed) {
+    // Call ContinuousIrisAtSpeed and return the result
+    VxSdk::VxResult::Value result = _ptzController->ContinuousIrisAtSpeed(irisSpeed);
+    return VxSdkNet::Results::Value(result);
+}
+
 VxSdkNet::Results::Value VxSdkNet::PtzController::ContinuousMove(int speedX, int speedY, VxSdkNet::PtzController::ZoomDirections inOut) {
     // Call ContinuousMove and return the result
     VxSdk::VxResult::Value result = _ptzController->ContinuousMove(speedX, speedY, (VxSdk::VxZoomDirection::Value)inOut);
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::PtzController::ContinuousMoveAtSpeed(int speedX, int speedY, int speedZ) {
+    // Call ContinuousMoveAtSpeed and return the result
+    VxSdk::VxResult::Value result = _ptzController->ContinuousMoveAtSpeed(speedX, speedY, speedZ);
     return VxSdkNet::Results::Value(result);
 }
 
@@ -165,6 +198,12 @@ VxSdkNet::Results::Value VxSdkNet::PtzController::RelativeMove(int deltaX, int d
 VxSdkNet::Results::Value VxSdkNet::PtzController::RelativePercentageMove(int percentageX, int percentageY) {
     // Call RelativePercentageMove and return the result
     VxSdk::VxResult::Value result = _ptzController->RelativePercentageMove(percentageX, percentageY);
+    return VxSdkNet::Results::Value(result);
+}
+
+VxSdkNet::Results::Value VxSdkNet::PtzController::RelativePercentageMove(int percentageX, int percentageY, int percentageZ) {
+    // Call RelativePercentageMove and return the result
+    VxSdk::VxResult::Value result = _ptzController->RelativePercentageMove(percentageX, percentageY, percentageZ);
     return VxSdkNet::Results::Value(result);
 }
 

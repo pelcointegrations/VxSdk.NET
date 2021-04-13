@@ -80,7 +80,13 @@ namespace VxSdkNet {
             CellLayout1plus4wide,
 
             /// <summary>A monitor wall layout.</summary>
-            MonitorWall
+            MonitorWall,
+
+            /// <summary>A 6x6 monitor layout.</summary>
+            CellLayout6x6,
+
+            /// <summary>A 8x8 monitor layout.</summary>
+            CellLayout8x8
         };
 
         /// <summary>
@@ -106,6 +112,14 @@ namespace VxSdkNet {
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
         Results::Value Refresh();
+
+        /// <summary>
+        /// Sets the ResolutionX and ResolutionY properties.
+        /// </summary>
+        /// <param name="resolutionX">The new ResolutionX value.</param>
+        /// <param name="resolutionY">The new ResolutionY value.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of setting the properties.</returns>
+        Results::Value SetResolution(int resolutionX, int resolutionY);
 
         /// <summary>
         /// Gets the layouts available for this monitor.
@@ -225,6 +239,26 @@ namespace VxSdkNet {
         property System::DateTime SyncTimeAnchor {
         public:
             System::DateTime get() { return Utils::ConvertCppDateTime(_monitor->syncTimeAnchor); }
+        }
+
+        /// <summary>
+        /// Gets or sets the horizontal resolution.
+        /// </summary>
+        /// <value>The horizontal resolution.</value>
+        property int ResolutionX {
+        public:
+            int get() { return _monitor->xResolution; }
+            void set(int value) { _monitor->SetResolutionX(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the vertical resolution.
+        /// </summary>
+        /// <value>The vertical resolution.</value>
+        property int ResolutionY {
+        public:
+            int get() { return _monitor->yResolution; }
+            void set(int value) { _monitor->SetResolutionY(value); }
         }
 
     internal:

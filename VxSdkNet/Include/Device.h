@@ -8,6 +8,7 @@
 #include "DataStorage.h"
 #include "DeviceAssignment.h"
 #include "Diagnostics.h"
+#include "File.h"
 #include "Log.h"
 #include "RelayOutput.h"
 
@@ -44,7 +45,42 @@ namespace VxSdkNet {
             NsmMember,
 
             /// <summary>Expired credentials..</summary>
-            AuthExpired
+            AuthExpired,
+
+            /// <summary>Initialization failure.</summary>
+            FailedToInitialize,
+
+            /// <summary>User required.</summary>
+            UserRequired
+        };
+
+        /// <summary>
+        /// Values that represent initialization status reason indicators.
+        /// </summary>
+        enum class InitializationStatusReasons {
+            /// <summary>An error or unknown value was returned.</summary>
+            Unknown,
+
+            /// <summary>Failed to establish a connection to the device.</summary>
+            ConnectFailed,
+
+            /// <summary>No response from the device.</summary>
+            NoResponse,
+
+            /// <summary>Device not supported.</summary>
+            NotSupported,
+
+            /// <summary>A server has gone offline during device discovery.</summary>
+            ServerOffline,
+
+            /// <summary>Encountered a SOAP fault while setting up communication with the device.</summary>
+            SoapFault,
+
+            /// <summary>Timed out while waiting for a response from a device.</summary>
+            TimedOut,
+
+            /// <summary>Invalid/missing credentials.</summary>
+            Unauthenticated
         };
 
         /// <summary>
@@ -170,6 +206,12 @@ namespace VxSdkNet {
         System::Collections::Generic::List<AnalyticSession^>^ GetAnalyticSessions(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Gets the uri to the backup file of the device configuration, if any.
+        /// </summary>
+        /// <returns>The backup file uri.</returns>
+        System::String^ GetBackupUri();
+
+        /// <summary>
         /// Get the data sources hosted by this device using an optional collection filter.
         /// <para>Available filters: AdvancedQuery, AllTags, Capturing, Commissioned, Enabled, Encoding, HasFolderTags, Id, Ip, ManualRecording, ModifiedSince, Name, Number, Recording, State, Type, Unassigned.</para>
         /// </summary>
@@ -223,6 +265,13 @@ namespace VxSdkNet {
         Results::Value Replace(System::String^ replacementDeviceId);
 
         /// <summary>
+        /// Restores a backup of the device configuration.
+        /// </summary>
+        /// <param name="backupPath">The local path to the backup file.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of the request.</returns>
+        Results::Value RestoreBackup(System::String^ backupPath);
+
+        /// <summary>
         /// Silences all audible alarms on the device.
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of the request.</returns>
@@ -234,6 +283,13 @@ namespace VxSdkNet {
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of refreshing the device.</returns>
         Results::Value TriggerRefresh();
+
+        /// <summary>
+        /// Updates the software running on the device.
+        /// </summary>
+        /// <param name="updateFile">The software update file.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of updating the software.</returns>
+        Results::Value UpdateSoftware(File^ updateFile);
 
         /// <summary>
         /// Gets the access points hosted by this device.
@@ -260,6 +316,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<AnalyticSession^>^ AnalyticSessions {
         public:
             System::Collections::Generic::List<AnalyticSession^>^ get() { return GetAnalyticSessions(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the authorization configuration.
+        /// </summary>
+        /// <value>The authorization configuration.</value>
+        property VxSdkNet::Configuration::Auth^ AuthConfig {
+        public:
+            VxSdkNet::Configuration::Auth^ get() { return _GetAuthConfig(); }
         }
 
         /// <summary>
@@ -314,6 +379,15 @@ namespace VxSdkNet {
         property Diagnostics^ DeviceDiagnostics {
         public:
             Diagnostics^ get() { return _GetDiagnostics(); }
+        }
+
+        /// <summary>
+        /// Gets the time when this device was discovered.
+        /// </summary>
+        /// <value>The time when this device was discovered.</value>
+        property System::DateTime Discovered {
+        public:
+            System::DateTime get() { return Utils::ConvertCppDateTime(_device->discovered); }
         }
 
         /// <summary>
@@ -383,6 +457,15 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the error status reason when device initialization failed.
+        /// </summary>
+        /// <value>The initialization error status reason.</value>
+        property InitializationStatusReasons InitializationStatusReason {
+        public:
+            InitializationStatusReasons get() { return InitializationStatusReasons(_device->initializationStatusReason); }
+        }
+
+        /// <summary>
         /// Gets or sets the IP of the device.
         /// </summary>
         /// <value>The IP.</value>
@@ -448,6 +531,15 @@ namespace VxSdkNet {
         property System::Collections::Generic::List<Log^>^ Logs {
         public:
             System::Collections::Generic::List<Log^>^ get() { return GetLogs(nullptr); }
+        }
+
+        /// <summary>
+        /// Gets the device MAC address.
+        /// </summary>
+        /// <value>The MAC address.</value>
+        property System::String^ MacAddress {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_device->macAddress); }
         }
 
         /// <summary>
@@ -548,6 +640,24 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the thermal elevated temperature detection configuration.
+        /// </summary>
+        /// <value>The thermal elevated temperature detection configuration.</value>
+        property VxSdkNet::Configuration::ThermalEtd^ ThermalEtdConfig {
+        public:
+            VxSdkNet::Configuration::ThermalEtd^ get() { return _GetThermalEtdConfig(); }
+        }
+
+        /// <summary>
+        /// Gets the time configuration.
+        /// </summary>
+        /// <value>The time configuration.</value>
+        property VxSdkNet::Configuration::Time^ TimeConfig {
+        public:
+            VxSdkNet::Configuration::Time^ get() { return _GetTimeConfig(); }
+        }
+
+        /// <summary>
         /// Gets the type of device.
         /// </summary>
         /// <value>The device <see cref="Types">Type</see>.</value>
@@ -602,9 +712,19 @@ namespace VxSdkNet {
             System::String^ get() { return Utils::ConvertCppString(_device->virtualIp); }
         }
 
+        /// <summary>
+        /// Gets the product webapp URL.
+        /// </summary>
+        /// <value>The product webapp URL.</value>
+        property System::String^ WebappUrl {
+        public:
+            System::String^ get() { return Utils::ConvertCppString(_device->webappUrl); }
+        }
+
     internal:
         VxSdk::IVxDevice* _device;
         bool _CanCreateLogs();
+        Configuration::Auth^ _GetAuthConfig();
         VxSdkNet::DataStorage^ _GetDataStorage();
         VxSdkNet::DbBackups^ _GetDatabaseBackups();
         Diagnostics^ _GetDiagnostics();
@@ -612,6 +732,8 @@ namespace VxSdkNet {
         System::Collections::Generic::List<System::String^>^ _GetLicensableFeatures();
         System::Collections::Generic::List<System::String^>^ _GetLicensedFeatures();
         VxSdkNet::ResourceLimits^ _GetLimits();
+        Configuration::ThermalEtd^ _GetThermalEtdConfig();
+        Configuration::Time^ _GetTimeConfig();
         bool _HasDiagnostics();
         void _SetEndpoints(System::Collections::Generic::List<System::String^>^ endpoints);
     };

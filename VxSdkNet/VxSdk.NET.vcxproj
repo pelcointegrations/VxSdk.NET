@@ -176,24 +176,41 @@
     <ClInclude Include="Include\BookmarkLock.h" />
     <ClInclude Include="Include\Configuration.h" />
     <ClInclude Include="Include\DataObject.h" />
+    <ClInclude Include="Include\DataSourceConfig.h" />
     <ClInclude Include="Include\DataStorage.h" />
     <ClInclude Include="Include\DbBackup.h" />
     <ClInclude Include="Include\DbBackups.h" />
     <ClInclude Include="Include\DeviceAssignment.h" />
+    <ClInclude Include="Include\DeviceSearch.h" />
     <ClInclude Include="Include\Diagnostics.h" />
+    <ClInclude Include="Include\Discovery.h" />
+    <ClInclude Include="Include\DiscoveryRequest.h" />
     <ClInclude Include="Include\Drawing.h" />
     <ClInclude Include="Include\Driver.h" />
+    <ClInclude Include="Include\ExportEstimate.h" />
     <ClInclude Include="Include\ExportStream.h" />
     <ClInclude Include="Include\ExportStreamClip.h" />
+    <ClInclude Include="Include\File.h" />
     <ClInclude Include="Include\FileRecovery.h" />
     <ClInclude Include="Include\Gap.h" />
     <ClInclude Include="Include\LdapValidationCredentials.h" />
     <ClInclude Include="Include\License.h" />
     <ClInclude Include="Include\LicenseFeature.h" />
+    <ClInclude Include="Include\LineCount.h" />
+    <ClInclude Include="Include\LineCountingRequest.h" />
+    <ClInclude Include="Include\NetworkStorageInfo.h" />
     <ClInclude Include="Include\NewAnalyticConfig.h" />
+    <ClInclude Include="Include\NewDigitalPtzPreset.h" />
     <ClInclude Include="Include\NewRecording.h" />
+    <ClInclude Include="Include\NewReport.h" />
+    <ClInclude Include="Include\NewReportTemplate.h" />
     <ClInclude Include="Include\ObjectWrongWayZone.h" />
+    <ClInclude Include="Include\PermissionSchema.h" />
     <ClInclude Include="Include\Recording.h" />
+    <ClInclude Include="Include\Report.h" />
+    <ClInclude Include="Include\ReportField.h" />
+    <ClInclude Include="Include\ReportFilter.h" />
+    <ClInclude Include="Include\ReportTemplate.h" />
     <ClInclude Include="Include\Resolution.h" />
     <ClInclude Include="Include\ResourceLimits.h" />
     <ClInclude Include="Include\LinkedPtzInfo.h" />
@@ -230,7 +247,9 @@
     <ClInclude Include="Include\ObjectInZone.h" />
     <ClInclude Include="Include\GridPoint.h" />
     <ClInclude Include="Include\Retention.h" />
+    <ClInclude Include="Include\RuleResponse.h" />
     <ClInclude Include="Include\SmtpInfo.h" />
+    <ClInclude Include="Include\VideoEncodingOption.h" />
     <ClInclude Include="Include\ZoneVector.h" />
     <ClInclude Include="Include\Volume.h" />
     <ClInclude Include="Include\VolumeGroup.h" />
@@ -290,13 +309,16 @@
     <ClCompile Include="Source\BookmarkLock.cpp" />
     <ClCompile Include="Source\Configuration.cpp" />
     <ClCompile Include="Source\DataObject.cpp" />
+    <ClCompile Include="Source\DataSourceConfig.cpp" />
     <ClCompile Include="Source\DataStorage.cpp" />
     <ClCompile Include="Source\DbBackup.cpp" />
     <ClCompile Include="Source\DbBackups.cpp" />
     <ClCompile Include="Source\DeviceAssignment.cpp" />
+    <ClCompile Include="Source\Discovery.cpp" />
     <ClCompile Include="Source\Drawing.cpp" />
     <ClCompile Include="Source\Driver.cpp" />
     <ClCompile Include="Source\ExportStream.cpp" />
+    <ClCompile Include="Source\File.cpp" />
     <ClCompile Include="Source\FileRecovery.cpp" />
     <ClCompile Include="Source\Gap.cpp" />
     <ClCompile Include="Source\License.cpp" />
@@ -305,6 +327,8 @@
     <ClCompile Include="Source\Marker.cpp" />
     <ClCompile Include="Source\Member.cpp" />
     <ClCompile Include="Source\Recording.cpp" />
+    <ClCompile Include="Source\Report.cpp" />
+    <ClCompile Include="Source\ReportTemplate.cpp" />
     <ClCompile Include="Source\Volume.cpp" />
     <ClCompile Include="Source\VolumeGroup.cpp" />
     <ClCompile Include="Source\Clip.cpp" />
@@ -343,12 +367,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets')" />
+    <Import Project="packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.35\build\native\VideoXpertSdk.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets'))" />
   </Target>
 </Project>

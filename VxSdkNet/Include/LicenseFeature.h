@@ -39,10 +39,24 @@ namespace VxSdkNet {
         System::Collections::Generic::List<Device^>^ GetCommissionedDevices(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
+        /// Applies this license feature to a device; doing so will consume an available count from the feature.
+        /// </summary>
+        /// <param name="device">The device to apply this license feature to.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of linking the device.</returns>
+        Results::Value Link(Device^ device);
+
+        /// <summary>
         /// Refreshes this instances properties.
         /// </summary>
         /// <returns>The <see cref="Results::Value">Result</see> of updating the properties.</returns>
         Results::Value Refresh();
+
+        /// <summary>
+        /// Removes this license feature from the given device, releasing it for reuse (decrements the used count).
+        /// </summary>
+        /// <param name="device">The device to remove this license feature from.</param>
+        /// <returns>The <see cref="Results::Value">Result</see> of unlinking the device.</returns>
+        Results::Value UnLink(Device^ device);
 
         /// <summary>
         /// Gets the activation identifier.
@@ -51,6 +65,15 @@ namespace VxSdkNet {
         property System::String^ ActivationId {
         public:
             System::String^ get() { return Utils::ConvertCppString(_licenseFeature->activationId); }
+        }
+
+        /// <summary>
+        /// Gets the URI to the download location of the capability request.
+        /// </summary>
+        /// <value>The capability request endpoint, if available.</value>
+        property System::String^ CapabilityRequestEndpoint {
+        public:
+            System::String^ get() { return _GetCapabilityRequest(); }
         }
 
         /// <summary>
@@ -63,9 +86,9 @@ namespace VxSdkNet {
         }
 
         /// <summary>
-        /// Gets the allowable commisions count.
+        /// Gets the allowable commissions count.
         /// </summary>
-        /// <value>The allowable commisions count.</value>
+        /// <value>The allowable commissions count.</value>
         property int Count {
         public:
             int get() { return _licenseFeature->count; }
@@ -109,6 +132,22 @@ namespace VxSdkNet {
         }
 
         /// <summary>
+        /// Gets the supported device types that may be licensed for use with this feature.
+        /// </summary>
+        /// <value>A <c>List</c> of supported device types.</value>
+        property System::Collections::Generic::List<Device::Types>^ LicensableDevices {
+        public:
+            System::Collections::Generic::List<Device::Types>^ get()
+            {
+                System::Collections::Generic::List<Device::Types>^ mlist = gcnew System::Collections::Generic::List<Device::Types>();
+                for (int i = 0; i < _licenseFeature->licensableDevicesSize; i++)
+                    mlist->Add((Device::Types)_licenseFeature->licensableDevices[i]);
+
+                return mlist;
+            }
+        }
+
+        /// <summary>
         /// Gets the name of the feature.
         /// </summary>
         /// <value>The name of the feature.</value>
@@ -137,6 +176,7 @@ namespace VxSdkNet {
 
     internal:
         VxSdk::IVxLicenseFeature* _licenseFeature;
+        System::String^ _GetCapabilityRequest();
     };
 }
 #endif // LicenseFeature_h__

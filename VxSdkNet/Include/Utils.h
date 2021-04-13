@@ -460,7 +460,13 @@ namespace VxSdkNet {
             Provider,
 
             /// <summary>Filter by recording type.</summary>
-            RecordType
+            RecordType,
+
+            /// <summary>Filter by filename.</summary>
+            FileName,
+
+            /// <summary>Filter by time discovered.</summary>
+            Discovered
         };
     };
 

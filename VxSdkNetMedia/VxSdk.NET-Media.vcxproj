@@ -176,24 +176,41 @@
     <ClInclude Include="..\VxSdkNet\Include\BookmarkLock.h" />
     <ClInclude Include="..\VxSdkNet\Include\Configuration.h" />
     <ClInclude Include="..\VxSdkNet\Include\DataObject.h" />
+    <ClInclude Include="..\VxSdkNet\Include\DataSourceConfig.h" />
     <ClInclude Include="..\VxSdkNet\Include\DataStorage.h" />
     <ClInclude Include="..\VxSdkNet\Include\DbBackup.h" />
     <ClInclude Include="..\VxSdkNet\Include\DbBackups.h" />
     <ClInclude Include="..\VxSdkNet\Include\DeviceAssignment.h" />
+    <ClInclude Include="..\VxSdkNet\Include\DeviceSearch.h" />
     <ClInclude Include="..\VxSdkNet\Include\Diagnostics.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Discovery.h" />
+    <ClInclude Include="..\VxSdkNet\Include\DiscoveryRequest.h" />
     <ClInclude Include="..\VxSdkNet\Include\Drawing.h" />
     <ClInclude Include="..\VxSdkNet\Include\Driver.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ExportEstimate.h" />
     <ClInclude Include="..\VxSdkNet\Include\ExportStream.h" />
     <ClInclude Include="..\VxSdkNet\Include\ExportStreamClip.h" />
+    <ClInclude Include="..\VxSdkNet\Include\File.h" />
     <ClInclude Include="..\VxSdkNet\Include\FileRecovery.h" />
     <ClInclude Include="..\VxSdkNet\Include\Gap.h" />
     <ClInclude Include="..\VxSdkNet\Include\LdapValidationCredentials.h" />
     <ClInclude Include="..\VxSdkNet\Include\License.h" />
     <ClInclude Include="..\VxSdkNet\Include\LicenseFeature.h" />
+    <ClInclude Include="..\VxSdkNet\Include\LineCount.h" />
+    <ClInclude Include="..\VxSdkNet\Include\LineCountingRequest.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NetworkStorageInfo.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewAnalyticConfig.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewDigitalPtzPreset.h" />
     <ClInclude Include="..\VxSdkNet\Include\NewRecording.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewReport.h" />
+    <ClInclude Include="..\VxSdkNet\Include\NewReportTemplate.h" />
     <ClInclude Include="..\VxSdkNet\Include\ObjectWrongWayZone.h" />
+    <ClInclude Include="..\VxSdkNet\Include\PermissionSchema.h" />
     <ClInclude Include="..\VxSdkNet\Include\Recording.h" />
+    <ClInclude Include="..\VxSdkNet\Include\Report.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ReportField.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ReportFilter.h" />
+    <ClInclude Include="..\VxSdkNet\Include\ReportTemplate.h" />
     <ClInclude Include="..\VxSdkNet\Include\Resolution.h" />
     <ClInclude Include="..\VxSdkNet\Include\ResourceLimits.h" />
     <ClInclude Include="..\VxSdkNet\Include\LinkedPtzInfo.h" />
@@ -230,7 +247,9 @@
     <ClInclude Include="..\VxSdkNet\Include\ObjectInZone.h" />
     <ClInclude Include="..\VxSdkNet\Include\GridPoint.h" />
     <ClInclude Include="..\VxSdkNet\Include\Retention.h" />
+    <ClInclude Include="..\VxSdkNet\Include\RuleResponse.h" />
     <ClInclude Include="..\VxSdkNet\Include\SmtpInfo.h" />
+    <ClInclude Include="..\VxSdkNet\Include\VideoEncodingOption.h" />
     <ClInclude Include="..\VxSdkNet\Include\ZoneVector.h" />
     <ClInclude Include="..\VxSdkNet\Include\Volume.h" />
     <ClInclude Include="..\VxSdkNet\Include\VolumeGroup.h" />
@@ -294,13 +313,16 @@
     <ClCompile Include="..\VxSdkNet\Source\BookmarkLock.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Configuration.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DataObject.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\DataSourceConfig.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DataStorage.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DbBackup.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DbBackups.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\DeviceAssignment.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\Discovery.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Drawing.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Driver.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\ExportStream.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\File.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\FileRecovery.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Gap.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\License.cpp" />
@@ -309,6 +331,8 @@
     <ClCompile Include="..\VxSdkNet\Source\Marker.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Member.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Recording.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\Report.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\ReportTemplate.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Volume.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\VolumeGroup.cpp" />
     <ClCompile Include="Source\MediaControl.cpp" />
@@ -351,12 +375,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk-Media.3.0.73\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.73\build\native\VideoXpertSdk-Media.targets')" />
+    <Import Project="packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.73\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.73\build\native\VideoXpertSdk-Media.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets'))" />
   </Target>
 </Project>

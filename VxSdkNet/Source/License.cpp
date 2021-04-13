@@ -14,6 +14,14 @@ VxSdkNet::License::!License() {
     _license = nullptr;
 }
 
+VxSdkNet::Results::Value VxSdkNet::License::DeleteLicenseFeature(VxSdkNet::LicenseFeature^ licenseFeatureItem) {
+    // To delete a license feature simply make a DeleteLicenseFeature call
+    VxSdk::VxResult::Value result = licenseFeatureItem->_licenseFeature->DeleteLicenseFeature();
+    // Unless there was an issue deleting the license feature the result should be VxSdk::VxResult::kOK
+    return VxSdkNet::Results::Value(result);
+}
+
+
 List<VxSdkNet::LicenseFeature^>^ VxSdkNet::License::_GetLicenseFeatures() {
     // Create a list of managed license feature objects
     List<VxSdkNet::LicenseFeature^>^ mlist = gcnew List<VxSdkNet::LicenseFeature^>();
