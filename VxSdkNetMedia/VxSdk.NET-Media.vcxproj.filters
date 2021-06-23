@@ -305,7 +305,7 @@
     <ClInclude Include="..\VxSdkNet\Include\NewMember.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\VxSdkNet\Include\FileRecovery.h">
+    <ClInclude Include="..\VxSdkNet\Include\VxFileRecovery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\VxSdkNet\Include\AnalyticBehavior.h">
@@ -407,7 +407,7 @@
     <ClInclude Include="..\VxSdkNet\Include\DiscoveryRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\VxSdkNet\Include\File.h">
+    <ClInclude Include="..\VxSdkNet\Include\VxFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\VxSdkNet\Include\PermissionSchema.h">
@@ -574,7 +574,7 @@
     <ClCompile Include="..\VxSdkNet\Source\Member.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\VxSdkNet\Source\FileRecovery.cpp">
+    <ClCompile Include="..\VxSdkNet\Source\VxFileRecovery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\VxSdkNet\Source\AnalyticBehavior.cpp">
@@ -601,7 +601,7 @@
     <ClCompile Include="..\VxSdkNet\Source\Discovery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\VxSdkNet\Source\File.cpp">
+    <ClCompile Include="..\VxSdkNet\Source\VxFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

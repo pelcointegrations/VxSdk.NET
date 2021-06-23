@@ -293,7 +293,7 @@
     <ClInclude Include="Include\NewMember.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\FileRecovery.h">
+    <ClInclude Include="Include\VxFileRecovery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\AnalyticBehavior.h">
@@ -395,7 +395,7 @@
     <ClInclude Include="Include\DiscoveryRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\File.h">
+    <ClInclude Include="Include\VxFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\PermissionSchema.h">
@@ -559,7 +559,7 @@
     <ClCompile Include="Source\Member.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\FileRecovery.cpp">
+    <ClCompile Include="Source\VxFileRecovery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\AnalyticBehavior.cpp">
@@ -586,7 +586,7 @@
     <ClCompile Include="Source\Discovery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\File.cpp">
+    <ClCompile Include="Source\VxFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

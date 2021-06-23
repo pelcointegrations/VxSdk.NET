@@ -190,8 +190,8 @@
     <ClInclude Include="..\VxSdkNet\Include\ExportEstimate.h" />
     <ClInclude Include="..\VxSdkNet\Include\ExportStream.h" />
     <ClInclude Include="..\VxSdkNet\Include\ExportStreamClip.h" />
-    <ClInclude Include="..\VxSdkNet\Include\File.h" />
-    <ClInclude Include="..\VxSdkNet\Include\FileRecovery.h" />
+    <ClInclude Include="..\VxSdkNet\Include\VxFile.h" />
+    <ClInclude Include="..\VxSdkNet\Include\VxFileRecovery.h" />
     <ClInclude Include="..\VxSdkNet\Include\Gap.h" />
     <ClInclude Include="..\VxSdkNet\Include\LdapValidationCredentials.h" />
     <ClInclude Include="..\VxSdkNet\Include\License.h" />
@@ -322,8 +322,8 @@
     <ClCompile Include="..\VxSdkNet\Source\Drawing.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Driver.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\ExportStream.cpp" />
-    <ClCompile Include="..\VxSdkNet\Source\File.cpp" />
-    <ClCompile Include="..\VxSdkNet\Source\FileRecovery.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\VxFile.cpp" />
+    <ClCompile Include="..\VxSdkNet\Source\VxFileRecovery.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\Gap.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\License.cpp" />
     <ClCompile Include="..\VxSdkNet\Source\LicenseFeature.cpp" />
@@ -375,12 +375,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets')" />
+    <Import Project="packages\VideoXpertSdk-Media.3.0.84\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.84\build\native\VideoXpertSdk-Media.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.83\build\native\VideoXpertSdk-Media.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.84\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.84\build\native\VideoXpertSdk-Media.targets'))" />
   </Target>
 </Project>

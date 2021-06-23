@@ -8,7 +8,7 @@
 #include "DataStorage.h"
 #include "DeviceAssignment.h"
 #include "Diagnostics.h"
-#include "File.h"
+#include "VxFile.h"
 #include "Log.h"
 #include "RelayOutput.h"
 
@@ -289,7 +289,7 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="updateFile">The software update file.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of updating the software.</returns>
-        Results::Value UpdateSoftware(File^ updateFile);
+        Results::Value UpdateSoftware(VxFile^ updateFile);
 
         /// <summary>
         /// Gets the access points hosted by this device.

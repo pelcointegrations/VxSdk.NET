@@ -633,14 +633,14 @@ System::Collections::Generic::List<System::String^>^ VxSdkNet::Configuration::St
     return mlist;
 }
 
-VxSdkNet::FileRecovery^ VxSdkNet::Configuration::Storage::_GetFileRecovery() {
+VxSdkNet::VxFileRecovery^ VxSdkNet::Configuration::Storage::_GetFileRecovery() {
     // Get the file recovery resource for the recorder
     VxSdk::IVxFileRecovery* fileRecovery = nullptr;
     VxSdk::VxResult::Value result = _configStorage->GetFileRecovery(fileRecovery);
 
     // Return the file recovery resource if GetFileRecovery was successful
     if (result == VxSdk::VxResult::kOK)
-        return gcnew VxSdkNet::FileRecovery(fileRecovery);
+        return gcnew VxSdkNet::VxFileRecovery(fileRecovery);
 
     return nullptr;
 }

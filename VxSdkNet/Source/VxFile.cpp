@@ -1,33 +1,33 @@
 /// <summary>
-/// Implements the file class.
+/// Implements the vx file class.
 /// </summary>
-#include "File.h"
+#include "VxFile.h"
 
-VxSdkNet::File::File(VxSdk::IVxFile* vxFile) {
-    _file = vxFile;
+VxSdkNet::VxFile::VxFile(VxSdk::IVxFile* vxFile) {
+    _vxFile = vxFile;
 }
 
-VxSdkNet::File::!File() {
-    _file->Delete();
-    _file = nullptr;
+VxSdkNet::VxFile::!VxFile() {
+    _vxFile->Delete();
+    _vxFile = nullptr;
 }
 
-VxSdkNet::Results::Value VxSdkNet::File::Refresh() {
-    return (VxSdkNet::Results::Value)_file->Refresh();
+VxSdkNet::Results::Value VxSdkNet::VxFile::Refresh() {
+    return (VxSdkNet::Results::Value)_vxFile->Refresh();
 }
 
-System::String^ VxSdkNet::File::_GetFileEndpoint() {
+System::String^ VxSdkNet::VxFile::_GetFileEndpoint() {
     char* fileEndpoint = nullptr;
     int size = 0;
 
     // If the file endpoint is not available on the system the result will return VxSdk::VxResult::kActionUnavailable,
     // otherwise VxSdk::VxResult::kInsufficientSize
-    VxSdk::VxResult::Value result = _file->GetFileEndpoint(fileEndpoint, size);
+    VxSdk::VxResult::Value result = _vxFile->GetFileEndpoint(fileEndpoint, size);
     if (result == VxSdk::VxResult::kInsufficientSize) {
         // Allocate enough space for fileEndpoint
         fileEndpoint = new char[size];
         // The result should now be kOK since we have allocated enough space
-        _file->GetFileEndpoint(fileEndpoint, size);
+        _vxFile->GetFileEndpoint(fileEndpoint, size);
     }
     return Utils::ConvertCppString(fileEndpoint);
 }

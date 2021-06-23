@@ -13,7 +13,7 @@
 #include "Discovery.h"
 #include "Drawing.h"
 #include "ExportEstimate.h"
-#include "File.h"
+#include "VxFile.h"
 #include "InternalEvent.h"
 #include "License.h"
 #include "Monitor.h"
@@ -321,7 +321,7 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="fileItem">The file to be deleted from the system.</param>
         /// <returns>The <see cref="Results::Value">Result</see> of deleting the file.</returns>
-        Results::Value DeleteFile(File^ fileItem);
+        Results::Value DeleteFile(VxFile^ fileItem);
 
         /// <summary>
         /// Delete a manual recording from the VideoXpert system.
@@ -531,7 +531,7 @@ namespace VxSdkNet {
         /// </summary>
         /// <param name="filters">The collection filters to be used in the request.</param>
         /// <returns>A <c>List</c> containing the files on the system.</returns>
-        System::Collections::Generic::List<File^>^ GetFiles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
+        System::Collections::Generic::List<VxFile^>^ GetFiles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters);
 
         /// <summary>
         /// Get the license from the system.
@@ -930,8 +930,8 @@ namespace VxSdkNet {
         /// Gets the files from the VideoXpert system.
         /// </summary>
         /// <value>A <c>List</c> containing the files on the system.</value>
-        property System::Collections::Generic::List<File^>^ Files {
-            System::Collections::Generic::List<File^>^ get() { return GetFiles(nullptr); }
+        property System::Collections::Generic::List<VxFile^>^ Files {
+            System::Collections::Generic::List<VxFile^>^ get() { return GetFiles(nullptr); }
         }
 
         /// <summary>

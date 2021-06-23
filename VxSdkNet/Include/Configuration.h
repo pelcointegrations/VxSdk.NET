@@ -4,7 +4,7 @@
 
 #include "VxSdk.h"
 #include "Utils.h"
-#include "FileRecovery.h"
+#include "VxFileRecovery.h"
 #include "ResourceLimits.h"
 #include "NetworkStorageInfo.h"
 
@@ -1726,9 +1726,9 @@ namespace VxSdkNet {
             /// Gets the file recovery control and monitor resource for this VxStorage.
             /// </summary>
             /// <value>The file recovery resource.</value>
-            property FileRecovery^ FileRecoveryResource {
+            property VxFileRecovery^ FileRecoveryResource {
             public:
-                FileRecovery^ get() { return _GetFileRecovery(); }
+                VxFileRecovery^ get() { return _GetFileRecovery(); }
             }
 
             /// <summary>
@@ -1907,7 +1907,7 @@ namespace VxSdkNet {
         internal:
             VxSdk::IVxConfiguration::Storage* _configStorage;
             System::Collections::Generic::List<System::String^>^ _GetFailoverGroup();
-            FileRecovery^ _GetFileRecovery();
+            VxFileRecovery^ _GetFileRecovery();
             VxSdkNet::ResourceLimits^ _GetLimits();
             System::Collections::Generic::List<System::String^>^ _GetMonitoredDeviceIds();
             void _SetMonitoredDeviceIds(System::Collections::Generic::List<System::String^>^ deviceIds);

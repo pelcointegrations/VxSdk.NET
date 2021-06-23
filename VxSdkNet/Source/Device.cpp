@@ -414,8 +414,8 @@ VxSdkNet::Results::Value VxSdkNet::Device::TriggerRefresh() {
     return (VxSdkNet::Results::Value)_device->TriggerRefresh();
 }
 
-VxSdkNet::Results::Value VxSdkNet::Device::UpdateSoftware(VxSdkNet::File^ updateFile) {
-    return (VxSdkNet::Results::Value)_device->UpdateSoftware(*updateFile->_file);
+VxSdkNet::Results::Value VxSdkNet::Device::UpdateSoftware(VxSdkNet::VxFile^ updateFile) {
+    return (VxSdkNet::Results::Value)_device->UpdateSoftware(*updateFile->_vxFile);
 }
 
 bool VxSdkNet::Device::_CanCreateLogs() {

@@ -190,8 +190,8 @@
     <ClInclude Include="Include\ExportEstimate.h" />
     <ClInclude Include="Include\ExportStream.h" />
     <ClInclude Include="Include\ExportStreamClip.h" />
-    <ClInclude Include="Include\File.h" />
-    <ClInclude Include="Include\FileRecovery.h" />
+    <ClInclude Include="Include\VxFile.h" />
+    <ClInclude Include="Include\VxFileRecovery.h" />
     <ClInclude Include="Include\Gap.h" />
     <ClInclude Include="Include\LdapValidationCredentials.h" />
     <ClInclude Include="Include\License.h" />
@@ -318,8 +318,8 @@
     <ClCompile Include="Source\Drawing.cpp" />
     <ClCompile Include="Source\Driver.cpp" />
     <ClCompile Include="Source\ExportStream.cpp" />
-    <ClCompile Include="Source\File.cpp" />
-    <ClCompile Include="Source\FileRecovery.cpp" />
+    <ClCompile Include="Source\VxFile.cpp" />
+    <ClCompile Include="Source\VxFileRecovery.cpp" />
     <ClCompile Include="Source\Gap.cpp" />
     <ClCompile Include="Source\License.cpp" />
     <ClCompile Include="Source\LicenseFeature.cpp" />
@@ -367,12 +367,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets')" />
+    <Import Project="packages\VideoXpertSdk.3.0.47\build\native\VideoXpertSdk.targets" Condition="Exists('packages\VideoXpertSdk.3.0.47\build\native\VideoXpertSdk.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.45\build\native\VideoXpertSdk.targets'))" />
+    <Error Condition="!Exists('packages\VideoXpertSdk.3.0.47\build\native\VideoXpertSdk.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk.3.0.47\build\native\VideoXpertSdk.targets'))" />
   </Target>
 </Project>

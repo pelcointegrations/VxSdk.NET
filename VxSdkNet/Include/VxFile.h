@@ -1,34 +1,34 @@
-// Declares the file class.
-#ifndef File_h__
-#define File_h__
+// Declares the vx file class.
+#ifndef VxFile_h__
+#define VxFile_h__
 
 #include "Utils.h"
 
 namespace VxSdkNet {
 
     /// <summary>
-    /// The File class represents a file (e.g. camera firmware).
+    /// The VxFile class represents a file (e.g. camera firmware).
     /// </summary>
-    public ref class File {
+    public ref class VxFile {
     public:
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="vxFile">The vx file.</param>
-        File(VxSdk::IVxFile* vxFile);
+        VxFile(VxSdk::IVxFile* vxFile);
 
         /// <summary>
         /// Destructor.
         /// </summary>
-        virtual ~File() {
-            this->!File();
+        virtual ~VxFile() {
+            this->!VxFile();
         }
 
         /// <summary>
         /// Finaliser.
         /// </summary>
-        !File();
+        !VxFile();
 
         /// <summary>
         /// Refreshes this instances properties.
@@ -51,7 +51,7 @@ namespace VxSdkNet {
         /// <value>The filename.</value>
         property System::String^ Filename {
         public:
-            System::String^ get() { return Utils::ConvertCppString(_file->filename); }
+            System::String^ get() { return Utils::ConvertCppString(_vxFile->filename); }
         }
 
         /// <summary>
@@ -60,12 +60,12 @@ namespace VxSdkNet {
         /// <value>The unique identifier.</value>
         property System::String^ Id {
         public:
-            System::String^ get() { return Utils::ConvertCppString(_file->id); }
+            System::String^ get() { return Utils::ConvertCppString(_vxFile->id); }
         }
 
     internal:
-        VxSdk::IVxFile* _file;
+        VxSdk::IVxFile* _vxFile;
         System::String^ _GetFileEndpoint();
     };
 }
-#endif // File_h__
+#endif // VxFile_h__

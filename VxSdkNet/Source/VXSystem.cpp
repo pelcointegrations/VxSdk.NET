@@ -696,10 +696,10 @@ VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteExport(VxSdkNet::Export^ expo
     return VxSdkNet::Results::Value(result);
 }
 
-VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteFile(VxSdkNet::File^ fileItem) {
-    // To delete an export simply make a DeleteExport call
-    VxSdk::VxResult::Value result = fileItem->_file ->DeleteFile();
-    // Unless there was an issue deleting the export the result should be VxSdk::VxResult::kOK
+VxSdkNet::Results::Value VxSdkNet::VXSystem::DeleteFile(VxSdkNet::VxFile^ fileItem) {
+    // To delete a file simply make a DeleteFile call
+    VxSdk::VxResult::Value result = fileItem->_vxFile ->DeleteFile();
+    // Unless there was an issue deleting the file the result should be VxSdk::VxResult::kOK
     return VxSdkNet::Results::Value(result);
 }
 
@@ -1502,9 +1502,9 @@ List<VxSdkNet::Export^>^ VxSdkNet::VXSystem::GetExports(System::Collections::Gen
     return mlist;
 }
 
-List<VxSdkNet::File^>^ VxSdkNet::VXSystem::GetFiles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
+List<VxSdkNet::VxFile^>^ VxSdkNet::VXSystem::GetFiles(System::Collections::Generic::Dictionary<Filters::Value, System::String^>^ filters) {
     // Create a list of managed file objects
-    List<VxSdkNet::File^>^ mlist = gcnew List<VxSdkNet::File^>();
+    List<VxSdkNet::VxFile^>^ mlist = gcnew List<VxSdkNet::VxFile^>();
     // Create a collection of unmanaged file objects
     VxSdk::VxCollection<VxSdk::IVxFile**> files;
 
@@ -1533,7 +1533,7 @@ List<VxSdkNet::File^>^ VxSdkNet::VXSystem::GetFiles(System::Collections::Generic
         // The result should now be kOK since we have allocated enough space
         if (result == VxSdk::VxResult::kOK) {
             for (int i = 0; i < files.collectionSize; i++)
-                mlist->Add(gcnew VxSdkNet::File(files.collection[i]));
+                mlist->Add(gcnew VxSdkNet::VxFile(files.collection[i]));
         }
         // Remove the memory we previously allocated to the collection
         delete[] files.collection;

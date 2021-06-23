@@ -1,6 +1,6 @@
-// Declares the file recovery class.
-#ifndef FileRecovery_h__
-#define FileRecovery_h__
+// Declares the vx file recovery class.
+#ifndef VxFileRecovery_h__
+#define VxFileRecovery_h__
 
 #include "VxSdk.h"
 #include "Utils.h"
@@ -8,9 +8,9 @@
 namespace VxSdkNet {
 
     /// <summary>
-    /// The FileRecovery class represents a file recovery controller/monitoring resource for a recorder.
+    /// The VxFileRecovery class represents a file recovery controller/monitoring resource for a recorder.
     /// </summary>
-    public ref class FileRecovery {
+    public ref class VxFileRecovery {
     public:
 
         /// <summary>
@@ -37,19 +37,19 @@ namespace VxSdkNet {
         /// Constructor.
         /// </summary>
         /// <param name="vxFileRecovery">The vx file recovery.</param>
-        FileRecovery(VxSdk::IVxFileRecovery* vxFileRecovery);
+        VxFileRecovery(VxSdk::IVxFileRecovery* vxFileRecovery);
 
         /// <summary>
         /// Destructor.
         /// </summary>
-        virtual ~FileRecovery() {
-            this->!FileRecovery();
+        virtual ~VxFileRecovery() {
+            this->!VxFileRecovery();
         }
 
         /// <summary>
         /// Finaliser.
         /// </summary>
-        !FileRecovery();
+        !VxFileRecovery();
 
         /// <summary>
         /// Halts any file recovery in process.
@@ -78,7 +78,7 @@ namespace VxSdkNet {
         /// <value>The number of files recovered..</value>
         property int FilesRecovered {
         public:
-            int get() { return _fileRecovery->filesRecovered; }
+            int get() { return _vxFileRecovery->filesRecovered; }
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace VxSdkNet {
         /// <value>The current status.</value>
         property FileRecoveryStatus Status {
         public:
-            FileRecoveryStatus get() { return (FileRecoveryStatus)_fileRecovery->status; }
+            FileRecoveryStatus get() { return (FileRecoveryStatus)_vxFileRecovery->status; }
         }
 
         /// <summary>
@@ -96,11 +96,11 @@ namespace VxSdkNet {
         /// <value>The message about the current status, if any.</value>
         property System::String^ StatusMessage {
         public:
-            System::String^ get() { return Utils::ConvertCppString(_fileRecovery->statusMessage); }
+            System::String^ get() { return Utils::ConvertCppString(_vxFileRecovery->statusMessage); }
         }
 
     internal:
-        VxSdk::IVxFileRecovery* _fileRecovery;
+        VxSdk::IVxFileRecovery* _vxFileRecovery;
     };
 }
-#endif // FileRecovery_h__
+#endif // VxFileRecovery_h__
