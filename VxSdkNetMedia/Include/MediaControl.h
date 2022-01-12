@@ -188,6 +188,16 @@ namespace VxSdkNet {
         bool StartLocalRecording(System::String^ filePath, System::String^ fileName);
 
         /// <summary>
+        /// Starts recording the current video stream to a local file.
+        /// </summary>
+        /// <param name="filePath">The full path to save the recorded video to.</param>
+        /// <param name="fileName">The file name to use for the recorded video file.</param>
+        /// <param name="includeOverlays"><c>true</c> to include the overlays currently displayed on the stream
+        /// in the recorded file, otherwise <c>false</c>.</param>
+        /// <returns><c>true</c> if the recording was started successfully, otherwise <c>false</c>.</returns>
+        bool StartLocalRecording(System::String^ filePath, System::String^ fileName, bool includeOverlays);
+
+        /// <summary>
         /// Stops the current local recording in progress, if any.
         /// </summary>
         void StopLocalRecording();

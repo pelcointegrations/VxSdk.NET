@@ -117,9 +117,13 @@ bool VxSdkNet::MediaControl::Play(float speed, VxSdkNet::MediaControl::RTSPNetwo
 }
 
 bool VxSdkNet::MediaControl::StartLocalRecording(System::String^ filePath, System::String^ fileName) {
+    return VxSdkNet::MediaControl::StartLocalRecording(filePath, fileName, true);
+}
+
+bool VxSdkNet::MediaControl::StartLocalRecording(System::String^ filePath, System::String^ fileName, bool includeOverlays) {
     std::string path = Utils::ConvertCSharpString(filePath);
     std::string name = Utils::ConvertCSharpString(fileName);
-    return _control->StartLocalRecording((char*)path.c_str(), (char*)name.c_str());
+    return _control->StartLocalRecording((char*)path.c_str(), (char*)name.c_str(), includeOverlays);
 }
 
 void VxSdkNet::MediaControl::StopLocalRecording() {
